@@ -1,0 +1,245 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+:root {
+    --primary-dark: #0A2463;    /* Dark blue */
+    --primary-light: #1E4B92;   /* Medium blue */
+    --accent: #3A7CA5;          /* Light blue */
+    --background: #FFFFFF;      /* White */
+    --text-dark: #333333;       /* Dark text */
+    --text-light: #666666;      /* Light text */
+    --border: #DDDDDD;          /* Light border */
+    --success: #4CAF50;         /* Green for messages */
+    --error: #F44336;           /* Red for errors */
+    --bluePrimary: #1E88E5;  
+    --BlueDark:  #1565C0;    
+}
+
+body {
+    background-color: #f5f7fa;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header styles */
+header {
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 1.5rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: var(--accent);
+}
+
+/* Main content area */
+main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+/* Footer styles */
+footer {
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+/* Form styles */
+.form-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-title {
+    text-align: center;
+    color: var(--primary-dark);
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-light);
+}
+
+.form-footer a {
+    color: var(--primary-light);
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Tender card styles */
+.tenders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.tender-card {
+    background: none; /* remove white card background */
+    border: none;     /* no border */
+    box-shadow: none; /* remove shadow */
+    transition: none; /* no hover effect */
+}
+
+.tender-header {
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 4px 4px 0 0; /* slight rounding */
+}
+
+.tender-body {
+    background: #fff; 
+    padding: 1rem 1.25rem;
+    border: 1px solid #e0e0e0;
+    border-top: none; /* connects with header */
+    border-radius: 0 0 4px 4px;
+}
+
+.tender-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tender-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--text-light);
+}
+
+.tender-list li:last-child {
+    border-bottom: none;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background-color: #E8F5E9;
+    color: var(--success);
+    border: 1px solid #C8E6C9;
+}
+
+.alert-error {
+    background-color: #FFEBEE;
+    color: var(--error);
+    border: 1px solid #FFCDD2;
+}

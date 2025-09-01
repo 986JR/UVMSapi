@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVMS - The Official University of Dodoma Tender Portal and Vendor Management System</title>
+    <link rel="stylesheet" href="css/styleIndex.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">UVMS</div>
+            <span class="logo-text">UDOM VENDOR MANAGEMENT SYSTEM</span>
+        </div>
+        <nav class="nav">
+            <a href="#" class="nav-link">Home</a>
+            <a href="register.html" class="nav-link">Register</a>
+            <a href="forgotPassword.html" class="nav-link">Forgot Password</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">Official Vendor Management System for The University of Dodoma</h1>
+            <p class="hero-subtitle">
+                Designed for the University of Dodoma to ensure accountability, transparency and efficiency in all vendor and tender processes.<br>
+                A gateway to secure and organized vendor management.
+            </p>
+            <hr id="hero-line">
+        </section>
+
+        <!-- Active Tenders Section -->
+        <section class="tenders-section">
+            <div class="active-section">
+                <h2 class="section-title">Active Tenders <span id="total-tender-count">(Loading...)</span></h2>
+                <hr id="active-line">
+
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <div class="email-section">
+                        <input type="email" placeholder="Email" class="email-input" id="email" name="email" required>
+                        <input type="password" placeholder="Password" class="password-input" id="password" name="password" required>
+                        <button type="submit" class="login-btn">Login</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Dynamic Filter Categories -->
+            <div class="filters" id="college-filters">
+                <div class="loading">Loading colleges, tenders and policies...</div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p> For Support: Call/Whatsapp <strong> +255712000000</strong> <br> Email: Administration@uvms.com <br> &copy; 2025 UDOM Vendor Management System. All rights reserved. </p>
+    </div>
+</footer>
+<script src="js/login.js"></script>
+<script>
+    const API_BASE_URL = 'http://localhost:8080/api';
+
+    let collegesData = [];
+    let policiesData = [];
+
+    const collegeFilters = document.getElementById('college-filters');
+    const totalTenderCount = document.getElementById('total-tender-count');
+    //const loginForm = document.getElementById('loginForm');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeApp();
+       // setupLoginForm();
+    });
+
+    async function initializeApp() {
+        try {
+            await Promise.all([fetchColleges(), fetchPolicies()]);
+            renderCollegesWithTenders();
+        } catch (error) {
+            console.error("Initialization error:", error);
+            showError("Failed to load data. Please refresh.");
+        }
+    }
+
+    //Fetch colleges (with tenders inside)
+    async function fetchColleges() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/colleges`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+            collegesData = await response.json();
+            console.log("Colleges fetched:", collegesData);
+        } catch (err) {
+            console.error("Error fetching colleges:", err);
+            // fallback demo data
+            collegesData = [
+                {
+                    college_id: 1,
+                    college_name: "College of Informatics and Virtual Education (CIVE)",
+                    tenders: [
+                        { tender_id: 1, title: "Office Supplies Procurement", description: "Computers, printers", status: "ACTIVE", deadlineDate: "2025-09-15T23:59:59" }
+                    ]
+                },
+                {
+                    college_id: 2,
+                    college_name: "College of Humanities and Social Sciences (CHSS)",
+                    tenders: [
+                        { tender_id: 2, title: "Library Books", description: "Research materials", status: "ACTIVE", deadlineDate: "2025-09-20T23:59:59" }
+                    ]
+                }
+            ];
+        }
+    }
+
+    //Fetch active policies
+    async function fetchPolicies() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/policies/active`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+            policiesData = await response.json();
+            console.log("Policies fetched:", policiesData);
+        } catch (err) {
+            console.error("Error fetching policies:", err);
+            // fallback demo data
+            policiesData = [
+                { policy_id: 1, title: "Vendor Registration Guidelines", content: "Steps to register as vendor", scope: "UNIVERSITY" },
+                { policy_id: 2, title: "Tender Submission Process", content: "How to submit tenders", scope: "UNIVERSITY" }
+            ];
+        }
+    }
+
+    //Render colleges & tenders + policies
+    function renderCollegesWithTenders() {
+        let totalActiveTenders = 0;
+        collegeFilters.innerHTML = "";
+
+        collegesData.forEach(college => {
+            const activeTenders = (college.tenders || []).filter(t => t.status === "ACTIVE");
+            totalActiveTenders += activeTenders.length;
+
+            const div = document.createElement("div");
+            div.className = "filter-column";
+            div.innerHTML = `
+                <h3 class="filter-title">
+                    ${college.college_name}
+                    <span class="tender-count">${activeTenders.length}</span>
+                </h3>
+                <ul class="filter-list">
+                    ${
+                activeTenders.length > 0
+                    ? activeTenders.map(t => `
+                            <li>
+                                <a href="#" class="filter-link" onclick="viewTenderDetails(${t.tender_id})">
+                                    <strong>${t.title}</strong><br>
+                                    <small style="color:#7f8c8d;">Deadline: ${t.deadlineDate ? new Date(t.deadlineDate).toLocaleDateString() : "N/A"}</small>
+                                </a>
+                            </li>
+                        `).join("")
+                    : `<li><span style="color:#95a5a6;">No active tenders</span></li>`
+            }
+                </ul>
+            `;
+            collegeFilters.appendChild(div);
+        });
+
+        //policies section
+        collegeFilters.appendChild(createPoliciesDiv());
+
+        totalTenderCount.textContent = `(${totalActiveTenders})`;
+    }
+
+    //Build policies UI dynamically
+    function createPoliciesDiv() {
+        const div = document.createElement("div");
+        div.className = "filter-column";
+        div.innerHTML = `
+            <h3 class="filter-title">Policies and Guidelines</h3>
+            <ul class="filter-list">
+                ${
+            policiesData.length > 0
+                ? policiesData.map(p => `
+                            <li>
+                                <a href="#" class="filter-link" onclick="viewPolicyDetails(${p.policy_id})">
+                                    ${p.title}
+                                </a>
+                            </li>
+                        `).join("")
+                : `<li><span style="color:#95a5a6;">No active policies</span></li>`
+        }
+            </ul>
+        `;
+        return div;
+    }
+
+    function viewTenderDetails(tenderId) {
+        let found = null;
+        for (const c of collegesData) {
+            found = (c.tenders || []).find(t => t.tender_id === tenderId);
+            if (found) break;
+        }
+        if (found) {
+            alert(`Tender Details:\n\nTitle: ${found.title}\nDescription: ${found.description}\nStatus: ${found.status}\nDeadline: ${found.deadlineDate}`);
+        }
+    }
+
+    function viewPolicyDetails(policyId) {
+        const policy = policiesData.find(p => p.policy_id === policyId);
+        if (policy) {
+            alert(`Policy Details:\n\nTitle: ${policy.title}\nScope: ${policy.scope}\n\n${policy.content}`);
+        }
+    }
+
+    function showError(msg) {
+        collegeFilters.innerHTML = `<div class="error">${msg}</div>`;
+    }
+
+    /*function setupLoginForm() {
+        loginForm.addEventListener("submit", e => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            if (!email || !password) return alert("Enter both email & password");
+            console.log("Login attempt:", { email, password });
+            alert("Login not implemented yet.");
+        });
+    } */
+
+    // auto-refresh every 5 min
+    setInterval(initializeApp, 5 * 60 * 1000);
+
+    window.UVMS = { initializeApp, viewTenderDetails, viewPolicyDetails, getCollegesData: () => collegesData, getPoliciesData: () => policiesData };
+</script>
+
+</body>
+</html>

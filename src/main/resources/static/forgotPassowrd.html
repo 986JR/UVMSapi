@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tender Management System - Forgot Password</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">TenderSystem</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="form-container">
+            <h2 class="form-title">Reset Your Password</h2>
+            <p class="text-center">Enter your email address and we'll send you a link to reset your password.</p>
+            
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-full">Send Reset Link</button>
+                </div>
+                
+                <div class="form-footer">
+                    <p>Remember your password? <a href="login.html">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Tender Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real application, you would handle the password reset process here
+            alert('Password reset link would be sent to your email.');
+        });
+    </script>
+</body>
+</html>

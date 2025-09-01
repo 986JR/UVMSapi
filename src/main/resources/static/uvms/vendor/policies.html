@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policies | University Vendor Management System</title>
+    <link rel="stylesheet" href="css/uvms-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --secondary: #6c757d;
+            --success: #198754;
+            --light: #f8f9fa;
+            --uvms-blue-primary: #1E88E5;
+            --uvms-text-primary: #333;
+            --uvms-text-secondary-light: #666;
+            --uvms-background-light: #f7f7f7;
+            --uvms-success-green: #2ecc71;
+            --uvms-warning-orange: #f1c40f;
+            --uvms-error-red: #e74c3c;
+        }
+        .policy-card {
+            border-left: 4px solid var(--uvms-blue-primary);
+            transition: transform 0.3s;
+            margin-bottom: 15px;
+        }
+        .policy-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,.1);
+        }
+        .category-badge {
+            padding: 0.5em 0.8em;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+        .category-procurement {
+            background-color: #e3f2fd;
+            color: var(--uvms-blue-primary);
+        }
+        .category-compliance {
+            background-color: #e8f5e8;
+            color: var(--uvms-success-green);
+        }
+        .category-safety {
+            background-color: #fff8e1;
+            color: var(--uvms-warning-orange);
+        }
+        .category-ethical {
+            background-color: #ffebee;
+            color: var(--uvms-error-red);
+        }
+        .category-environmental {
+            background-color: #f1f8e9;
+            color: #388e3c;
+        }
+        .nav-tab {
+            display: block;
+            padding: 12px 16px;
+            color: var(--uvms-text-primary);
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        .nav-tab:hover {
+            background-color: var(--uvms-background-light);
+            color: var(--uvms-blue-primary);
+        }
+        .nav-tab.active {
+            background-color: var(--uvms-blue-primary);
+            color: white;
+            border-color: var(--uvms-blue-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>UDOM VMS</h3>
+            <p>Vendor Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="../../dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="colleges.html"><i class="fas fa-university"></i> Academic Units</a>
+            <a href="tenders.html"><i class="fas fa-file-contract"></i> Tenders</a>
+            <a href="applications.html"><i class="fas fa-clipboard-list"></i> Applications</a>
+            <a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a>
+            <a href="contracts.html"><i class="fas fa-file-signature"></i> Contracts</a>
+            <a href="renew-license.html"><i class="fas fa-sync-alt"></i> Renew License</a>
+            <a href="policies.html" class="active"><i class="fas fa-book"></i> Policies</a>
+            <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">Policies & Guidelines</div>
+        <div class="navbar-user">
+            <div class="user-avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="flex flex-between align-center mb-3 flex-mobile-stack">
+            <div class="mb-mobile-2">
+                <h1 style="margin-bottom: 5px;">Policies & Guidelines</h1>
+                <p style="color: var(--uvms-text-secondary-light); margin: 0; font-size: 0.9em;">Review university policies and compliance requirements</p>
+            </div>
+            <div class="flex gap-1">
+                <a href="../../dashboard.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> <span class="hide-mobile">Back to Dashboard</span>
+                </a>
+                <div class="search-container" style="position: relative;">
+                    <input type="text" class="form-input" placeholder="Search policies..." id="searchInput" style="padding-right: 40px; width: 250px;">
+                    <i class="fas fa-search" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--uvms-text-secondary-light);"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info mb-3">
+            <i class="fas fa-info-circle"></i> Please review all policies and guidelines carefully to ensure compliance with UDOM requirements.
+        </div>
+
+        <div class="grid grid-4 gap-3">
+            <div class="grid-span-1">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 style="margin-bottom: 15px; color: var(--uvms-blue-primary);">Categories</h4>
+                        <div class="nav-tabs-vertical">
+                            <a href="#" class="nav-tab active" data-tab="all">
+                                <i class="fas fa-list"></i> All Policies
+                            </a>
+                            <a href="#" class="nav-tab" data-tab="procurement">
+                                <i class="fas fa-shopping-cart"></i> Procurement
+                            </a>
+                            <a href="#" class="nav-tab" data-tab="compliance">
+                                <i class="fas fa-shield-alt"></i> Compliance
+                            </a>
+                            <a href="#" class="nav-tab" data-tab="safety">
+                                <i class="fas fa-hard-hat"></i> Safety
+                            </a>
+                            <a href="#" class="nav-tab" data-tab="ethical">
+                                <i class="fas fa-users"></i> Ethical Standards
+                            </a>
+                            <a href="#" class="nav-tab" data-tab="environmental">
+                                <i class="fas fa-leaf"></i> Environmental
+                            </a>
+                        </div>
+
+                        <hr style="margin: 20px 0;">
+
+                        <h5 style="margin-bottom: 15px; color: var(--uvms-blue-primary);">Important Updates</h5>
+                        <div class="alert alert-warning mb-2" style="padding: 10px; font-size: 0.85em;">
+                            <i class="fas fa-exclamation-triangle"></i> New procurement guidelines effective January 2025.
+                        </div>
+                        <div class="alert alert-info" style="padding: 10px; font-size: 0.85em;">
+                            <i class="fas fa-info-circle"></i> Safety policy updates now available for review.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-span-3">
+                <div class="tab-content">
+                    <!-- All Policies Tab -->
+                    <div class="tab-panel active" id="tab-all">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="margin-bottom: 20px; color: var(--uvms-blue-primary);">All Policies & Guidelines</h4>
+
+                                <div class="card policy-card mb-3">
+                                    <div class="card-body">
+                                        <div class="flex flex-between align-start mb-2">
+                                            <h5 style="margin: 0; color: var(--uvms-blue-primary);">Vendor Code of Conduct</h5>
+                                            <span class="category-badge category-compliance">Compliance</span>
+                                        </div>
+                                        <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">Ethical guidelines and standards of behavior expected from all vendors working with UDOM.</p>
+                                        <div class="flex flex-between align-center">
+                                            <small style="color: var(--uvms-text-secondary-light);">Last updated: August 15, 2024</small>
+                                            <div class="flex gap-1">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title">Procurement Policy</h5>
+                                            <span class="category-badge category-procurement">Procurement</span>
+                                        </div>
+                                        <p class="card-text">Guidelines for the university's procurement process, including tender evaluation and vendor selection.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Last updated: July 1, 2023</small>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-2">
+                                                    <i class="fas fa-eye me-1"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download me-1"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card mb-3">
+                                    <div class="card-body">
+                                        <div class="flex flex-between align-start mb-2">
+                                            <h5 style="margin: 0; color: var(--uvms-blue-primary);">Workplace Safety Guidelines</h5>
+                                            <span class="category-badge category-safety">Safety</span>
+                                        </div>
+                                        <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">Safety protocols and requirements for all vendors working on UDOM premises.</p>
+                                        <div class="flex flex-between align-center">
+                                            <small style="color: var(--uvms-text-secondary-light);">Last updated: June 20, 2024</small>
+                                            <div class="flex gap-1">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card mb-3">
+                                    <div class="card-body">
+                                        <div class="flex flex-between align-start mb-2">
+                                            <h5 style="margin: 0; color: var(--uvms-blue-primary);">Environmental Sustainability Policy</h5>
+                                            <span class="category-badge category-environmental">Environmental</span>
+                                        </div>
+                                        <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">Requirements for environmentally sustainable practices in all vendor operations on campus.</p>
+                                        <div class="flex flex-between align-center">
+                                            <small style="color: var(--uvms-text-secondary-light);">Last updated: May 5, 2024</small>
+                                            <div class="flex gap-1">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card mb-3">
+                                    <div class="card-body">
+                                        <div class="flex flex-between align-start mb-2">
+                                            <h5 style="margin: 0; color: var(--uvms-blue-primary);">Anti-Corruption Policy</h5>
+                                            <span class="category-badge category-ethical">Ethical Standards</span>
+                                        </div>
+                                        <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">Zero-tolerance policy against corruption, bribery, and unethical practices in vendor relationships.</p>
+                                        <div class="flex flex-between align-center">
+                                            <small style="color: var(--uvms-text-secondary-light);">Last updated: April 10, 2024</small>
+                                            <div class="flex gap-1">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card mb-3">
+                                    <div class="card-body">
+                                        <div class="flex flex-between align-start mb-2">
+                                            <h5 style="margin: 0; color: var(--uvms-blue-primary);">Data Protection Guidelines</h5>
+                                            <span class="category-badge category-compliance">Compliance</span>
+                                        </div>
+                                        <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">Requirements for handling and protecting UDOM data accessed by vendors during projects.</p>
+                                        <div class="flex flex-between align-center">
+                                            <small style="color: var(--uvms-text-secondary-light);">Last updated: March 15, 2024</small>
+                                            <div class="flex gap-1">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Procurement Tab -->
+                    <div class="tab-panel" id="tab-procurement" style="display: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="margin-bottom: 20px; color: var(--uvms-blue-primary);">Procurement Policies</h4>
+
+                                <div class="card policy-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title">Procurement Policy</h5>
+                                            <span class="category-badge category-procurement">Procurement</span>
+                                        </div>
+                                        <p class="card-text">Guidelines for the university's procurement process, including tender evaluation and vendor selection.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Last updated: July 1, 2023</small>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-2">
+                                                    <i class="fas fa-eye me-1"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download me-1"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title">Bid Submission Guidelines</h5>
+                                            <span class="category-badge category-procurement">Procurement</span>
+                                        </div>
+                                        <p class="card-text">Detailed instructions for preparing and submitting bids for university tenders.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Last updated: June 15, 2023</small>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-2">
+                                                    <i class="fas fa-eye me-1"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download me-1"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card policy-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title">Vendor Registration Process</h5>
+                                            <span class="category-badge category-procurement">Procurement</span>
+                                        </div>
+                                        <p class="card-text">Step-by-step guide to registering as a vendor with the university procurement system.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Last updated: May 20, 2023</small>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-2">
+                                                    <i class="fas fa-eye me-1"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download me-1"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compliance Tab -->
+                    <div class="tab-panel" id="tab-compliance" style="display: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="margin-bottom: 20px; color: var(--uvms-blue-primary);">Compliance Policies</h4>
+                                <p style="color: var(--uvms-text-secondary-light);">Select a compliance policy from the left navigation to view details.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Safety Tab -->
+                    <div class="tab-panel" id="tab-safety" style="display: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="margin-bottom: 20px; color: var(--uvms-blue-primary);">Safety Policies</h4>
+                                <p style="color: var(--uvms-text-secondary-light);">Select a safety policy from the left navigation to view details.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ethical Tab -->
+                    <div class="tab-panel" id="tab-ethical" style="display: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="margin-bottom: 20px; color: var(--uvms-blue-primary);">Ethical Standards</h4>
+                                <p style="color: var(--uvms-text-secondary-light);">Select an ethical standards policy from the left navigation to view details.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Environmental Tab -->
+                    <div class="tab-panel" id="tab-environmental" style="display: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="margin-bottom: 20px; color: var(--uvms-blue-primary);">Environmental Policies</h4>
+                                <p style="color: var(--uvms-text-secondary-light);">Select an environmental policy from the left navigation to view details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/uvms-main.js"></script>
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all tabs
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                // Hide all tab panels
+                document.querySelectorAll('.tab-panel').forEach(panel => panel.style.display = 'none');
+
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Show corresponding tab panel
+                const tabId = this.getAttribute('data-tab');
+                const panel = document.getElementById('tab-' + tabId);
+                if (panel) {
+                    panel.style.display = 'block';
+                }
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const policyCards = document.querySelectorAll('.policy-card');
+
+            policyCards.forEach(card => {
+                const title = card.querySelector('h5').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                const category = card.querySelector('.category-badge').textContent.toLowerCase();
+
+                if (title.includes(searchText) || description.includes(searchText) || category.includes(searchText)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

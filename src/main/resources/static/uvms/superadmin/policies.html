@@ -1,0 +1,410 @@
+    <main class="main-content">
+        <h1 class="page-title">University Policies & Guidelines</h1>
+
+
+
+        <!-- Create New Policy Form -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Create New Policy</h2>
+                <button class="btn btn-primary" onclick="showCreatePolicyModal()">Create New Policy</button>
+            </div>
+        </div>
+
+        <!-- Existing Policies List -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">University-Wide Policies</h2>
+            </div>
+            <div class="card-body">
+                <div class="policies-grid">
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3 class="policy-title">Vendor Registration Guidelines</h3>
+                            <div class="policy-meta">
+                                <span class="policy-date">Posted: Jan 15, 2024</span>
+                                <span class="policy-author">Uploaded By: Super Admin</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="viewPolicy(1)">View</button>
+                            <button class="btn btn-sm btn-primary" onclick="editPolicy(1)">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePolicy(1)">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3 class="policy-title">Tender Evaluation Process</h3>
+                            <div class="policy-meta">
+                                <span class="policy-date">Posted: Jan 10, 2024</span>
+                                <span class="policy-author">Uploaded By: Super Admin</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="viewPolicy(2)">View</button>
+                            <button class="btn btn-sm btn-primary" onclick="editPolicy(2)">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePolicy(2)">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3 class="policy-title">License Renewal Procedures</h3>
+                            <div class="policy-meta">
+                                <span class="policy-date">Posted: Jan 8, 2024</span>
+                                <span class="policy-author">Uploaded By: Super Admin</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="viewPolicy(3)">View</button>
+                            <button class="btn btn-sm btn-primary" onclick="editPolicy(3)">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePolicy(3)">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3 class="policy-title">Compliance Monitoring Standards</h3>
+                            <div class="policy-meta">
+                                <span class="policy-date">Posted: Jan 5, 2024</span>
+                                <span class="policy-author">Uploaded By: Super Admin</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="viewPolicy(4)">View</button>
+                            <button class="btn btn-sm btn-primary" onclick="editPolicy(4)">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePolicy(4)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Policy Modal -->
+    <div class="modal" id="createPolicyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Policy</h3>
+                <button class="close" onclick="hideCreatePolicyModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createPolicyForm">
+                    <div class="form-group">
+                        <label for="policyTitle">Policy Title</label>
+                        <input type="text" class="form-control" id="policyTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="policyContent">Policy Content</label>
+                        <textarea class="form-control" id="policyContent" rows="8" placeholder="Enter policy content here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="policyFile">Upload PDF Document (Optional)</label>
+                        <input type="file" class="form-control" id="policyFile" accept=".pdf">
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="activePolicy" checked>
+                            <label class="form-check-label" for="activePolicy">
+                                Active (Publish immediately)
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="hideCreatePolicyModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createPolicy()">Create Policy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Policy Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Policy</h3>
+                <button class="close" onclick="hideEditModal()">&times;</button>
+            </div>
+            <form id="editPolicyForm">
+                <input type="hidden" id="editPolicyId">
+                <div class="form-group">
+                    <label class="form-label">Policy Title *</label>
+                    <input type="text" class="form-control" id="editPolicyTitle" required>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select class="form-control form-select" id="editPolicyCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="vendor">Vendor Management</option>
+                            <option value="tender">Tender Process</option>
+                            <option value="license">License Management</option>
+                            <option value="compliance">Compliance</option>
+                            <option value="security">Security</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Version</label>
+                        <input type="text" class="form-control" id="editPolicyVersion">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="editPolicyDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Replace Document (Optional)</label>
+                    <div class="file-upload" id="editFileUpload">
+                        <input type="file" id="editPolicyFile" accept=".pdf,.doc,.docx" style="display: none;">
+                        <div class="upload-text">
+                            <strong>Click to upload</strong> or drag and drop<br>
+                            Leave empty to keep current document
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-control form-select" id="editPolicyStatus">
+                        <option value="active">Active</option>
+                        <option value="draft">Draft</option>
+                        <option value="under-review">Under Review</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-between gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="hideEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Policy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function showUploadModal() {
+            document.getElementById('uploadModal').classList.add('show');
+        }
+
+        function hideUploadModal() {
+            document.getElementById('uploadModal').classList.remove('show');
+            document.getElementById('uploadPolicyForm').reset();
+        }
+
+        function showEditModal() {
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function hideEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            document.getElementById('editPolicyForm').reset();
+        }
+
+        // Policy management functions
+        function viewPolicy(policyId) {
+            console.log('Viewing policy:', policyId);
+            showAlert('Opening policy viewer...', 'success');
+        }
+
+        function editPolicy(policyId) {
+            console.log('Editing policy:', policyId);
+            // Populate edit form with policy data
+            document.getElementById('editPolicyId').value = policyId;
+            showEditModal();
+        }
+
+        function archivePolicy(policyId) {
+            if (confirm('Are you sure you want to archive this policy?')) {
+                console.log('Archiving policy:', policyId);
+                showAlert('Policy archived successfully', 'warning');
+            }
+        }
+
+        function approvePolicy(policyId) {
+            if (confirm('Are you sure you want to approve this policy?')) {
+                console.log('Approving policy:', policyId);
+                showAlert('Policy approved and published', 'success');
+            }
+        }
+
+        function saveDraft() {
+            console.log('Saving policy as draft');
+            showAlert('Policy saved as draft', 'success');
+            hideUploadModal();
+        }
+
+        // Search and filter functions
+        function filterPolicies() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const rows = document.querySelectorAll('#policiesTable tbody tr');
+            
+            rows.forEach(row => {
+                const title = row.cells[0].textContent.toLowerCase();
+                const category = row.cells[1].textContent.toLowerCase();
+                const status = row.cells[5].textContent.toLowerCase();
+                
+                const matchesSearch = title.includes(searchTerm);
+                const matchesCategory = !categoryFilter || category.includes(categoryFilter);
+                const matchesStatus = !statusFilter || status.includes(statusFilter);
+                
+                if (matchesSearch && matchesCategory && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            filterPolicies();
+        }
+
+        // File upload handling
+        function setupFileUpload() {
+            const fileUpload = document.getElementById('fileUpload');
+            const fileInput = document.getElementById('policyFile');
+            const editFileUpload = document.getElementById('editFileUpload');
+            const editFileInput = document.getElementById('editPolicyFile');
+
+            // Upload modal file handling
+            fileUpload.addEventListener('click', () => fileInput.click());
+            fileUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUpload.classList.add('dragover');
+            });
+            fileUpload.addEventListener('dragleave', () => {
+                fileUpload.classList.remove('dragover');
+            });
+            fileUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUpload.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    updateFileUploadText(fileUpload, files[0].name);
+                }
+            });
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    updateFileUploadText(fileUpload, e.target.files[0].name);
+                }
+            });
+
+            // Edit modal file handling
+            editFileUpload.addEventListener('click', () => editFileInput.click());
+            editFileUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                editFileUpload.classList.add('dragover');
+            });
+            editFileUpload.addEventListener('dragleave', () => {
+                editFileUpload.classList.remove('dragover');
+            });
+            editFileUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                editFileUpload.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    editFileInput.files = files;
+                    updateFileUploadText(editFileUpload, files[0].name);
+                }
+            });
+            editFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    updateFileUploadText(editFileUpload, e.target.files[0].name);
+                }
+            });
+        }
+
+        function updateFileUploadText(uploadElement, fileName) {
+            const uploadText = uploadElement.querySelector('.upload-text');
+            uploadText.innerHTML = `<strong>Selected:</strong> ${fileName}<br><small>Click to change file</small>`;
+        }
+
+        // Form submission handlers
+        document.getElementById('uploadPolicyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            console.log('Uploading new policy:', Object.fromEntries(formData));
+            showAlert('Policy uploaded and published successfully', 'success');
+            hideUploadModal();
+        });
+
+        document.getElementById('editPolicyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            console.log('Updating policy:', Object.fromEntries(formData));
+            showAlert('Policy updated successfully', 'success');
+            hideEditModal();
+        });
+
+        // Utility functions
+        function exportPolicies() {
+            console.log('Exporting policies data');
+            showAlert('Export initiated. Download will start shortly.', 'success');
+        }
+
+        function refreshPolicies() {
+            console.log('Refreshing policies data');
+            showAlert('Policies data refreshed successfully', 'success');
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const mainContent = document.querySelector('.main-content');
+            mainContent.insertBefore(alertDiv, mainContent.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '../login.html';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterPolicies);
+        document.getElementById('categoryFilter').addEventListener('change', filterPolicies);
+        document.getElementById('statusFilter').addEventListener('change', filterPolicies);
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Policies page loaded');
+            setupFileUpload();
+        });
+
+        // Add category item hover effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .category-item {
+                padding: 1rem;
+                border-radius: 0;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .category-item:hover {
+                background-color: rgba(30, 136, 229, 0.05);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

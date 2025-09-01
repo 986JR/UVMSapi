@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard | UDOM Vendor Management System</title>
+    <link rel="stylesheet" href="css/uvms-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>UDOM VMS</h3>
+            <p>Vendor Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="active">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="uvms/vendor/colleges.html">
+                <i class="fas fa-university"></i> Colleges
+            </a>
+            <a href="uvms/vendor/tenders.html">
+                <i class="fas fa-file-contract"></i> Tenders
+            </a>
+            <a href="uvms/vendor/applications.html">
+                <i class="fas fa-clipboard-list"></i> Applications
+            </a>
+            <a href="uvms/vendor/licenses.html">
+                <i class="fas fa-certificate"></i> Licenses
+            </a>
+            <a href="uvms/vendor/contracts.html">
+                <i class="fas fa-file-signature"></i> Contracts
+            </a>
+            <a href="uvms/vendor/renew-license.html">
+                <i class="fas fa-sync-alt"></i> Renew License
+            </a>
+            <a href="uvms/vendor/policies.html">
+                <i class="fas fa-book"></i> Policies
+            </a>
+            <a href="uvms/vendor/notifications.html">
+                <i class="fas fa-bell"></i> Notifications
+            </a>
+            <a href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+
+        </nav>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <button class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="navbar-brand">Vendor Dashboard</div>
+        <div class="navbar-user">
+            <div class="user-avatar" >JD</div>
+            <span>John Doe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="flex flex-between align-center mb-3">
+            <h1>Dashboard Overview</h1>
+            <h1 id="welcomeMsg">Loading...</h1>
+            <button class="btn btn-primary" onclick="location.href='notifications.html'">
+                <i class="fas fa-bell"></i> Notifications
+                <span class="badge-warning" style="background: var(--uvms-warning-yellow); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7em; margin-left: 5px;">3</span>
+            </button>
+        </div>
+
+        <!-- Stats Cards - Database Aligned -->
+        <div class="stats-grid mb-3">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h4>8</h4>
+                    <p>Open Tenders</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-info">
+                    <h4>4</h4>
+                    <p>My Applications</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-info">
+                    <h4>2</h4>
+                    <p>Pending Reviews</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            <div class="stat-card info">
+                <div class="stat-info">
+                    <h4>3</h4>
+                    <p>Active Licenses</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid grid-2">
+            <!-- Recent Tenders -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Tenders</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tender-item mb-2" style="padding: 15px; border-left: 4px solid var(--uvms-blue-primary); background: var(--uvms-surface-light); margin-bottom: 10px;">
+                        <div class="flex flex-between align-center flex-mobile-stack">
+                            <h4 style="margin: 0; font-size: 1em;">Construction of New Library Building</h4>
+                            <small style="color: var(--uvms-text-secondary-light);">TND-2024-001</small>
+                        </div>
+                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">College of Engineering - Deadline: 2024-12-30</p>
+                        <div class="flex align-center gap-1 flex-mobile-stack">
+                            <span class="badge badge-success">open</span>
+                            <small>Created by Admin ID: 2</small>
+                        </div>
+                    </div>
+
+                    <div class="tender-item mb-2" style="padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;">
+                        <div class="flex flex-between align-center flex-mobile-stack">
+                            <h4 style="margin: 0; font-size: 1em;">Supply of Laboratory Equipment</h4>
+                            <small style="color: var(--uvms-text-secondary-light);">TND-2024-002</small>
+                        </div>
+                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">College of Natural Sciences - Deadline: 2025-01-15</p>
+                        <div class="flex align-center gap-1 flex-mobile-stack">
+                            <span class="badge badge-success">open</span>
+                            <small>Created by Admin ID: 5</small>
+                        </div>
+                    </div>
+
+                    <div class="tender-item mb-2" style="padding: 15px; border-left: 4px solid var(--uvms-accent-cyan); background: var(--uvms-surface-light); margin-bottom: 10px;">
+                        <div class="flex flex-between align-center flex-mobile-stack">
+                            <h4 style="margin: 0; font-size: 1em;">Campus WiFi Infrastructure Upgrade</h4>
+                            <small style="color: var(--uvms-text-secondary-light);">TND-2024-003</small>
+                        </div>
+                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">College of Informatics - Deadline: 2025-02-20</p>
+                        <div class="flex align-center gap-1 flex-mobile-stack">
+                            <span class="badge badge-success">open</span>
+                            <small>Created by Admin ID: 3</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="uvms/vendor/tenders.html" class="btn btn-secondary">View All Tenders</a>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Upcoming Deadlines -->
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h3>Upcoming Deadlines</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="deadline-item" style="padding: 12px; border-left: 4px solid var(--uvms-warning-yellow); background: rgba(251, 192, 45, 0.1); margin-bottom: 10px;">
+                            <div class="flex flex-between align-center">
+                                <h4 style="margin: 0; font-size: 0.9em;">Library Construction Tender</h4>
+                                <span class="badge badge-warning">3 days left</span>
+                            </div>
+                            <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">College of Engineering</p>
+                        </div>
+
+                        <div class="deadline-item" style="padding: 12px; border-left: 4px solid var(--uvms-blue-primary); background: rgba(30, 136, 229, 0.1); margin-bottom: 10px;">
+                            <div class="flex flex-between align-center">
+                                <h4 style="margin: 0; font-size: 0.9em;">License Renewal</h4>
+                                <span class="badge badge-secondary">12 days left</span>
+                            </div>
+                            <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">License #VL-2024-0875</p>
+                        </div>
+
+                        <div class="deadline-item" style="padding: 12px; border-left: 4px solid var(--uvms-accent-cyan); background: rgba(0, 172, 193, 0.1);">
+                            <div class="flex flex-between align-center">
+                                <h4 style="margin: 0; font-size: 0.9em;">Annual Compliance Report</h4>
+                                <span class="badge badge-secondary">25 days left</span>
+                            </div>
+                            <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">UDOM Vendor Management</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex" style="flex-direction: column; gap: 10px;">
+                            <button class="btn btn-primary" onclick="location.href='tenders.html'">
+                                <i class="fas fa-search"></i> Browse Tenders
+                            </button>
+                            <button class="btn btn-success" onclick="location.href='applications.html'">
+                                <i class="fas fa-clipboard-list"></i> View Applications
+                            </button>
+                            <button class="btn btn-secondary" onclick="location.href='renew-license.html'">
+                                <i class="fas fa-sync-alt"></i> Renew License
+                            </button>
+                            <!-- Test Snackbar Functionality -->
+                            <button class="btn btn-info" onclick="showSuccess('Dashboard loaded successfully!')">
+                                <i class="fas fa-bell"></i> Test Notification
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

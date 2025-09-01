@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UVMS</title>
+    <link rel="stylesheet" href="css/styleIndex.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">UVMS</div>
+            <span class="logo-text">UDOM VENDOR MANAGEMENT SYSTEM</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Register</a>
+            <a href="forgotPassword.html" class="nav-link">Forgot Password</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">Vendor Registration</h1>
+            <p class="hero-subtitle">
+                Register as a vendor to participate in University of Dodoma tenders and procurement opportunities.
+            </p>
+            <hr id="hero-line">
+        </section>
+
+        <!-- Registration Form -->
+        <section class="form-section">
+            <form id="registerForm" class="auth-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" name="companyName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tinNumber">TIN Number</label>
+                    <input type="text" id="tinNumber" name="tinNumber" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Business Address</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="businessType">Business Type</label>
+                    <input type="text" id="businessType" name="businessType" placeholder="e.g. Goods Supplier, Service Provider" required>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the Terms and Conditions</label>
+                </div>
+
+                <button type="submit" class="submit-btn">Register</button>
+
+                <div class="form-footer">
+                    <p>Already have an account? <a href="index.html">Login here</a></p>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p> For Support: Call/Whatsapp <strong> +255712000000</strong> <br> Email: Administration@uvms.com <br> &copy; 2025 UDOM Vender Management System. All rights reserved. </p>
+    </div>
+</footer>
+
+<script src="js/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVMS Super Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="superadmin.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">UVMS Super Admin</div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" data-page="dashboard" class="nav-link active">
+                        <span class="nav-icon">🏛️</span>
+                        Dashboard
+                    </a></li>
+                    <li><a href="#" data-page="manage_admins" class="nav-link">
+                        <span class="nav-icon">👥</span>
+                        Manage Admins
+                    </a></li>
+                    <li><a href="#" data-page="oversee_tenders" class="nav-link">
+                        <span class="nav-icon">📋</span>
+                        Tenders Management
+                    </a></li>
+                    <li><a href="#" data-page="reports" class="nav-link">
+                        <span class="nav-icon">📊</span>
+                        Reports
+                    </a></li>
+                    <li><a href="#" data-page="policies" class="nav-link">
+                        <span class="nav-icon">📄</span>
+                        Policies
+                    </a></li>
+                    <li><a href="#" data-page="notifications" class="nav-link">
+                        <span class="nav-icon">🔔</span>
+                        Notifications
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-container">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="page-header">
+                    <button class="sidebar-toggle">☰</button>
+                    <div class="welcome-section">
+                        <h2 class="page-title-header" id="currentPageTitle">Dashboard</h2>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">Avatar placeholder</div>
+                    <span class="user-name">Name Placeholder</span>
+                    <button class="logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Page content will be dynamically loaded here -->
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading dashboard...</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay"></div>
+
+    <!-- Add Admin Modal -->
+    <div class="modal" id="addAdminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New College Admin</h3>
+                <button class="close" onclick="hideModal('addAdminModal')">&times;</button>
+            </div>
+            <form id="addAdminForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" class="form-control" id="adminName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address *</label>
+                    <input type="email" class="form-control" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number *</label>
+                    <input type="tel" class="form-control" id="adminPhone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">College Assignment *</label>
+                    <select class="form-control form-select" id="adminCollege" required>
+                        <option value="">Select College</option>
+                        <option value="cobe">College of Business and Economics</option>
+                        <option value="coese">College of Earth Sciences and Engineering</option>
+                        <option value="coed">College of Education</option>
+                        <option value="cohss">College of Humanities and Social Sciences</option>
+                        <option value="science">Science College</option>
+                        <option value="law">Law College</option>
+                        <option value="pharmacy">Pharmacy College</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-between gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('addAdminModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Admin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Policy Modal -->
+    <div class="modal" id="uploadPolicyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload New Policy</h3>
+                <button class="close" onclick="hideModal('uploadPolicyModal')">&times;</button>
+            </div>
+            <form id="uploadPolicyForm">
+                <div class="form-group">
+                    <label class="form-label">Policy Title *</label>
+                    <input type="text" class="form-control" id="policyTitle" required>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select class="form-control form-select" id="policyCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="vendor">Vendor Management</option>
+                            <option value="tender">Tender Process</option>
+                            <option value="license">License Management</option>
+                            <option value="compliance">Compliance</option>
+                            <option value="security">Security</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Version</label>
+                        <input type="text" class="form-control" id="policyVersion" placeholder="e.g., v1.0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="policyDescription" rows="3" placeholder="Brief description of the policy..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Policy Document *</label>
+                    <div class="file-upload" id="fileUpload">
+                        <input type="file" id="policyFile" accept=".pdf,.doc,.docx" style="display: none;">
+                        <div class="upload-text">
+                            <strong>Click to upload</strong> or drag and drop<br>
+                            PDF, DOC, DOCX files only
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-between gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('uploadPolicyModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Upload Policy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tender Details Modal -->
+    <div class="modal" id="tenderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Tender Details</h3>
+                <button class="close" onclick="hideModal('tenderModal')">&times;</button>
+            </div>
+            <div id="tenderDetails">
+                <div class="form-group">
+                    <label class="form-label">Tender Title</label>
+                    <div class="form-control" id="modalTenderTitle">Loading...</div>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">College</label>
+                        <div class="form-control" id="modalTenderCollege">Loading...</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <div class="form-control" id="modalTenderCategory">Loading...</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <div class="form-control" id="modalTenderDescription" style="min-height: 100px;">Loading...</div>
+                </div>
+            </div>
+            <div class="d-flex justify-between gap-2 mt-3">
+                <button type="button" class="btn btn-secondary" onclick="hideModal('tenderModal')">Close</button>
+                <button type="button" class="btn btn-primary">View Applications</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="superadmin.js"></script>
+    <script>
+        // Global modal functions
+        function showAddAdminModal() {
+            showModal('addAdminModal');
+        }
+
+        function showUploadPolicyModal() {
+            showModal('uploadPolicyModal');
+        }
+
+        function showTenderModal() {
+            showModal('tenderModal');
+        }
+
+        // Form submission handlers
+        document.getElementById('addAdminForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            console.log('Adding new admin:', Object.fromEntries(formData));
+            app.showAlert('Admin added successfully', 'success');
+            hideModal('addAdminModal');
+            this.reset();
+        });
+
+        document.getElementById('uploadPolicyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            console.log('Uploading policy:', Object.fromEntries(formData));
+            app.showAlert('Policy uploaded successfully', 'success');
+            hideModal('uploadPolicyModal');
+            this.reset();
+        });
+
+        // File upload handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileUpload = document.getElementById('fileUpload');
+            const fileInput = document.getElementById('policyFile');
+
+            if (fileUpload && fileInput) {
+                fileUpload.addEventListener('click', () => fileInput.click());
+                
+                fileUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileUpload.classList.add('dragover');
+                });
+                
+                fileUpload.addEventListener('dragleave', () => {
+                    fileUpload.classList.remove('dragover');
+                });
+                
+                fileUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    fileUpload.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        fileInput.files = files;
+                        updateFileUploadText(files[0].name);
+                    }
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        updateFileUploadText(e.target.files[0].name);
+                    }
+                });
+            }
+
+            function updateFileUploadText(fileName) {
+                const uploadText = fileUpload.querySelector('.upload-text');
+                uploadText.innerHTML = `<strong>Selected:</strong> ${fileName}<br><small>Click to change file</small>`;
+            }
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
