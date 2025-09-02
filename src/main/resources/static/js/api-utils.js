@@ -4,7 +4,7 @@
 
 
 // Base API URL - adjust this to match your Spring Boot server
-const BASE_API_URL = 'http://localhost:8080/api';
+const BASE_API_URL = 'https://uvmsapiv1.onrender.com/api';
 
 /**
  * Get JWT token from localStorage

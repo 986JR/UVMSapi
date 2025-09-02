@@ -31,7 +31,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         localStorage.setItem("jwtToken", token);
 
         //Validate token by hitting protected endpoint
-        const validateRes = await fetch("http://localhost:8080/api/dashboard", {
+        const validateRes = await fetch("https://uvmsapiv1.onrender.com/api/dashboard", {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + token,
