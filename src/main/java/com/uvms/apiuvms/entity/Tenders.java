@@ -26,7 +26,7 @@ public class Tenders {
 
     @ManyToOne
     @JoinColumn(name = "college_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("college-tenders")
     private Colleges college;
 
     @Column(nullable = false, length = 255)
@@ -58,7 +58,7 @@ public class Tenders {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("tender-plots")
     private List<Plots> plots = new ArrayList<>();
 
     // Constructors

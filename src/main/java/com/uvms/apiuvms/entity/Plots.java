@@ -1,6 +1,7 @@
 // Plots.java in entity folder
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ public class Plots {
 
     @ManyToOne
     @JoinColumn(name = "tender_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference("tender-plots")
     private Tenders tender;
 
     @Column(name = "plot_number", length = 50, nullable = false)
