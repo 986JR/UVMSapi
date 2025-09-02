@@ -48,7 +48,7 @@ public class SecurityConfig {
                         // Public auth endpoints
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         // Public API endpoints
-                        .requestMatchers("/api/colleges/**", "/api/tenders/**").permitAll()
+                        .requestMatchers("/api/colleges/**", "/api/tenders/**","/api/colleges").permitAll()
                         .requestMatchers("/api/policies/**").permitAll()
                         // Protected endpoints
                         .requestMatchers("/api/protected/**").authenticated()
