@@ -23,11 +23,9 @@ public class Applications {
 
     @ManyToOne
     @JoinColumn(name = "vendor_id", nullable = false)
-    @JsonIgnore
     private Vendors vendor;
     @ManyToOne
     @JoinColumn(name = "plot_id", nullable = false)
-    @JsonIgnore
     private Plots plot;
 
     @CreationTimestamp
@@ -60,9 +58,9 @@ public class Applications {
     // Constructors
     public Applications() {}
 
-    public Applications(Vendors vendor, /*Plots plot,*/ String submittedContractPath) {
+    public Applications(Vendors vendor, Plots plot, String submittedContractPath) {
         this.vendor = vendor;
-       // this.plot = plot;
+       this.plot = plot;
         this.submittedContractPath = submittedContractPath;
     }
 }

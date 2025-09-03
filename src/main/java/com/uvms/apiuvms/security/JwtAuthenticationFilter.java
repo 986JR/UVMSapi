@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // If valid JWT token exists, extract email
             if (jwt != null && jwtUtil.isTokenValid(jwt)) {
                 email = jwtUtil.extractEmail(jwt);
+
             }
 
             // If email extracted and no existing authentication
