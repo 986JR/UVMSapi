@@ -17,14 +17,14 @@ public class Colleges {
 
     @Column(nullable = false, unique = true,length = 255)
     private String college_name;
-
+    // @com.fasterxml.jackson.annotation.JsonIgnore
 //Refferential Integrity Contrains
     @OneToMany(mappedBy = "colleges", cascade = CascadeType.ALL, orphanRemoval = true)
-    @com.fasterxml.jackson.annotation.JsonIgnore
+  //  @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Admins> admins = new ArrayList<>();
 
     @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @com.fasterxml.jackson.annotation.JsonIgnore
+   // @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Tenders> tenders = new ArrayList<>();
     //Constructors
 
