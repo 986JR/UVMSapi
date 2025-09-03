@@ -2,6 +2,7 @@
 package com.uvms.apiuvms.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,12 +23,12 @@ public class Applications {
 
     @ManyToOne
     @JoinColumn(name = "vendor_id", nullable = false)
+    @JsonIgnore
     private Vendors vendor;
-
-    //@ManyToOne
-   // @JoinColumn(name = "plot_id", nullable = false)
-    //@JsonBackReference
-    //private Plots plot;
+    @ManyToOne
+    @JoinColumn(name = "plot_id", nullable = false)
+    @JsonIgnore
+    private Plots plot;
 
     @CreationTimestamp
     @Column(name = "application_date", updatable = false)
