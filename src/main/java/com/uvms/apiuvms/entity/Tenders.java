@@ -58,7 +58,7 @@ public class Tenders {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("tender-plots")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Plots> plots = new ArrayList<>();
 
     // Constructors
