@@ -8,290 +8,229 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>UVMS</h3>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h3>UVMS</h3>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="dashboard.html" class="active">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="colleges.html">
+            <i class="fas fa-university"></i> Tenders
+        </a>
+        <a href="applications.html">
+            <i class="fas fa-clipboard-list"></i> Applications
+        </a>
+        <a href="licenses.html">
+            <i class="fas fa-certificate"></i> Licenses
+        </a>
+        <a href="contracts.html">
+            <i class="fas fa-file-signature"></i> Contracts
+        </a>
+        <a href="policies.html">
+            <i class="fas fa-book"></i> Policies
+        </a>
+        <a href="notifications.html">
+            <i class="fas fa-bell"></i> Notifications
+        </a>
+        <a href="../../index.html">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </nav>
+</div>
+
+<!-- Top Navigation -->
+<nav class="navbar">
+    <button class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="navbar-brand">Dashboard</div>
+    <div class="navbar-user">
+        <div class="user-avatar">JD</div>
+        <span>John Doe</span>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+    <!-- Stats Cards -->
+    <div class="stats-grid mb-3">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h4>0</h4>
+                <p>Contracts</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-file-contract"></i>
+            </div>
         </div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="active">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-            <a href="colleges.html">
-                <i class="fas fa-university"></i> Tenders
-            </a>  
-            <a href="applications.html">
-                <i class="fas fa-clipboard-list"></i> Applications
-            </a>
-            <a href="licenses.html">
-                <i class="fas fa-certificate"></i> Licenses
-            </a>
-            <a href="contracts.html">
-                <i class="fas fa-file-signature"></i> Contracts
-            </a>
-            <a href="policies.html">
-                <i class="fas fa-book"></i> Policies
-            </a>
-            <a href="notifications.html">
-                <i class="fas fa-bell"></i> Notifications
-            </a>
-            <a href="../../index.html">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </nav>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h4>0</h4>
+                <p>Licenses</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h4>0</h4>
+                <p>Applications</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h4>0</h4>
+                <p>Renewal Requests</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-certificate"></i>
+            </div>
+        </div>
     </div>
 
-    <!-- Top Navigation -->
-    <nav class="navbar">
-        <button class="mobile-menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="navbar-brand">Dashboard</div>
-        <div class="navbar-user">
-            <div class="user-avatar">JD</div>
-            <span>John Doe</span>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Stats Cards -->
-        <div class="stats-grid mb-3">
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h4>8</h4>
-                    <p>Contracts</p>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-file-contract"></i>
-                </div>
+    <!-- Content Grid -->
+    <div class="grid grid-2">
+        <!-- Recent Tenders -->
+        <div class="card recent-tenders">
+            <div class="card-header">
+                <h3>Recent Tenders</h3>
             </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h4>4</h4>
-                    <p>Licenses</p>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-clipboard-list"></i>
-                </div>
+            <div class="card-body tenders-container">
+                <!-- Fetched tenders will go here -->
             </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h4>2</h4>
-                    <p>Applications</p>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h4>3</h4>
-                    <p>Renewal Requests</p>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-certificate"></i>
-                </div>
+            <div class="card-footer">
+                <a href="notifications.html" class="btn btn-primary"><i class="fas fa-bell"></i> Notifications</a>
             </div>
         </div>
 
-        <!-- Content Grid -->
-        <div class="grid grid-2">
-            <!-- Recent Tenders -->
+        <!-- Right Column -->
+        <div>
+            <!-- Policies and Guidelines -->
+            <div class="card policies-card mb-2">
+                <div class="card-header">
+                    <h3>Policies and Guidelines</h3>
+                </div>
+                <div class="card-body policies-container">
+                    <!-- Fetched policies will go here -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
             <div class="card">
                 <div class="card-header">
-                    <h3>Recent Tenders</h3>
+                    <h3>Quick Actions</h3>
                 </div>
                 <div class="card-body">
-                    <div class="tender-item mb-2" style="padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;">
-                        <div class="flex flex-between align-center flex-mobile-stack">
-                            <h4 style="margin: 0; font-size: 1em;">Construction of New Library Building</h4>
-                            <small style="color: var(--uvms-text-secondary-light);">TND-2024-001</small>
-                        </div>
-                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">College of Engineering - Deadline: 2024-12-30</p>
-                        <div class="flex align-center gap-1 flex-mobile-stack">
-                            <span class="badge badge-success">open</span>
-                            <!-- <small>Created by Admin ID: 2</small> -->
-                        </div>
-                    </div>
-                    
-                    <div class="tender-item mb-2" style="padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;">
-                        <div class="flex flex-between align-center flex-mobile-stack">
-                            <h4 style="margin: 0; font-size: 1em;">Supply of Laboratory Equipment</h4>
-                            <small style="color: var(--uvms-text-secondary-light);">TND-2024-002</small>
-                        </div>
-                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">College of Natural Sciences - Deadline: 2025-01-15</p>
-                        <div class="flex align-center gap-1 flex-mobile-stack">
-                            <span class="badge badge-success">open</span>
-                            <!-- <small>Created by Admin ID: 5</small> -->
-                        </div>
-                    </div>
-                    
-                    <div class="tender-item mb-2" style="padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;">
-                        <div class="flex flex-between align-center flex-mobile-stack">
-                            <h4 style="margin: 0; font-size: 1em;">Campus WiFi Infrastructure Upgrade</h4>
-                            <small style="color: var(--uvms-text-secondary-light);">TND-2024-003</small>
-                        </div>
-                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">College of Informatics - Deadline: 2025-02-20</p>
-                        <div class="flex align-center gap-1 flex-mobile-stack">
-                            <span class="badge badge-success">open</span>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="card-footer">
-                    <a href="notifications.html" class="btn btn-primary"><i class="fas fa-bell"></i> Notifications</a>
-                </div>
-            </div>
-
-            <!-- Right Column -->
-            <div>
-                <!-- Upcoming Deadlines -->
-                <div class="card mb-2">
-                    <div class="card-header">
-                        <h3>Policies and Guidelines</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="deadline-item" style="padding: 12px; border-left: 4px solid var(--uvms-blue-primary); background: rgba(30, 136, 229, 0.1); margin-bottom: 10px;">
-                            <div class="flex flex-between align-center">
-                                <h4 style="margin: 0; font-size: 0.9em;">Lorem Ipsum</h4>
-                                <span class="badge badge-secondary">View</span>
-                            </div>
-                            <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">Lorem ipsum dolor sit amet</p>
-                        </div>
-                        
-                        <div class="deadline-item" style="padding: 12px; border-left: 4px solid var(--uvms-blue-primary); background: rgba(30, 136, 229, 0.1); margin-bottom: 10px;">
-                            <div class="flex flex-between align-center">
-                                <h4 style="margin: 0; font-size: 0.9em;">Lorem Ipsum</h4>
-                                <span class="badge badge-secondary">View</span>
-                            </div>
-                            <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">Lorem ipsum dolor sit amet</p>
-                        </div>
-                        
-                        <div class="deadline-item" style="padding: 12px; border-left: 4px solid var(--uvms-blue-primary); background: rgba(30, 136, 229, 0.1); margin-bottom: 10px;">
-                            <div class="flex flex-between align-center">
-                                <h4 style="margin: 0; font-size: 0.9em;">Lorem Ipsum</h4>
-                                <span class="badge badge-secondary">View</span>
-                            </div>
-                            <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">Lorem ipsum dolor sit amet</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Quick Actions</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="flex" style="flex-direction: column; gap: 10px;">
-                            <button class="btn btn-primary" onclick="location.href='tenders.html'">
-                                <i class="fas fa-search"></i> Browse Tenders
-                            </button>
-                            <button class="btn btn-primary" onclick="location.href='applications.html'">
-                                <i class="fas fa-clipboard-list"></i> My Applications
-                            </button>
-                            <button class="btn btn-primary" onclick="location.href='renew-license.html'">
-                                <i class="fas fa-sync-alt"></i> Renew License
-                            </button>
-                        </div>
+                    <div class="flex" style="flex-direction: column; gap: 10px;">
+                        <button class="btn btn-primary" onclick="location.href='tenders.html'">
+                            <i class="fas fa-search"></i> Browse Tenders
+                        </button>
+                        <button class="btn btn-primary" onclick="location.href='applications.html'">
+                            <i class="fas fa-clipboard-list"></i> My Applications
+                        </button>
+                        <button class="btn btn-primary" onclick="location.href='renew-license.html'">
+                            <i class="fas fa-sync-alt"></i> Renew License
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--<script src="js/uvms-main.js"></script>--> 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const apiBase = "https://uvmsapiv1.onrender.com/api";
+        const token = localStorage.getItem("jwtToken");
 
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-            const apiBase = "https://uvmsapiv1.onrender.com/api";
-            const token = localStorage.getItem("jwtToken");
-
-            if (!token) {
+        if (!token) {
             alert("You must login first!");
             window.location.href = "index.html";
             return;
         }
 
-            const authHeaders = {
+        const authHeaders = {
             "Authorization": "Bearer " + token,
             "Content-Type": "application/json"
         };
 
-            // 1️⃣ Fetch Vendor Info
-            fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
+        // 1️⃣ Fetch Vendor Info
+        fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
             .then(response => {
-            if (!response.ok) throw new Error("Unauthorized or session expired");
-            return response.json();
-        })
+                if (!response.ok) throw new Error("Unauthorized or session expired");
+                return response.json();
+            })
             .then(vendor => {
-            document.querySelector(".navbar-user span").textContent = `${vendor.firstName} ${vendor.lastName}`;
-
-            // Update Stats Cards
-            document.querySelector(".stats-grid .stat-card:nth-child(1) h4").textContent = vendor.contracts?.length || 0;
-            document.querySelector(".stats-grid .stat-card:nth-child(2) h4").textContent = vendor.licenses?.length || 0;
-            document.querySelector(".stats-grid .stat-card:nth-child(3) h4").textContent = vendor.applications?.length || 0;
-            document.querySelector(".stats-grid .stat-card:nth-child(4) h4").textContent = vendor.renewalRequests?.length || 0;
-        })
+                document.querySelector(".navbar-user span").textContent = `${vendor.firstName} ${vendor.lastName}`;
+                document.querySelector(".stats-grid .stat-card:nth-child(1) h4").textContent = vendor.contracts?.length || 0;
+                document.querySelector(".stats-grid .stat-card:nth-child(2) h4").textContent = vendor.licenses?.length || 0;
+                document.querySelector(".stats-grid .stat-card:nth-child(3) h4").textContent = vendor.applications?.length || 0;
+                document.querySelector(".stats-grid .stat-card:nth-child(4) h4").textContent = vendor.renewalRequests?.length || 0;
+            })
             .catch(err => {
-            console.error("Error fetching vendor:", err);
-            alert("Session expired. Please login again.");
-            localStorage.removeItem("jwtToken");
-            window.location.href = "index.html";
-        });
+                console.error("Error fetching vendor:", err);
+                alert("Session expired. Please login again.");
+                localStorage.removeItem("jwtToken");
+                window.location.href = "index.html";
+            });
 
-            // 2️⃣ Fetch Recent Tenders (last 3)
-            fetch(`${apiBase}/tenders`, { headers: authHeaders })
+        // 2️⃣ Fetch Recent Tenders (last 3)
+        fetch(`${apiBase}/tenders`, { headers: authHeaders })
             .then(response => response.json())
             .then(tenders => {
-            const tendersContainer = document.querySelector(".card:nth-child(1) .card-body");
-            tendersContainer.innerHTML = "";
-            const lastThree = tenders.slice(-3).reverse();
-            lastThree.forEach(t => {
-            const div = document.createElement("div");
-            div.classList.add("tender-item", "mb-2");
-            div.style.cssText = "padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;";
-            div.innerHTML = `
-                    <div class="flex flex-between align-center flex-mobile-stack">
-                        <h4 style="margin: 0; font-size: 1em;">${t.title}</h4>
-                        <small style="color: var(--uvms-text-secondary-light);">${t.tenderCode}</small>
-                    </div>
-                    <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">${t.college?.college_name || "N/A"} - Deadline: ${t.deadlineDate}</p>
-                    <div class="flex align-center gap-1 flex-mobile-stack">
-                        <span class="badge badge-success">${t.status || "open"}</span>
-                    </div>
-                `;
-            tendersContainer.appendChild(div);
-        });
-        })
+                const tendersContainer = document.querySelector(".tenders-container");
+                tendersContainer.innerHTML = "";
+                const lastThree = tenders.slice(-3).reverse();
+                lastThree.forEach(t => {
+                    const div = document.createElement("div");
+                    div.classList.add("tender-item", "mb-2");
+                    div.style.cssText = "padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;";
+                    div.innerHTML = `
+                        <div class="flex flex-between align-center flex-mobile-stack">
+                            <h4 style="margin: 0; font-size: 1em;">${t.title}</h4>
+                            <small style="color: var(--uvms-text-secondary-light);">${t.tenderCode}</small>
+                        </div>
+                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">${t.college?.college_name || "N/A"} - Deadline: ${t.deadlineDate}</p>
+                        <div class="flex align-center gap-1 flex-mobile-stack">
+                            <span class="badge badge-success">${t.status || "open"}</span>
+                        </div>
+                    `;
+                    tendersContainer.appendChild(div);
+                });
+            })
             .catch(err => console.error("Error fetching tenders:", err));
 
-            // 3️⃣ Fetch Policies/Guidelines (last 3)
-            fetch(`${apiBase}/policies`, { headers: authHeaders })
+        // 3️⃣ Fetch Policies/Guidelines (last 3)
+        fetch(`${apiBase}/policies`, { headers: authHeaders })
             .then(response => response.json())
             .then(policies => {
-            const policiesContainer = document.querySelector(".card:nth-child(2) .card-body");
-            policiesContainer.innerHTML = "";
-            const lastThree = policies.slice(-3).reverse();
-            lastThree.forEach(p => {
-            const div = document.createElement("div");
-            div.classList.add("deadline-item");
-            div.style.cssText = "padding: 12px; border-left: 4px solid var(--uvms-blue-primary); background: rgba(30, 136, 229, 0.1); margin-bottom: 10px;";
-            div.innerHTML = `
-                    <div class="flex flex-between align-center">
-                        <h4 style="margin: 0; font-size: 0.9em;">${p.title}</h4>
-                        <span class="badge badge-secondary">View</span>
-                    </div>
-                    <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">${p.description}</p>
-                `;
-            policiesContainer.appendChild(div);
-        });
-        })
+                const policiesContainer = document.querySelector(".policies-container");
+                policiesContainer.innerHTML = "";
+                const lastThree = policies.slice(-3).reverse();
+                lastThree.forEach(p => {
+                    const div = document.createElement("div");
+                    div.classList.add("deadline-item");
+                    div.style.cssText = "padding: 12px; border-left: 4px solid var(--uvms-blue-primary); background: rgba(30, 136, 229, 0.1); margin-bottom: 10px;";
+                    div.innerHTML = `
+                        <div class="flex flex-between align-center">
+                            <h4 style="margin: 0; font-size: 0.9em;">${p.title}</h4>
+                            <span class="badge badge-secondary">View</span>
+                        </div>
+                        <p style="margin: 5px 0 0 0; color: var(--uvms-text-secondary-light); font-size: 0.8em;">${p.description}</p>
+                    `;
+                    policiesContainer.appendChild(div);
+                });
+            })
             .catch(err => console.error("Error fetching policies:", err));
-        });
-    </script>
-
+    });
+</script>
 
 </body>
 </html>
