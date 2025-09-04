@@ -41,7 +41,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
         if (validateRes.ok) {
             //Redirect if token is valid
-            window.location.href = "dashboard2.html";
+            window.location.href = "dashboard.html";
         } else if (validateRes.status === 403 || validateRes.status === 401) {
             alert("Unauthorized! Please login again.");
             localStorage.removeItem("jwtToken"); // clear invalid token
