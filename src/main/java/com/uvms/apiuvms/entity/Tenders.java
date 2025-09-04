@@ -26,7 +26,7 @@ public class Tenders {
 
     @ManyToOne
     @JoinColumn(name = "college_id", nullable = false)
-    @JsonBackReference("college-tenders")
+    //@JsonBackReference("college-tenders")
     private Colleges college;
 
     @Column(nullable = false, length = 255)
