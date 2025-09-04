@@ -25,7 +25,7 @@ public class Colleges {
     private List<Admins> admins = new ArrayList<>();
 
     @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   // @com.fasterxml.jackson.annotation.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Tenders> tenders = new ArrayList<>();
     //Constructors
 
