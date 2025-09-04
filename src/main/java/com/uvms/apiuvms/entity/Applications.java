@@ -1,14 +1,18 @@
 // Applications.java in entity folder
 package com.uvms.apiuvms.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "application_id"
+)
+@JsonIdentityReference(alwaysAsId = true)
 @Entity
 @Table(name = "applications")
 @Data

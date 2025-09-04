@@ -1,5 +1,8 @@
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,6 +12,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "vendors")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "vendorId"
+)
+@JsonIdentityReference(alwaysAsId = true)
 public class Vendors {
 
     @Id

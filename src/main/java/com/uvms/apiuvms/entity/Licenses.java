@@ -1,6 +1,8 @@
 // Licenses.java in entity folder
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,6 +13,12 @@ import java.util.List;
 @Entity
 @Table(name = "licenses")
 @Data
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "license_id"
+)
+
 public class Licenses {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

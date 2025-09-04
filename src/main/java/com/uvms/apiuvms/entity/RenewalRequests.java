@@ -1,6 +1,9 @@
 // RenewalRequests.java in entity folder
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +13,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "renewal_requests")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "renewal_id"
+)
+@JsonIdentityReference(alwaysAsId = true)
 public class RenewalRequests {
     public enum Status {
         PENDING, APPROVED, DENIED
