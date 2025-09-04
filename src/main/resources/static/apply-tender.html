@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Tender | University Vendor Management System</title>
+    <link rel="stylesheet" href="css/vendor-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --secondary: #6c757d;
+            --success: #198754;
+            --light: #f8f9fa;
+            --uvms-border-light: #dee2e6;
+            --uvms-background-light: #f8f9fa;
+            --uvms-blue-primary: #1E88E5;
+        }
+        .sidebar {
+            background-color: #1E88E5;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 60px;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: all 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 80px;
+        }
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .form-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .upload-area {
+            border: 2px dashed var(--uvms-border-light);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: var(--uvms-background-light);
+        }
+        .upload-area:hover {
+            border-color: var(--uvms-blue-primary);
+            background-color: rgba(30, 136, 229, 0.05);
+        }
+        .file-item {
+            padding: 12px;
+            background-color: var(--uvms-background-light);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .progress-container {
+            height: 8px;
+            background-color: var(--uvms-border-light);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--uvms-blue-primary);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4>Vendor Portal</h4>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="colleges.html"><i class="fas fa-university"></i> Academic Units</a>
+            <a href="tenders.html"><i class="fas fa-file-alt"></i> Tenders</a>
+            <a href="applications.html" class="active"><i class="fas fa-clipboard-check"></i> Applications</a>
+            <a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a>
+            <a href="contracts.html"><i class="fas fa-file-contract"></i> Contracts</a>
+            <a href="renew-license.html"><i class="fas fa-sync-alt"></i> Renew License</a>
+            <a href="policies.html"><i class="fas fa-book"></i> Policies</a>
+            <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <a href="tender-details.html" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Tender Details
+                </a>
+            </div>
+            <div class="navbar-right">
+                <div class="user-menu">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Vendor Name</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <div class="header-content">
+                <h2>Apply for Tender</h2>
+                <p class="text-muted">Reference: TENDER-UT-2023-087 | Construction of New Library Building</p>
+            </div>
+            <div class="header-actions">
+                <span class="badge badge-warning">Closes in 3 days</span>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Please complete all sections of this application form and upload required documents. Incomplete applications will not be considered.
+        </div>
+
+        <form id="tenderApplicationForm">
+            <!-- Company Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Company Information</h4>
+                </div>
+                <div class="card-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="companyName" class="form-label">Company Name *</label>
+                        <input type="text" class="form-input" id="companyName" value="ABC Construction Ltd." readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="registrationNo" class="form-label">Registration Number *</label>
+                        <input type="text" class="form-input" id="registrationNo" value="REG-123456789" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactPerson" class="form-label">Contact Person *</label>
+                        <input type="text" class="form-input" id="contactPerson" value="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail" class="form-label">Contact Email *</label>
+                        <input type="email" class="form-input" id="contactEmail" value="john@abcconstruction.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactPhone" class="form-label">Contact Phone *</label>
+                        <input type="tel" class="form-input" id="contactPhone" value="+1 (555) 123-4567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyWebsite" class="form-label">Company Website</label>
+                        <input type="url" class="form-input" id="companyWebsite" value="https://www.abcconstruction.com">
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Proposal Details -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Proposal Details</h4>
+                </div>
+                <div class="card-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="proposedAmount" class="form-label">Proposed Amount (USD) *</label>
+                        <div class="input-group">
+                            <span class="input-prefix">$</span>
+                            <input type="number" class="form-input" id="proposedAmount" placeholder="Enter amount" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="completionTime" class="form-label">Proposed Completion Time (months) *</label>
+                        <input type="number" class="form-input" id="completionTime" placeholder="Enter months" min="1" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="proposalSummary" class="form-label">Proposal Summary *</label>
+                    <textarea class="form-textarea" id="proposalSummary" rows="4" placeholder="Briefly describe your approach to this project" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="keyPersonnel" class="form-label">Key Personnel</label>
+                    <textarea class="form-textarea" id="keyPersonnel" rows="3" placeholder="List key team members who will work on this project"></textarea>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Documents Upload -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Required Documents</h4>
+                </div>
+                <div class="card-body">
+                
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> The following documents are mandatory for your application to be considered.
+                </div>
+                
+                <div class="upload-area" onclick="document.getElementById('fileUpload').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h5>Drag & Drop or Click to Upload</h5>
+                    <p class="text-muted">Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</p>
+                    <input type="file" id="fileUpload" multiple hidden>
+                </div>
+                
+                <h5>Uploaded Files</h5>
+                <div class="file-list">
+                    <div class="file-item">
+                        <div class="file-info">
+                            <i class="fas fa-file-pdf"></i> company-profile.pdf
+                            <span class="text-muted">(2.4 MB)</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-info">
+                            <i class="fas fa-file-pdf"></i> financial-statement-2022.pdf
+                            <span class="text-muted">(1.8 MB)</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <h5>Required Documents Checklist</h5>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input class="form-checkbox" type="checkbox" id="check1" required>
+                        <label class="checkbox-label" for="check1">Company Profile</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input class="form-checkbox" type="checkbox" id="check2" required>
+                        <label class="checkbox-label" for="check2">Financial Statements (Last 3 years)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input class="form-checkbox" type="checkbox" id="check3" required>
+                        <label class="checkbox-label" for="check3">Tax Compliance Certificate</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input class="form-checkbox" type="checkbox" id="check4" required>
+                        <label class="checkbox-label" for="check4">Similar Project References (Minimum 3)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input class="form-checkbox" type="checkbox" id="check5" required>
+                        <label class="checkbox-label" for="check5">Technical Proposal Document</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input class="form-checkbox" type="checkbox" id="check6" required>
+                        <label class="checkbox-label" for="check6">Financial Proposal Document</label>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Terms and Conditions</h4>
+                </div>
+                <div class="card-body">
+                
+                <div class="terms-content">
+                    <h6>1. Submission Guidelines</h6>
+                    <p>All proposals must be submitted before the deadline. Late submissions will not be considered under any circumstances.</p>
+                    
+                    <h6>2. Evaluation Process</h6>
+                    <p>Proposals will be evaluated based on technical merit (70%) and financial offer (30%). The evaluation committee's decision is final.</p>
+                    
+                    <h6>3. Validity of Offer</h6>
+                    <p>Your proposal must remain valid for a period of 90 days from the submission deadline.</p>
+                    
+                    <h6>4. Confidentiality</h6>
+                    <p>All information submitted will be treated as confidential and used solely for the purpose of this tender evaluation.</p>
+                    
+                    <h6>5. Withdrawal of Proposal</h6>
+                    <p>Proposals may be withdrawn by written notice received at any time before the submission deadline.</p>
+                    
+                    <h6>6. Award of Contract</h6>
+                    <p>The university reserves the right to accept or reject any proposal, and to cancel the tender process at any time.</p>
+                </div>
+                
+                <div class="checkbox-item">
+                    <input class="form-checkbox" type="checkbox" id="termsAgreement" required>
+                    <label class="checkbox-label" for="termsAgreement">
+                        I have read and agree to the terms and conditions *
+                    </label>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Submission -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline-secondary">
+                    <i class="fas fa-save"></i> Save Draft
+                </button>
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-outline-primary">
+                        <i class="fas fa-eye"></i> Preview Application
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/uvms-main.js"></script>
+    <script>
+        document.getElementById('tenderApplicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Form validation
+            const proposedAmount = document.getElementById('proposedAmount').value;
+            const completionTime = document.getElementById('completionTime').value;
+            const proposalSummary = document.getElementById('proposalSummary').value;
+            
+            if (!proposedAmount || !completionTime || !proposalSummary) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Check if all required documents are uploaded
+            const checkboxes = document.querySelectorAll('.form-checkbox');
+            for (let checkbox of checkboxes) {
+                if (!checkbox.checked) {
+                    alert('Please confirm that you have uploaded all required documents.');
+                    return;
+                }
+            }
+            
+            // If all validations pass, show success message
+            alert('Your application has been submitted successfully!');
+            window.location.href = 'applications.html';
+        });
+        
+        // File upload handling
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const fileList = document.querySelector('.file-list');
+            
+            for (let file of files) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <i class="fas fa-file"></i> ${file.name}
+                        <span class="text-muted">(${(file.size / 1024 / 1024).toFixed(1)} MB)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentElement.remove()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                fileList.appendChild(fileItem);
+            }
+        });
+    </script>
+</body>
+</html>

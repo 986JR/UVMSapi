@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications | UDOM Vendor Management System</title>
+    <link rel="stylesheet" href="css/vendor-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 20px auto;
+            padding: 0;
+            /* border-radius: 12px; */
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            background: var(--uvms-blue-primary);
+            color: white;
+            /* border-radius: 12px 12px 0 0; */
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            flex: 1;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .modal-section h3 {
+            margin-top: 0;
+            color: var(--uvms-blue-primary);
+            border-bottom: 2px solid var(--uvms-blue-light);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85em;
+            color: var(--uvms-text-secondary-light);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: var(--uvms-text-primary);
+        }
+
+        .file-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--uvms-blue-light);
+            border-radius: 6px;
+            /* color: var(--uvms-blue-primary); */
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .file-download:hover {
+            background: var(--uvms-blue-primary);
+            color: white;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: #f8f9fa;
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Status specific styles */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: var(--uvms-warning-light);
+            color: var(--uvms-warning-yellow);
+        }
+
+        .status-approved {
+            background: var(--uvms-success-light);
+            color: var(--uvms-success-green);
+        }
+
+        .status-denied {
+            background: var(--uvms-error-light);
+            color: var(--uvms-error-red);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10px auto;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>UVMS</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="colleges.html">
+                <i class="fas fa-university"></i> Tenders
+            </a>
+            <a href="applications.html" class="active">
+                <i class="fas fa-clipboard-list"></i> Applications
+            </a>
+            <a href="licenses.html">
+                <i class="fas fa-certificate"></i> Licenses
+            </a>
+            <a href="contracts.html">
+                <i class="fas fa-file-signature"></i> Contracts
+            </a>
+            <!-- <a href="renew-license.html">
+                <i class="fas fa-sync-alt"></i> Renew License
+            </a> -->
+            <a href="policies.html">
+                <i class="fas fa-book"></i> Policies
+            </a>
+            <a href="notifications.html">
+                <i class="fas fa-bell"></i> Notifications
+            </a>
+            <a href="../../index.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">My Applications</div>
+        <div class="navbar-user">
+            <div class="user-avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search and Filter -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="flex flex-between align-center gap-2 flex-mobile-stack">
+                    <div class="form-group" style="margin: 0; flex: 1; max-width: 400px;">
+                        <div style="position: relative;">
+                            <a href="college-tenders.html" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> <span class="hide-mobile">Browse Tenders</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 gap-mobile-1">
+                        <button class="btn sort btn-secondary" onclick="filterApplications('all')">
+                            <i class="fas fa-list"></i> <span class="hide-mobile">All</span>
+                        </button>
+                        <button class="btn sort btn-secondary" onclick="filterApplications('pending')">
+                            <i class="fas fa-clock"></i> <span class="hide-mobile">Pending</span>
+                        </button>
+                        <button class="btn sort btn-secondary" onclick="filterApplications('approved')">
+                            <i class="fas fa-check"></i> <span class="hide-mobile">Approved</span>
+                        </button>
+                        <button class="btn sort btn-secondary" onclick="filterApplications('denied')">
+                            <i class="fas fa-times"></i> <span class="hide-mobile">Denied</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-grid mb-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h4>5</h4>
+                    <p>Total Applications</p>
+                </div>
+                <div class="stat-icon" style="background: var(--uvms-blue-light);">
+                    <i class="fas fa-clipboard-list" style="color: var(--uvms-blue-primary);"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h4>2</h4>
+                    <p>Pending Review</p>
+                </div>
+                <div class="stat-icon" style="background: var(--uvms-warning-light);">
+                    <i class="fas fa-clock" style="color: var(--uvms-warning-yellow);"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h4>2</h4>
+                    <p>Approved</p>
+                </div>
+                <div class="stat-icon" style="background: var(--uvms-success-light);">
+                    <i class="fas fa-check-circle" style="color: var(--uvms-success-green);"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h4>1</h4>
+                    <p>Denied</p>
+                </div>
+                <div class="stat-icon" style="background: var(--uvms-error-light);">
+                    <i class="fas fa-times-circle" style="color: var(--uvms-error-red);"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Applications List -->
+        <div class="grid grid-1" id="applicationsContainer">
+            <!-- Application Card 1 - Pending -->
+            <div class="card application-card" data-status="pending">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Construction of New Library Building</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Plot:</strong> Plot A-15, Main Campus | <strong>College:</strong> Engineering
+                            </p>
+                        </div>
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                    
+                    <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-15</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                            <p style="margin: 0; font-weight: 500;">APP-2024-001</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Submitted Contract:</small>
+                            <p style="margin: 0; font-weight: 500;">
+                                <a href="#" style="color: var(--uvms-blue-primary);">
+                                    <i class="fas fa-file-pdf"></i> contract_001.pdf
+                                </a>
+                            </p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Awaiting Review</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-clock"></i> Submitted 3 days ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('APP-2024-001', 'pending')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-times"></i> Withdraw
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application Card 2 - Approved -->
+            <div class="card application-card" data-status="approved">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Supply of Laboratory Equipment</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Plot:</strong> Plot B-08, Science Block | <strong>College:</strong> Natural Sciences
+                            </p>
+                        </div>
+                        <span class="badge badge-success">Approved</span>
+                    </div>
+                    
+                    <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-10</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                            <p style="margin: 0; font-weight: 500;">APP-2024-002</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Approved Contract:</small>
+                            <p style="margin: 0; font-weight: 500;">
+                                <a href="#" style="color: var(--uvms-success-green);">
+                                    <i class="fas fa-file-contract"></i> approved_contract_002.pdf
+                                </a>
+                            </p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Reviewed By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 5</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success" style="margin-bottom: 15px;">
+                        <i class="fas fa-check-circle"></i> <strong>Approved:</strong> Application meets all requirements.
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-check"></i> Approved on 2024-12-18
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('APP-2024-002', 'approved')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="downloadContract('APP-2024-002')">
+                                <i class="fas fa-download"></i> Download Contract
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application Card 3 - Cafeteria Services (Denied) -->
+            <div class="card application-card" data-status="denied">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Cafeteria Management Services</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Plot:</strong> Plot C-12, Food Court | <strong>College:</strong> Business
+                            </p>
+                        </div>
+                        <span class="badge badge-error">Denied</span>
+                    </div>
+                    
+                    <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-12</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                            <p style="margin: 0; font-weight: 500;">APP-2024-003</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Reviewed By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 3</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Reviewed At:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-18 16:45:00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-error" style="margin-bottom: 15px;">
+                        <i class="fas fa-times-circle"></i> <strong>Denied:</strong> Did not meet minimum experience requirement in institutional food service management.
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-times"></i> Denied on 2024-12-18
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('APP-2024-003', 'denied')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application Card 4 - Landscaping (Pending) -->
+            <div class="card application-card" data-status="pending">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Campus Landscaping and Maintenance</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Plot:</strong> Plot D-01, Main Grounds | <strong>College:</strong> Agriculture
+                            </p>
+                        </div>
+                        <span class="badge badge-warning">Under Review</span>
+                    </div>
+                    
+                    <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-17</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                            <p style="margin: 0; font-weight: 500;">APP-2024-004</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Submitted Contract:</small>
+                            <p style="margin: 0; font-weight: 500;">
+                                <a href="#" style="color: var(--uvms-blue-primary);">
+                                    <i class="fas fa-file-pdf"></i> contract_004.pdf
+                                </a>
+                            </p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Under Review</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-clock"></i> Submitted 1 day ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('APP-2024-004', 'pending')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-times"></i> Withdraw
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application Card 5 - IT Infrastructure (Approved) -->
+            <div class="card application-card" data-status="approved">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">IT Infrastructure Upgrade</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Plot:</strong> Plot E-05, IT Block | <strong>College:</strong> Engineering
+                            </p>
+                        </div>
+                        <span class="badge badge-success">Approved</span>
+                    </div>
+                    
+                    <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-05</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                            <p style="margin: 0; font-weight: 500;">APP-2024-005</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Approved Contract:</small>
+                            <p style="margin: 0; font-weight: 500;">
+                                <a href="#" style="color: var(--uvms-success-green);">
+                                    <i class="fas fa-file-contract"></i> approved_contract_005.pdf
+                                </a>
+                            </p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Reviewed By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 1</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success" style="margin-bottom: 15px;">
+                        <i class="fas fa-check-circle"></i> <strong>Approved:</strong> Application meets all technical requirements.
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-check"></i> Approved on 2024-12-20
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('APP-2024-005', 'approved')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="downloadContract('APP-2024-005')">
+                                <i class="fas fa-download"></i> Download Contract
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Application Details Modal -->
+    <div id="applicationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Application Details</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Application Information Section -->
+                <div class="modal-section">
+                    <h3>Application Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Application ID</span>
+                            <span class="info-value" id="modal-app-id">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Tender Title</span>
+                            <span class="info-value" id="modal-tender-title">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">College</span>
+                            <span class="info-value" id="modal-college">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Plot/Location</span>
+                            <span class="info-value" id="modal-plot">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Application Date</span>
+                            <span class="info-value" id="modal-app-date">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="info-value" id="modal-status">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Contract Files Section -->
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Submitted Contract</span>
+                            <a href="#" class="file-download" id="modal-submitted-contract">
+                                <i class="fas fa-file-pdf"></i> Download Submitted Contract
+                            </a>
+                        </div>
+                        <div class="info-item" id="approved-contract-section" style="display: none;">
+                            <span class="info-label">Approved Contract</span>
+                            <a href="#" class="file-download" id="modal-approved-contract">
+                                <i class="fas fa-file-contract"></i> Download Approved Contract
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Review Information (only shown for reviewed applications) -->
+                    <div id="review-info-section" style="display: none;">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Reviewed By</span>
+                                <span class="info-value" id="modal-reviewed-by">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Reviewed At</span>
+                                <span class="info-value" id="modal-reviewed-at">-</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Feedback/Comments</span>
+                            <span class="info-value" id="modal-feedback">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendor Information Section -->
+                <div class="modal-section">
+                    <h3>Vendor Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Company Name</span>
+                            <span class="info-value" id="modal-company-name">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Business Type</span>
+                            <span class="info-value" id="modal-business-type">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">TIN Number</span>
+                            <span class="info-value" id="modal-tin-number">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Business Address</span>
+                            <span class="info-value" id="modal-business-address">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Contact Person</span>
+                            <span class="info-value" id="modal-contact-person">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Phone Number</span>
+                            <span class="info-value" id="modal-phone">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value" id="modal-email">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Registration Date</span>
+                            <span class="info-value" id="modal-reg-date">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn btn-primary" id="modal-download-btn" style="display: none;" onclick="downloadCurrentContract()">
+                    <i class="fas fa-download"></i> Download Contract
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/uvms-main.js"></script>
+    <script>
+        // Mock data for demonstration - Replace with actual API calls
+        const applicationData = {
+            'APP-2024-001': {
+                tenderTitle: 'Construction of New Library Building',
+                college: 'College of Engineering',
+                plot: 'Plot A-15, Main Campus',
+                appDate: '2024-12-15',
+                status: 'pending',
+                submittedContract: '/contracts/submitted/contract_001.pdf',
+                vendor: {
+                    companyName: 'TechBuild Solutions Ltd',
+                    businessType: 'Construction',
+                    tinNumber: '123-456-789',
+                    businessAddress: '123 Construction Ave, Dodoma',
+                    contactPerson: 'John Doe',
+                    phone: '+255 123 456 789',
+                    email: 'john.doe@techbuild.co.tz',
+                    regDate: '2024-01-15'
+                }
+            },
+            'APP-2024-002': {
+                tenderTitle: 'Supply of Laboratory Equipment',
+                college: 'College of Natural Sciences',
+                plot: 'Plot B-08, Science Block',
+                appDate: '2024-12-10',
+                status: 'approved',
+                submittedContract: '/contracts/submitted/contract_002.pdf',
+                approvedContract: '/contracts/approved/approved_contract_002.pdf',
+                reviewedBy: 'Admin User (ID: 5)',
+                reviewedAt: '2024-12-18 14:30:00',
+                feedback: 'Application meets all requirements and specifications.',
+                vendor: {
+                    companyName: 'Science Supplies Co.',
+                    businessType: 'Equipment Supply',
+                    tinNumber: '987-654-321',
+                    businessAddress: '456 Science Street, Dodoma',
+                    contactPerson: 'Jane Smith',
+                    phone: '+255 987 654 321',
+                    email: 'jane.smith@sciencesupplies.co.tz',
+                    regDate: '2023-11-20'
+                }
+            },
+            'APP-2024-003': {
+                tenderTitle: 'Cafeteria Management Services',
+                college: 'College of Business',
+                plot: 'Plot C-12, Food Court',
+                appDate: '2024-12-12',
+                status: 'denied',
+                submittedContract: '/contracts/submitted/contract_003.pdf',
+                reviewedBy: 'Admin User (ID: 3)',
+                reviewedAt: '2024-12-18 16:45:00',
+                feedback: 'Did not meet minimum experience requirement in institutional food service management.',
+                vendor: {
+                    companyName: 'Food Services Ltd',
+                    businessType: 'Food & Catering',
+                    tinNumber: '456-789-123',
+                    businessAddress: '789 Food Court, Dodoma',
+                    contactPerson: 'Mike Johnson',
+                    phone: '+255 456 789 123',
+                    email: 'mike.johnson@foodservices.co.tz',
+                    regDate: '2024-03-10'
+                }
+            },
+            'APP-2024-004': {
+                tenderTitle: 'Campus Landscaping and Maintenance',
+                college: 'College of Agriculture',
+                plot: 'Plot D-01, Main Grounds',
+                appDate: '2024-12-17',
+                status: 'pending',
+                submittedContract: '/contracts/submitted/contract_004.pdf',
+                vendor: {
+                    companyName: 'Green Thumb Landscaping',
+                    businessType: 'Landscaping',
+                    tinNumber: '321-654-987',
+                    businessAddress: '321 Garden Road, Dodoma',
+                    contactPerson: 'Sarah Wilson',
+                    phone: '+255 321 654 987',
+                    email: 'sarah.wilson@greenthumb.co.tz',
+                    regDate: '2023-08-15'
+                }
+            },
+            'APP-2024-005': {
+                tenderTitle: 'IT Infrastructure Upgrade',
+                college: 'College of Engineering',
+                plot: 'Plot E-05, IT Block',
+                appDate: '2024-12-05',
+                status: 'approved',
+                submittedContract: '/contracts/submitted/contract_005.pdf',
+                approvedContract: '/contracts/approved/approved_contract_005.pdf',
+                reviewedBy: 'Admin User (ID: 1)',
+                reviewedAt: '2024-12-20 10:15:00',
+                feedback: 'Application meets all technical requirements and budget constraints.',
+                vendor: {
+                    companyName: 'Tech Solutions Inc.',
+                    businessType: 'IT Services',
+                    tinNumber: '789-123-456',
+                    businessAddress: '555 Tech Park, Dodoma',
+                    contactPerson: 'Robert Brown',
+                    phone: '+255 789 123 456',
+                    email: 'robert.brown@techsolutions.co.tz',
+                    regDate: '2022-05-20'
+                }
+            }
+        };
+
+        let currentApplicationId = '';
+
+        // Show application details modal
+        function showApplicationDetails(appId, status) {
+            currentApplicationId = appId;
+            const data = applicationData[appId];
+            const modal = document.getElementById('applicationModal');
+            
+            if (data) {
+                // Populate application information
+                document.getElementById('modal-app-id').textContent = appId;
+                document.getElementById('modal-tender-title').textContent = data.tenderTitle;
+                document.getElementById('modal-college').textContent = data.college;
+                document.getElementById('modal-plot').textContent = data.plot;
+                document.getElementById('modal-app-date').textContent = data.appDate;
+                
+                // Set status with appropriate styling
+                const statusElement = document.getElementById('modal-status');
+                statusElement.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                statusElement.className = 'info-value status-' + data.status;
+                
+                // Set contract links
+                document.getElementById('modal-submitted-contract').href = data.submittedContract;
+                
+                // Show approved contract section if available
+                const approvedContractSection = document.getElementById('approved-contract-section');
+                const approvedContractLink = document.getElementById('modal-approved-contract');
+                if (data.approvedContract) {
+                    approvedContractSection.style.display = 'block';
+                    approvedContractLink.href = data.approvedContract;
+                } else {
+                    approvedContractSection.style.display = 'none';
+                }
+                
+                // Show review information for reviewed applications
+                const reviewSection = document.getElementById('review-info-section');
+                if (data.reviewedBy) {
+                    reviewSection.style.display = 'block';
+                    document.getElementById('modal-reviewed-by').textContent = data.reviewedBy;
+                    document.getElementById('modal-reviewed-at').textContent = data.reviewedAt;
+                    document.getElementById('modal-feedback').textContent = data.feedback || 'No feedback provided';
+                } else {
+                    reviewSection.style.display = 'none';
+                }
+                
+                // Populate vendor information
+                document.getElementById('modal-company-name').textContent = data.vendor.companyName;
+                document.getElementById('modal-business-type').textContent = data.vendor.businessType;
+                document.getElementById('modal-tin-number').textContent = data.vendor.tinNumber;
+                document.getElementById('modal-business-address').textContent = data.vendor.businessAddress;
+                document.getElementById('modal-contact-person').textContent = data.vendor.contactPerson;
+                document.getElementById('modal-phone').textContent = data.vendor.phone;
+                document.getElementById('modal-email').textContent = data.vendor.email;
+                document.getElementById('modal-reg-date').textContent = data.vendor.regDate;
+                
+                // Show download button only for approved applications
+                const downloadBtn = document.getElementById('modal-download-btn');
+                if (status === 'approved') {
+                    downloadBtn.style.display = 'block';
+                } else {
+                    downloadBtn.style.display = 'none';
+                }
+                
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('applicationModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Download contract function
+        function downloadContract(appId) {
+            const data = applicationData[appId];
+            if (data && data.approvedContract) {
+                // Simulate file download - replace with actual download logic
+                window.open(data.approvedContract, '_blank');
+            }
+        }
+
+        // Download current contract from modal
+        function downloadCurrentContract() {
+            if (currentApplicationId) {
+                downloadContract(currentApplicationId);
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('applicationModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Filter functionality
+        function filterApplications(status) {
+            const applicationCards = document.querySelectorAll('.application-card');
+            
+            applicationCards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

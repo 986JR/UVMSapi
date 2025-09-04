@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tender Details | UDOM Vendor Management System</title>
+    <link rel="stylesheet" href="css/vendor-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>UVMS</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="colleges.html" class="active">
+                <i class="fas fa-university"></i> Tenders
+            </a>
+            <a href="applications.html">
+                <i class="fas fa-clipboard-list"></i> Applications
+            </a>
+            <a href="licenses.html">
+                <i class="fas fa-certificate"></i> Licenses
+            </a>
+            <a href="contracts.html">
+                <i class="fas fa-file-signature"></i> Contracts
+            </a>
+            <a href="policies.html">
+                <i class="fas fa-book"></i> Policies
+            </a>
+            <a href="notifications.html">
+                <i class="fas fa-bell"></i> Notifications
+            </a>
+            <a href="../../index.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <button class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="navbar-brand">Tender Details</div>
+        <div class="navbar-user">
+            <div class="user-avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="flex flex-between align-center mb-3 flex-mobile-stack">
+            <div class="mb-mobile-2">
+                <h1 style="margin-bottom: 5px;">Construction of New Library Building</h1>
+                <p style="color: var(--uvms-text-secondary-light); margin: 0; font-size: 0.9em;">Tender ID: TND-2024-001 | College of Engineering</p>
+            </div>
+            <a href="college-tenders.html?college=engineering" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </a>
+        </div>
+
+        <!-- Tender Details -->
+        <div class="grid grid-2 gap-3">
+            <!-- Left Column -->
+            <div>
+                <!-- Basic Information -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>Basic Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid grid-2 gap-2">
+                            <div>
+                                <small style="color: var(--uvms-text-secondary-light);">Tender ID:</small>
+                                <p style="margin: 0; font-weight: 500;">TND-2024-001</p>
+                            </div>
+                            <div>
+                                <small style="color: var(--uvms-text-secondary-light);">College:</small>
+                                <p style="margin: 0; font-weight: 500;">College of Engineering</p>
+                            </div>
+                            <div>
+                                <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                                <p style="margin: 0; font-weight: 500;">Admin ID: 2</p>
+                            </div>
+                            <div>
+                                <small style="color: var(--uvms-text-secondary-light);">Created At:</small>
+                                <p style="margin: 0; font-weight: 500;">2024-12-01 10:30:00</p>
+                            </div>
+                            <div>
+                                <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                                <p style="margin: 0; font-weight: 500;"><span class="badge badge-success">Open</span></p>
+                            </div>
+                            <div>
+                                <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                                <p style="margin: 0; font-weight: 500; color: var(--uvms-danger-red);">2024-12-25 17:00:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>Description</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--uvms-text-secondary-light); line-height: 1.6;">
+                            Construction of a 5-story library building with modern facilities, reading rooms, and digital resource center. 
+                            The project includes structural work, electrical installations, plumbing, HVAC systems, and interior finishing. 
+                            The building should comply with all university construction standards and environmental sustainability guidelines.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Available Plots -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>Available Plots</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot-item mb-2" style="padding: 12px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light);">
+                            <h4 style="margin: 0; font-size: 1em;">Plot A-15</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">Main Campus, Near Administration Building</p>
+                            <small style="color: var(--uvms-text-secondary-light);">Size: 2,500 sqm</small>
+                        </div>
+                        
+                        <div class="plot-item mb-2" style="padding: 12px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light);">
+                            <h4 style="margin: 0; font-size: 1em;">Plot A-16</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">Main Campus, Adjacent to Student Center</p>
+                            <small style="color: var(--uvms-text-secondary-light);">Size: 1,800 sqm</small>
+                        </div>
+                        
+                        <div class="plot-item" style="padding: 12px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light);">
+                            <h4 style="margin: 0; font-size: 1em;">Plot A-17</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">Main Campus, Near Faculty of Science</p>
+                            <small style="color: var(--uvms-text-secondary-light);">Size: 2,200 sqm</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Actions -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex" style="flex-direction: column; gap: 10px;">
+                            <button class="btn btn-primary" onclick="downloadContract()">
+                                <i class="fas fa-download"></i> Download Contract Template
+                            </button>
+                            <button class="btn btn-success" onclick="openApplicationModal()">
+                                <i class="fas fa-paper-plane"></i> Submit Application
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-question-circle"></i> Request Information
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>Timeline</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline-item" style="padding: 10px 0; border-left: 2px solid var(--uvms-blue-primary); padding-left: 15px; position: relative;">
+                            <div style="position: absolute; left: -6px; top: 12px; width: 10px; height: 10px; background: var(--uvms-blue-primary); border-radius: 50%;"></div>
+                            <small style="color: var(--uvms-text-secondary-light);">December 1, 2024</small>
+                            <p style="margin: 5px 0; font-weight: 500;">Tender Published</p>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 10px 0; border-left: 2px solid var(--uvms-blue-primary); padding-left: 15px; position: relative;">
+                            <div style="position: absolute; left: -6px; top: 12px; width: 10px; height: 10px; background: var(--uvms-blue-primary); border-radius: 50%;"></div>
+                            <small style="color: var(--uvms-text-secondary-light);">December 10, 2024</small>
+                            <p style="margin: 5px 0; font-weight: 500;">Site Visit</p>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 10px 0; border-left: 2px solid var(--uvms-blue-primary); padding-left: 15px; position: relative;">
+                            <div style="position: absolute; left: -6px; top: 12px; width: 10px; height: 10px; background: var(--uvms-blue-primary); border-radius: 50%;"></div>
+                            <small style="color: var(--uvms-text-secondary-light);">December 25, 2024</small>
+                            <p style="margin: 5px 0; font-weight: 500; color: var(--uvms-danger-red);">Submission Deadline</p>
+                        </div>
+                        
+                        <div class="timeline-item" style="padding: 10px 0; padding-left: 15px; position: relative;">
+                            <div style="position: absolute; left: -6px; top: 12px; width: 10px; height: 10px; background: var(--uvms-text-secondary-light); border-radius: 50%;"></div>
+                            <small style="color: var(--uvms-text-secondary-light);">January 15, 2025</small>
+                            <p style="margin: 5px 0; font-weight: 500;">Evaluation Complete</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Requirements -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Requirements</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul style="color: var(--uvms-text-secondary-light); padding-left: 20px;">
+                            <li>Minimum 5 years experience in similar projects</li>
+                            <li>Tax compliance certificate</li>
+                            <li>Company registration documents</li>
+                            <li>Signed copy of contract template</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Modal -->
+    <div id="applicationModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 20px; width: 90%; max-width: 500px;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--uvms-surface-dark); padding-bottom: 15px; margin-bottom: 15px;">
+                <h3 style="margin: 0;">Submit Application</h3>
+                <span class="close" onclick="closeApplicationModal()" style="float: right; font-size: 24px; cursor: pointer;">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--uvms-text-secondary-light); margin-bottom: 15px;">
+                    You are applying for: <strong>Construction of New Library Building</strong> (TND-2024-001)
+                </p>
+                
+                <div class="form-group">
+                    <label for="plotSelection" class="form-label">Select Plot</label>
+                    <select class="form-input" id="plotSelection" required>
+                        <option value="">Select a plot</option>
+                        <option value="A-15">Plot A-15 (Main Campus, Near Administration Building)</option>
+                        <option value="A-16">Plot A-16 (Main Campus, Adjacent to Student Center)</option>
+                        <option value="A-17">Plot A-17 (Main Campus, Near Faculty of Science)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signedContract" class="form-label">Upload Signed Contract (PDF or Word)</label>
+                    <input type="file" class="form-input" id="signedContract" accept=".pdf,.doc,.docx" required>
+                    <small style="color: var(--uvms-text-secondary-light);">Make sure to merge the required documents with the signed contract before attaching.</small>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid var(--uvms-surface-dark); padding-top: 15px; margin-top: 15px;">
+                <button type="button" class="btn btn-secondary" onclick="closeApplicationModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="submitApplication()">Submit Application</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/uvms-main.js"></script>
+    <script>
+        // Function to open application modal
+        function openApplicationModal() {
+            document.getElementById('applicationModal').style.display = 'flex';
+        }
+        
+        // Function to close application modal
+        function closeApplicationModal() {
+            document.getElementById('applicationModal').style.display = 'none';
+        }
+        
+        // Function to download contract template
+        function downloadContract() {
+            alert('Contract template for TND-2024-001 would be downloaded');
+            //  trigger a file download
+        }
+        
+        // Function to submit application
+        function submitApplication() {
+            const plot = document.getElementById('plotSelection').value;
+            const contractFile = document.getElementById('signedContract').files[0];
+            
+            if (!plot || !contractFile) {
+                alert('Please select a plot and upload the signed contract');
+                return;
+            }
+            
+            //  this would submit the form data to the server
+            alert(`Application submitted for plot ${plot}. You will be notified once it's reviewed.`);
+            closeApplicationModal();
+            
+            // Redirect to applications page
+            setTimeout(() => {
+                window.location.href = 'applications.html';
+            }, 1500);
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('applicationModal');
+            if (event.target === modal) {
+                closeApplicationModal();
+            }
+        };
+    </script>
+</body>
+</html>

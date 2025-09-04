@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenders | UDOM Vendor Management System</title>
+    <link rel="stylesheet" href="css/vendor-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>UDOM VMS</h3>
+            <p>Vendor Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="colleges.html"><i class="fas fa-university"></i> Tenders</a>
+            <a href="tenders.html" class="active"><i class="fas fa-file-contract"></i> Tenders</a>
+            <a href="applications.html"><i class="fas fa-clipboard-list"></i> Applications</a>
+            <a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a>
+            <a href="contracts.html"><i class="fas fa-file-signature"></i> Contracts</a>
+            <a href="renew-license.html"><i class="fas fa-sync-alt"></i> Renew License</a>
+            <a href="policies.html"><i class="fas fa-book"></i> Policies</a>
+            <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">Available Tenders</div>
+        <div class="navbar-user">
+            <div class="user-avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="flex flex-between align-center mb-3 flex-mobile-stack">
+            <div class="mb-mobile-2">
+                <h1 style="margin-bottom: 5px;">Available Tenders</h1>
+                <p style="color: var(--uvms-text-secondary-light); margin: 0; font-size: 0.9em;">College of Engineering - 6 active tenders with multiple plots</p>
+            </div>
+            <a href="colleges.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> <span class="hide-mobile">Back to Colleges</span>
+            </a>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="flex flex-between align-center gap-2 flex-mobile-stack">
+                    <div class="form-group" style="margin: 0; flex: 1; max-width: 400px;">
+                        <div style="position: relative;">
+                            <input type="text" class="form-input" placeholder="Search tenders..." id="searchInput" style="padding-left: 40px;">
+                            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--uvms-text-secondary-light);"></i>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 gap-mobile-1">
+                        <button class="btn btn-secondary" onclick="filterTenders('all')">
+                            <i class="fas fa-list"></i> <span class="hide-mobile">All</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="filterTenders('open')">
+                            <i class="fas fa-folder-open"></i> <span class="hide-mobile">Open</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="filterTenders('closing')">
+                            <i class="fas fa-clock"></i> <span class="hide-mobile">Closing Soon</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="alert alert-info mb-3">
+            <i class="fas fa-info-circle"></i> You have 2 applications in progress. <a href="applications.html" style="color: var(--uvms-blue-primary);">View applications</a>
+        </div>
+
+        <!-- Tenders Grid -->
+        <div class="grid grid-2" id="tendersContainer">
+            <!-- Tender Card 1 - Open with Multiple Plots -->
+            <div class="card tender-card" data-status="open">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Construction of New Library Building</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Tender ID:</strong> TND-2024-001 | <strong>College:</strong> Engineering
+                            </p>
+                        </div>
+                        <span class="badge badge-warning">Closes in 3 days</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Construction of a 5-story library building with modern facilities, reading rooms, and digital resource center.
+                    </p>
+                    
+                    <div class="grid grid-2 gap-2 mb-3">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-01</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                            <p style="margin: 0; font-weight: 500; color: var(--uvms-error-red);">2024-12-25</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Open</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 2</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Available Plots -->
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fas fa-map-marker-alt"></i> <strong>Available Plots:</strong> 3 plots available for application
+                        <div style="margin-top: 8px;">
+                            <span class="badge badge-success">Plot A-15</span>
+                            <span class="badge badge-success">Plot A-16</span>
+                            <span class="badge badge-success">Plot A-17</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-calendar"></i> Updated 2 days ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tender Card 2 - WiFi Infrastructure -->
+            <div class="card tender-card" data-status="open">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Campus WiFi Infrastructure Upgrade</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Tender ID:</strong> TND-2024-002 | <strong>College:</strong> Engineering
+                            </p>
+                        </div>
+                        <span class="badge badge-info">New</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Upgrading the entire campus WiFi infrastructure to support higher bandwidth and wider coverage.
+                    </p>
+                    
+                    <div class="grid grid-2 gap-2 mb-3">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-11-15</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                            <p style="margin: 0; font-weight: 500; color: var(--uvms-error-red);">2024-12-15</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Open</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 1</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-calendar"></i> Updated 1 day ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tender Card 3 - Laboratory Equipment -->
+            <div class="card tender-card" data-status="closing">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Supply of Laboratory Equipment</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Tender ID:</strong> TND-2024-003 | <strong>College:</strong> Science
+                            </p>
+                        </div>
+                        <span class="badge badge-warning">Closes in 7 days</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Supply and installation of advanced laboratory equipment for physics and chemistry departments.
+                    </p>
+                    
+                    <div class="grid grid-2 gap-2 mb-3">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-11-25</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                            <p style="margin: 0; font-weight: 500; color: var(--uvms-warning-yellow);">2024-12-30</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Open</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 3</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-calendar"></i> Updated 3 days ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tender Card 4 - Cafeteria Services -->
+            <div class="card tender-card" data-status="open">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Cafeteria Management Services</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Tender ID:</strong> TND-2024-004 | <strong>College:</strong> Business
+                            </p>
+                        </div>
+                        <span class="badge badge-secondary">Closes in 14 days</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Management and operation of campus cafeterias and food services for the academic year 2024.
+                    </p>
+                    
+                    <div class="grid grid-2 gap-2 mb-3">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-11-10</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                            <p style="margin: 0; font-weight: 500;">2025-01-12</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Open</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 2</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-calendar"></i> Updated 5 days ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tender Card 5 - Landscaping -->
+            <div class="card tender-card" data-status="open">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Campus Landscaping and Maintenance</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Tender ID:</strong> TND-2024-005 | <strong>College:</strong> Agriculture
+                            </p>
+                        </div>
+                        <span class="badge badge-success">Open</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Comprehensive landscaping and maintenance services for the entire university campus.
+                    </p>
+                    
+                    <div class="grid grid-2 gap-2 mb-3">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-11-12</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                            <p style="margin: 0; font-weight: 500;">2025-01-01</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Open</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 1</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-calendar"></i> Updated 4 days ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tender Card 6 - Security Services -->
+            <div class="card tender-card" data-status="open">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Security Services</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Tender ID:</strong> TND-2024-006 | <strong>College:</strong> Administration
+                            </p>
+                        </div>
+                        <span class="badge badge-info">New</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Provision of security personnel and services for campus safety and access control.
+                    </p>
+                    
+                    <div class="grid grid-2 gap-2 mb-3">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created:</small>
+                            <p style="margin: 0; font-weight: 500;">2024-12-18</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Deadline:</small>
+                            <p style="margin: 0; font-weight: 500;">2025-01-20</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">Open</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Created By:</small>
+                            <p style="margin: 0; font-weight: 500;">Admin ID: 4</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-calendar"></i> Updated 1 day ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const searchText = this.value.toLowerCase();
+        const tenderCards = document.querySelectorAll('.tender-card');
+        
+        tenderCards.forEach(card => {
+            const title = card.querySelector('h4').textContent.toLowerCase();
+            const description = card.querySelector('p').textContent.toLowerCase();
+            const college = card.querySelector('p').textContent.toLowerCase();
+            
+            if (title.includes(searchText) || description.includes(searchText) || college.includes(searchText)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Filter functionality
+    function filterTenders(status) {
+        const tenderCards = document.querySelectorAll('.tender-card');
+        
+        tenderCards.forEach(card => {
+            if (status === 'all' || card.dataset.status === status) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update active filter button
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+        });
+        event.target.classList.remove('btn-secondary');
+        event.target.classList.add('btn-primary');
+    }
+</script>
+</body>
+</html>

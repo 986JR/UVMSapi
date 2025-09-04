@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colleges | UDOM Vendor Management System</title>
+    <link rel="stylesheet" href="css/vendor-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>UVMS</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="colleges.html" class="active">
+                <i class="fas fa-university"></i> Tenders
+            </a>
+            <a href="applications.html">
+                <i class="fas fa-clipboard-list"></i> Applications
+            </a>
+            <a href="licenses.html">
+                <i class="fas fa-certificate"></i> Licenses
+            </a>
+            <a href="contracts.html">
+                <i class="fas fa-file-signature"></i> Contracts
+            </a>
+            <a href="policies.html">
+                <i class="fas fa-book"></i> Policies
+            </a>
+            <a href="notifications.html">
+                <i class="fas fa-bell"></i> Notifications
+            </a>
+            <a href="../../index.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <button class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="navbar-brand">Tenders</div>
+        <div class="navbar-user">
+            <div class="user-avatar">JD</div>
+            <span>John Doe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Colleges Grid -->
+        <div class="grid grid-2" id="collegesContainer">
+            <!-- College Card 1 - Database Schema Compliant -->
+            <div class="card college-card" data-college="engineering">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">College Name</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>College Acronym</strong> eg CIVE
+                            </p>
+                        </div>
+                        <span class="badge badge-success"># Available Tenders</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Description... Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae facere incidunt, quas iste possimus velit.
+                    </p>
+                    
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fa fa-map-pin" aria-hidden="true"></i> <strong>Location: </strong> College Location
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-building"></i> Multiple departments available
+                        </small>
+                        <button class="btn btn-primary" onclick="location.href='college-tenders.html'">
+                            <i class="fas fa-eye"></i> View Tenders
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College Card 2 -->
+            <div class="card college-card" data-college="engineering">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">College Name</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>College Acronym</strong> eg CIVE
+                            </p>
+                        </div>
+                        <span class="badge badge-success"># Available Tenders</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Description... Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae facere incidunt, quas iste possimus velit.
+                    </p>
+                    
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fa fa-map-pin" aria-hidden="true"></i> <strong>Location: </strong> College Location
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-building"></i> Multiple departments available
+                        </small>
+                        <button class="btn btn-primary" onclick="location.href='college-tenders.html'">
+                            <i class="fas fa-eye"></i> View Tenders
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College Card 3 -->
+            <div class="card college-card" data-college="engineering">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">College Name</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>College Acronym</strong> eg CIVE
+                            </p>
+                        </div>
+                        <span class="badge badge-success"># Available Tenders</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Description... Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae facere incidunt, quas iste possimus velit.
+                    </p>
+                    
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fa fa-map-pin" aria-hidden="true"></i> <strong>Location: </strong> College Location
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-building"></i> Multiple departments available
+                        </small>
+                        <button class="btn btn-primary" onclick="location.href='college-tenders.html'">
+                            <i class="fas fa-eye"></i> View Tenders
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- College Card 4 -->
+            <div class="card college-card" data-college="engineering">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">College Name</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>College Acronym</strong> eg CIVE
+                            </p>
+                        </div>
+                        <span class="badge badge-success"># Available Tenders</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Description... Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae facere incidunt, quas iste possimus velit.
+                    </p>
+                    
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fa fa-map-pin" aria-hidden="true"></i> <strong>Location: </strong> College Location
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-building"></i> Multiple departments available
+                        </small>
+                        <button class="btn btn-primary" onclick="location.href='college-tenders.html'">
+                            <i class="fas fa-eye"></i> View Tenders
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card college-card" data-college="engineering">
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">College Name</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>College Acronym</strong> eg CIVE
+                            </p>
+                        </div>
+                        <span class="badge badge-success"># Available Tenders</span>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: var(--uvms-text-secondary-light);">
+                        Description... Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae facere incidunt, quas iste possimus velit.
+                    </p>
+                    
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <i class="fa fa-map-pin" aria-hidden="true"></i> <strong>Location: </strong> College Location
+                    </div>
+                    
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-building"></i> Multiple departments available
+                        </small>
+                        <button class="btn btn-primary" onclick="location.href='college-tenders.html'">
+                            <i class="fas fa-eye"></i> View Tenders
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/uvms-main.js"></script>
+</body>
+</html>
