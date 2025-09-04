@@ -47,7 +47,7 @@ public class Licenses {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
-    @OneToMany(mappedBy = "license", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "license", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RenewalRequests> renewalRequests = new ArrayList<>();
 
     // Constructors
