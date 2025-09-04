@@ -40,7 +40,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public pages (served by Spring Boot)
                         .requestMatchers("/", "/index.html", "/login.html", "/register.html",
-                                "/dashboard.html", "/forgotPassword.html").permitAll()
+                                "/dashboard.html", "/forgotPassword.html","/applications.html").permitAll()
+                        .requestMatchers("/apply-tender.html","/college-tenders.html"
+                        ,"/colleges.html","/contracts.html","/licenses.html","/notifications.html").permitAll()
+                        .requestMatchers("/policies.html","/renew-license.html","/tenders.html","/tender-details.html").permitAll()
                         // Static assets
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                         // Actuator health check (for Render)
