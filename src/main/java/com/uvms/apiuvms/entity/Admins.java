@@ -1,7 +1,9 @@
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,7 +55,7 @@ public class Admins {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "college_id", nullable = true, referencedColumnName = "college_id")
-    @JsonIgnore
+    @JsonBackReference
     private Colleges colleges;
 
     //Constructors

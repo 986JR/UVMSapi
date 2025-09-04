@@ -21,6 +21,7 @@ public class Colleges {
 //Refferential Integrity Contrains
     @OneToMany(mappedBy = "colleges", cascade = CascadeType.ALL, orphanRemoval = true)
   //  @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonManagedReference
     private List<Admins> admins = new ArrayList<>();
 
     @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
