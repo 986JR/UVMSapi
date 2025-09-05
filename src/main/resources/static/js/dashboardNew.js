@@ -90,8 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
 //Logout
 const logoutBtn = document.getElementById('logout-btn');
 logoutBtn.addEventListener('click', () => {
+    //alert()
     logout();
-    window.location.href = '/index.html';
+    //window.location.href = '/index.html';
 });
 function logout() {
     localStorage.removeItem('jwtToken');
