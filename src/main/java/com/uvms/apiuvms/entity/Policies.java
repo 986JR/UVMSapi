@@ -1,7 +1,10 @@
 // Policies.java in entity folder
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +14,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "policies")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "policy_id"
+)
 public class Policies {
     public enum Scope {
         UNIVERSITY, COLLEGE
@@ -32,11 +39,12 @@ public class Policies {
 
     @ManyToOne
     @JoinColumn(name = "college_id")
-    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     private Colleges college;
 
     @ManyToOne
     @JoinColumn(name = "admin_id", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Admins admin;
 
     @CreationTimestamp

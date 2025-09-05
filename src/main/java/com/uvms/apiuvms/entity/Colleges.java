@@ -1,6 +1,9 @@
 package com.uvms.apiuvms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,6 +13,10 @@ import java.util.List;
 @Entity
 @Table(name = "Colleges")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "college_id"
+)
 public class Colleges {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,12 +28,16 @@ public class Colleges {
 //Refferential Integrity Contrains
     @OneToMany(mappedBy = "colleges", cascade = CascadeType.ALL, orphanRemoval = true)
     @com.fasterxml.jackson.annotation.JsonIgnore
-    //@JsonManagedReference
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Admins> admins = new ArrayList<>();
 
     @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Tenders> tenders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<Policies> policies = new ArrayList<>();
     //Constructors
 
     public Colleges() {

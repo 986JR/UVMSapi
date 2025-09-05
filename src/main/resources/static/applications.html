@@ -702,221 +702,126 @@
 
     <script src="js/uvms-main.js"></script>
     <script>
-        // Mock data for demonstration - Replace with actual API calls
-        const applicationData = {
-            'APP-2024-001': {
-                tenderTitle: 'Construction of New Library Building',
-                college: 'College of Engineering',
-                plot: 'Plot A-15, Main Campus',
-                appDate: '2024-12-15',
-                status: 'pending',
-                submittedContract: '/contracts/submitted/contract_001.pdf',
-                vendor: {
-                    companyName: 'TechBuild Solutions Ltd',
-                    businessType: 'Construction',
-                    tinNumber: '123-456-789',
-                    businessAddress: '123 Construction Ave, Dodoma',
-                    contactPerson: 'John Doe',
-                    phone: '+255 123 456 789',
-                    email: 'john.doe@techbuild.co.tz',
-                    regDate: '2024-01-15'
-                }
-            },
-            'APP-2024-002': {
-                tenderTitle: 'Supply of Laboratory Equipment',
-                college: 'College of Natural Sciences',
-                plot: 'Plot B-08, Science Block',
-                appDate: '2024-12-10',
-                status: 'approved',
-                submittedContract: '/contracts/submitted/contract_002.pdf',
-                approvedContract: '/contracts/approved/approved_contract_002.pdf',
-                reviewedBy: 'Admin User (ID: 5)',
-                reviewedAt: '2024-12-18 14:30:00',
-                feedback: 'Application meets all requirements and specifications.',
-                vendor: {
-                    companyName: 'Science Supplies Co.',
-                    businessType: 'Equipment Supply',
-                    tinNumber: '987-654-321',
-                    businessAddress: '456 Science Street, Dodoma',
-                    contactPerson: 'Jane Smith',
-                    phone: '+255 987 654 321',
-                    email: 'jane.smith@sciencesupplies.co.tz',
-                    regDate: '2023-11-20'
-                }
-            },
-            'APP-2024-003': {
-                tenderTitle: 'Cafeteria Management Services',
-                college: 'College of Business',
-                plot: 'Plot C-12, Food Court',
-                appDate: '2024-12-12',
-                status: 'denied',
-                submittedContract: '/contracts/submitted/contract_003.pdf',
-                reviewedBy: 'Admin User (ID: 3)',
-                reviewedAt: '2024-12-18 16:45:00',
-                feedback: 'Did not meet minimum experience requirement in institutional food service management.',
-                vendor: {
-                    companyName: 'Food Services Ltd',
-                    businessType: 'Food & Catering',
-                    tinNumber: '456-789-123',
-                    businessAddress: '789 Food Court, Dodoma',
-                    contactPerson: 'Mike Johnson',
-                    phone: '+255 456 789 123',
-                    email: 'mike.johnson@foodservices.co.tz',
-                    regDate: '2024-03-10'
-                }
-            },
-            'APP-2024-004': {
-                tenderTitle: 'Campus Landscaping and Maintenance',
-                college: 'College of Agriculture',
-                plot: 'Plot D-01, Main Grounds',
-                appDate: '2024-12-17',
-                status: 'pending',
-                submittedContract: '/contracts/submitted/contract_004.pdf',
-                vendor: {
-                    companyName: 'Green Thumb Landscaping',
-                    businessType: 'Landscaping',
-                    tinNumber: '321-654-987',
-                    businessAddress: '321 Garden Road, Dodoma',
-                    contactPerson: 'Sarah Wilson',
-                    phone: '+255 321 654 987',
-                    email: 'sarah.wilson@greenthumb.co.tz',
-                    regDate: '2023-08-15'
-                }
-            },
-            'APP-2024-005': {
-                tenderTitle: 'IT Infrastructure Upgrade',
-                college: 'College of Engineering',
-                plot: 'Plot E-05, IT Block',
-                appDate: '2024-12-05',
-                status: 'approved',
-                submittedContract: '/contracts/submitted/contract_005.pdf',
-                approvedContract: '/contracts/approved/approved_contract_005.pdf',
-                reviewedBy: 'Admin User (ID: 1)',
-                reviewedAt: '2024-12-20 10:15:00',
-                feedback: 'Application meets all technical requirements and budget constraints.',
-                vendor: {
-                    companyName: 'Tech Solutions Inc.',
-                    businessType: 'IT Services',
-                    tinNumber: '789-123-456',
-                    businessAddress: '555 Tech Park, Dodoma',
-                    contactPerson: 'Robert Brown',
-                    phone: '+255 789 123 456',
-                    email: 'robert.brown@techsolutions.co.tz',
-                    regDate: '2022-05-20'
-                }
-            }
-        };
+        // Get token from localStorage (or wherever you store it)
+        const token = localStorage.getItem('jwtToken');
 
+        // Redirect if no token
+        if (!token) {
+            window.location.href = '../../index.html';
+        }
+
+        // Container where application cards will be rendered
+        const applicationsContainer = document.getElementById('applicationsContainer');
+
+        // Current application ID for modal download
         let currentApplicationId = '';
 
-        // Show application details modal
-        function showApplicationDetails(appId, status) {
-            currentApplicationId = appId;
-            const data = applicationData[appId];
-            const modal = document.getElementById('applicationModal');
-            
-            if (data) {
-                // Populate application information
-                document.getElementById('modal-app-id').textContent = appId;
-                document.getElementById('modal-tender-title').textContent = data.tenderTitle;
-                document.getElementById('modal-college').textContent = data.college;
-                document.getElementById('modal-plot').textContent = data.plot;
-                document.getElementById('modal-app-date').textContent = data.appDate;
-                
-                // Set status with appropriate styling
-                const statusElement = document.getElementById('modal-status');
-                statusElement.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
-                statusElement.className = 'info-value status-' + data.status;
-                
-                // Set contract links
-                document.getElementById('modal-submitted-contract').href = data.submittedContract;
-                
-                // Show approved contract section if available
-                const approvedContractSection = document.getElementById('approved-contract-section');
-                const approvedContractLink = document.getElementById('modal-approved-contract');
-                if (data.approvedContract) {
-                    approvedContractSection.style.display = 'block';
-                    approvedContractLink.href = data.approvedContract;
-                } else {
-                    approvedContractSection.style.display = 'none';
+        // Fetch applications from API
+        async function fetchApplications() {
+            try {
+                const response = await fetch('https://uvmsapiv1.onrender.com/api/applications', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`  // Sending token
+                    }
+                });
+
+                if (response.status === 401) {
+                    // Unauthorized, redirect to login
+                    window.location.href = '../../index.html';
+                    return;
                 }
-                
-                // Show review information for reviewed applications
-                const reviewSection = document.getElementById('review-info-section');
-                if (data.reviewedBy) {
-                    reviewSection.style.display = 'block';
-                    document.getElementById('modal-reviewed-by').textContent = data.reviewedBy;
-                    document.getElementById('modal-reviewed-at').textContent = data.reviewedAt;
-                    document.getElementById('modal-feedback').textContent = data.feedback || 'No feedback provided';
-                } else {
-                    reviewSection.style.display = 'none';
+
+                if (!response.ok) {
+                    throw new Error(`Error fetching applications: ${response.status}`);
                 }
-                
-                // Populate vendor information
-                document.getElementById('modal-company-name').textContent = data.vendor.companyName;
-                document.getElementById('modal-business-type').textContent = data.vendor.businessType;
-                document.getElementById('modal-tin-number').textContent = data.vendor.tinNumber;
-                document.getElementById('modal-business-address').textContent = data.vendor.businessAddress;
-                document.getElementById('modal-contact-person').textContent = data.vendor.contactPerson;
-                document.getElementById('modal-phone').textContent = data.vendor.phone;
-                document.getElementById('modal-email').textContent = data.vendor.email;
-                document.getElementById('modal-reg-date').textContent = data.vendor.regDate;
-                
-                // Show download button only for approved applications
-                const downloadBtn = document.getElementById('modal-download-btn');
-                if (status === 'approved') {
-                    downloadBtn.style.display = 'block';
-                } else {
-                    downloadBtn.style.display = 'none';
-                }
-                
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
+
+                const data = await response.json();
+                renderApplications(data);
+            } catch (error) {
+                console.error(error);
+                applicationsContainer.innerHTML = '<p style="color:red;">Failed to load applications.</p>';
             }
         }
 
-        // Close modal
-        function closeModal() {
-            document.getElementById('applicationModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        // Render application cards dynamically
+        function renderApplications(applications) {
+            applicationsContainer.innerHTML = ''; // Clear existing cards
 
-        // Download contract function
-        function downloadContract(appId) {
-            const data = applicationData[appId];
-            if (data && data.approvedContract) {
-                // Simulate file download - replace with actual download logic
-                window.open(data.approvedContract, '_blank');
-            }
-        }
+            applications.forEach(app => {
+                const statusClass = app.status.toLowerCase();
+                const submittedContract = app.submitted_contract || '#';
+                const approvedContract = app.approved_contract || null;
+                const reviewedBy = app.reviewed_by || null;
+                const reviewedAt = app.reviewed_at || null;
+                const feedback = app.feedback || '';
 
-        // Download current contract from modal
-        function downloadCurrentContract() {
-            if (currentApplicationId) {
-                downloadContract(currentApplicationId);
-            }
-        }
+                const card = document.createElement('div');
+                card.className = 'card application-card';
+                card.dataset.status = statusClass;
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('applicationModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
+                card.innerHTML = `
+                <div class="card-body">
+                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                        <div>
+                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">${app.tender_title}</h4>
+                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
+                                <strong>Plot:</strong> ${app.plot} | <strong>College:</strong> ${app.college}
+                            </p>
+                        </div>
+                        <span class="badge badge-${statusClass}">${statusClass.charAt(0).toUpperCase() + statusClass.slice(1)}</span>
+                    </div>
+                    <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                            <p style="margin: 0; font-weight: 500;">${app.application_date}</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                            <p style="margin: 0; font-weight: 500;">${app.application_id}</p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Submitted Contract:</small>
+                            <p style="margin: 0; font-weight: 500;">
+                                <a href="${submittedContract}" style="color: var(--uvms-blue-primary);">
+                                    <i class="fas fa-file-pdf"></i> View
+                                </a>
+                            </p>
+                        </div>
+                        <div>
+                            <small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                            <p style="margin: 0; font-weight: 500;">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-between align-center">
+                        <small style="color: var(--uvms-text-secondary-light);">
+                            <i class="fas fa-clock"></i> Submitted ${app.days_ago || 'N/A'} days ago
+                        </small>
+                        <div class="flex gap-1">
+                            <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('${app.application_id}', '${statusClass}')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            ${statusClass === 'approved' ? `
+                                <button class="btn btn-sm btn-success" onclick="downloadContract('${app.application_id}')">
+                                    <i class="fas fa-download"></i> Download Contract
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
 
-        // Filter functionality
-        function filterApplications(status) {
-            const applicationCards = document.querySelectorAll('.application-card');
-            
-            applicationCards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                applicationsContainer.appendChild(card);
+
+                // Save the data into a local object for modal
+                applicationData[app.application_id] = app;
             });
         }
+
+        // Call fetchApplications on page load
+        fetchApplications();
     </script>
+
 </body>
 </html>

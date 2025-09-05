@@ -61,12 +61,17 @@ public class Admins {
     private Colleges colleges;
 
 
-    @OneToMany(mappedBy = "reviewedBy")
+    @OneToMany(mappedBy = "reviewedBy", fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Applications> applicationsReviewed;
+
+
+    @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<Policies> policiesPosted;
+
+
     //Constructors
-
-
     public Admins() {
     }
 
