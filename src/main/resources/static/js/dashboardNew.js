@@ -1,4 +1,3 @@
-
 //dashboard New JS
 document.addEventListener("DOMContentLoaded", () => {
     const apiBase = "https://uvmsapiv1.onrender.com/api";
@@ -9,47 +8,43 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("You must login first!");
             window.location.href = "index.html";
         }, 3000);
+        return; // stop further execution
     }
 
     //Logout
     const logoutBtn = document.getElementById('logout-btn');
     logoutBtn.addEventListener('click', () => {
-        //alert()
         logout();
         return;
-        alert("Actioned returned here");
-
-        //window.location.href = '/index.html';
     });
+
     function logout() {
         localStorage.removeItem('jwtToken');
         console.log('🚪 User logged out');
-      alert("This function is exceuted");
+        alert("You have been logged out!");
         window.location.href = 'index.html';
         throw new Error("Script stopped after logout");
     }
-
-
-
 
     const authHeaders = {
         "Authorization": "Bearer " + token,
         "Content-Type": "application/json"
     };
 
+    let vendorId = null;
 
-    //Fetch Vendor Info
+    // 1️⃣ Fetch Vendor Info
     fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
         .then(response => {
             if (!response.ok) throw new Error("Unauthorized or session expired");
             return response.json();
         })
         .then(vendor => {
+            vendorId = vendor.vendorId;
             document.querySelector(".navbar-user span").textContent = `${vendor.firstName} ${vendor.lastName}`;
-            document.querySelector(".stats-grid .stat-card:nth-child(1) h4").textContent = vendor.contracts?.length || 0;
-            document.querySelector(".stats-grid .stat-card:nth-child(2) h4").textContent = vendor.licenses?.length || 0;
-            document.querySelector(".stats-grid .stat-card:nth-child(3) h4").textContent = vendor.applications?.length || 0;
-            document.querySelector(".stats-grid .stat-card:nth-child(4) h4").textContent = vendor.renewalRequests?.length || 0;
+
+            // After vendor is loaded → fetch stats
+            loadVendorStats(vendorId);
         })
         .catch(err => {
             console.error("Error fetching vendor:", err);
@@ -58,7 +53,43 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "index.html";
         });
 
-    //Fetch Recent Tenders (last 3)
+    // 2️⃣ Function to fetch & update stats
+    function loadVendorStats(vendorId) {
+        // Licenses
+        fetch(`${apiBase}/licenses`, { headers: authHeaders })
+            .then(res => res.json())
+            .then(data => {
+                const count = data.filter(l => l.vendor?.vendorId === vendorId).length;
+                document.querySelector(".stats-grid .stat-card:nth-child(2) h4").textContent = count;
+            });
+
+        // Contracts
+        /*
+        fetch(`${apiBase}/contracts`, { headers: authHeaders })
+            .then(res => res.json())
+            .then(data => {
+                const count = data.filter(c => c.vendor?.vendorId === vendorId).length;
+                document.querySelector(".stats-grid .stat-card:nth-child(1) h4").textContent = count;
+            });*/
+
+        // Applications
+        fetch(`${apiBase}/applications`, { headers: authHeaders })
+            .then(res => res.json())
+            .then(data => {
+                const count = data.filter(a => a.vendor?.vendorId === vendorId).length;
+                document.querySelector(".stats-grid .stat-card:nth-child(3) h4").textContent = count;
+            });
+
+        // Renewals
+        fetch(`${apiBase}/renewals`, { headers: authHeaders })
+            .then(res => res.json())
+            .then(data => {
+                const count = data.filter(r => r.vendor?.vendorId === vendorId).length;
+                document.querySelector(".stats-grid .stat-card:nth-child(4) h4").textContent = count;
+            });
+    }
+
+    // 3️⃣ Fetch Recent Tenders (last 3)
     fetch(`${apiBase}/tenders`, { headers: authHeaders })
         .then(response => response.json())
         .then(tenders => {
@@ -84,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Error fetching tenders:", err));
 
-    //Fetch Policies/Guidelines (last 3)
+    // 4️⃣ Fetch Policies/Guidelines (last 3)
     fetch(`${apiBase}/policies`, { headers: authHeaders })
         .then(response => response.json())
         .then(policies => {
@@ -107,7 +138,3 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Error fetching policies:", err));
 });
-
-
-
-

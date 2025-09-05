@@ -1,18 +1,20 @@
 package com.uvms.apiuvms.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="Admins")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "admin_id"
+)
 public class Admins {
 
     @Id
@@ -58,6 +60,10 @@ public class Admins {
     @JsonBackReference
     private Colleges colleges;
 
+
+    @OneToMany(mappedBy = "reviewedBy")
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<Applications> applicationsReviewed;
     //Constructors
 
 

@@ -1,4 +1,3 @@
-// Applications.java in entity folder
 package com.uvms.apiuvms.entity;
 
 import com.fasterxml.jackson.annotation.*;
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "application_id"
 )
-@JsonIdentityReference(alwaysAsId = true)
+//@JsonIdentityReference(alwaysAsId = true)
 @Entity
 @Table(name = "applications")
 @Data
@@ -27,9 +26,11 @@ public class Applications {
 
     @ManyToOne
     @JoinColumn(name = "vendor_id", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Vendors vendor;
     @ManyToOne
     @JoinColumn(name = "plot_id", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Plots plot;
 
     @CreationTimestamp
@@ -48,6 +49,7 @@ public class Applications {
 
     @ManyToOne
     @JoinColumn(name = "reviewed_by")
+    @JsonIdentityReference(alwaysAsId = true)
     private Admins reviewedBy;
 
     @Column(name = "reviewed_at")
@@ -57,6 +59,7 @@ public class Applications {
     private String feedback;
 
     @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+    @JsonIdentityReference(alwaysAsId = true)
     private Licenses license;
 
     // Constructors

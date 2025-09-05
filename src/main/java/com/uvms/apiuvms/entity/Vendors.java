@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "vendors")
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "vendorId"
 )
-@JsonIdentityReference(alwaysAsId = true)
+//@JsonIdentityReference(alwaysAsId = true)
 public class Vendors {
 
     @Id
@@ -64,6 +65,10 @@ public class Vendors {
 
     @Column(name = "is_active")
     private boolean isActive = false;
+
+    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<Applications> applications;
 
     // Default constructor
     public Vendors() {

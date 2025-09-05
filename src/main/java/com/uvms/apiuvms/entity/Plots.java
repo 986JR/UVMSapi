@@ -1,15 +1,19 @@
 // Plots.java in entity folder
 package com.uvms.apiuvms.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "plots")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "plot_id"
+)
 public class Plots {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +33,9 @@ public class Plots {
     @Column(name = "is_available")
     private Boolean isAvailable = true;
 
-    //@OneToOne(mappedBy = "plot", cascade = CascadeType.ALL)
-    //private Applications application;
+    @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL)
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<Applications> application;
 
     // Constructors
     public Plots() {}
