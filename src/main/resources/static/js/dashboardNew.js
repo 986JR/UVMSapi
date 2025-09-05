@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         // Renewals
-        fetch(`${apiBase}/renewals`, { headers: authHeaders })
+        fetch(`${apiBase}/renewal-requests`, { headers: authHeaders })
             .then(res => res.json())
             .then(data => {
                 const count = data.filter(r => r.vendor?.vendorId === vendorId).length;
@@ -90,30 +90,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 3️⃣ Fetch Recent Tenders (last 3)
-    fetch(`${apiBase}/tenders`, { headers: authHeaders })
+    // Fetch colleges first
+    fetch(`${apiBase}/colleges`, { headers: authHeaders })
         .then(response => response.json())
-        .then(tenders => {
-            const tendersContainer = document.querySelector(".tenders-container");
-            tendersContainer.innerHTML = "";
-            const lastThree = tenders.slice(-3).reverse();
-            lastThree.forEach(t => {
-                const div = document.createElement("div");
-                div.classList.add("tender-item", "mb-2");
-                div.style.cssText = "padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;";
-                div.innerHTML = `
+        .then(colleges => {
+            // Create a map: college ID -> college name
+            const collegeMap = {};
+            colleges.forEach(c => {
+                collegeMap[c.college_id] = c.college_name;
+            });
+
+            // Now fetch tenders
+            return fetch(`${apiBase}/tenders`, { headers: authHeaders })
+                .then(response => response.json())
+                .then(tenders => {
+                    const tendersContainer = document.querySelector(".tenders-container");
+                    tendersContainer.innerHTML = "";
+
+                    const lastThree = tenders.slice(-3).reverse();
+                    lastThree.forEach(t => {
+                        const div = document.createElement("div");
+                        div.classList.add("tender-item", "mb-2");
+                        div.style.cssText = "padding: 15px; border-left: 4px solid var(--uvms-success-green); background: var(--uvms-surface-light); margin-bottom: 10px;";
+
+                        // Map college ID to college name
+                        const collegeName = collegeMap[t.college] || "N/A";
+
+                        div.innerHTML = `
                         <div class="flex flex-between align-center flex-mobile-stack">
                             <h4 style="margin: 0; font-size: 1em;">${t.title}</h4>
-                            <small style="color: var(--uvms-text-secondary-light);">${t.tenderCode}</small>
+                            <small style="color: var(--uvms-text-secondary-light);">${t.tenderCode || ""}</small>
                         </div>
-                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">${t.college?.college_name || "N/A"} - Deadline: ${t.deadlineDate}</p>
+                        <p style="margin: 5px 0; color: var(--uvms-text-secondary-light);">${collegeName} - Deadline: ${t.deadlineDate}</p>
                         <div class="flex align-center gap-1 flex-mobile-stack">
                             <span class="badge badge-success">${t.status || "open"}</span>
                         </div>
                     `;
-                tendersContainer.appendChild(div);
-            });
+                        tendersContainer.appendChild(div);
+                    });
+                });
         })
-        .catch(err => console.error("Error fetching tenders:", err));
+        .catch(err => console.error("Error fetching data:", err));
+
 
     // 4️⃣ Fetch Policies/Guidelines (last 3)
     fetch(`${apiBase}/policies`, { headers: authHeaders })
