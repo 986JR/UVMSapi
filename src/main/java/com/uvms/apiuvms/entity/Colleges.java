@@ -31,11 +31,11 @@ public class Colleges {
     @JsonIdentityReference(alwaysAsId = true)
     private List<Admins> admins = new ArrayList<>();
 
-    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Tenders> tenders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Policies> policies = new ArrayList<>();
     //Constructors

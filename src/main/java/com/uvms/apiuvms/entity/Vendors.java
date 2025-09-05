@@ -66,7 +66,7 @@ public class Vendors {
     @Column(name = "is_active")
     private boolean isActive = false;
 
-    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Applications> applications;
 
