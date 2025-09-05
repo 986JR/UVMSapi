@@ -1,11 +1,14 @@
+
+//dashboard New JS
 document.addEventListener("DOMContentLoaded", () => {
     const apiBase = "https://uvmsapiv1.onrender.com/api";
     const token = localStorage.getItem("jwtToken");
 
     if (!token) {
-        alert("You must login first!");
-        window.location.href = "index.html";
-        return;
+        setTimeout(() => {
+            alert("You must login first!");
+            window.location.href = "index.html";
+        }, 3000);
     }
 
     const authHeaders = {
@@ -13,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Content-Type": "application/json"
     };
 
-    // 1️⃣ Fetch Vendor Info
+    //Fetch Vendor Info
     fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
         .then(response => {
             if (!response.ok) throw new Error("Unauthorized or session expired");
@@ -33,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "index.html";
         });
 
-    // 2️⃣ Fetch Recent Tenders (last 3)
+    //Fetch Recent Tenders (last 3)
     fetch(`${apiBase}/tenders`, { headers: authHeaders })
         .then(response => response.json())
         .then(tenders => {
@@ -59,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Error fetching tenders:", err));
 
-    // 3️⃣ Fetch Policies/Guidelines (last 3)
+    //Fetch Policies/Guidelines (last 3)
     fetch(`${apiBase}/policies`, { headers: authHeaders })
         .then(response => response.json())
         .then(policies => {
@@ -82,3 +85,16 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Error fetching policies:", err));
 });
+
+
+//Logout
+const logoutBtn = document.getElementById('logout-btn');
+logoutBtn.addEventListener('click', () => {
+    logout();
+    window.location.href = '/index.html';
+});
+function logout() {
+    localStorage.removeItem('jwtToken');
+    console.log('🚪 User logged out');
+    window.location.href = 'index.html';
+}
