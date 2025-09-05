@@ -268,4 +268,67 @@ public class VendorsService {
 
         return new DashboardResponse(vendor);
     }
+
+
+    //
+    // VendorsService.java
+
+    public Optional<Vendors> patchVendor(Integer vendorId, Vendors vendorDetails) {
+        Optional<Vendors> vendorOptional = vendorsRepository.findById(vendorId);
+
+        if (vendorOptional.isPresent()) {
+            Vendors vendor = vendorOptional.get();
+
+            if (vendorDetails.getEmail() != null) {
+                vendor.setEmail(vendorDetails.getEmail());
+            }
+            if (vendorDetails.getPasswordHash() != null) {
+                // Hash password if it's not already hashed
+                String password = vendorDetails.getPasswordHash();
+                if (!password.startsWith("$2a$")) {
+                    vendor.setPasswordHash(passwordEncoder.encode(password));
+                } else {
+                    vendor.setPasswordHash(password);
+                }
+            }
+            if (vendorDetails.getFirstName() != null) {
+                vendor.setFirstName(vendorDetails.getFirstName());
+            }
+            if (vendorDetails.getLastName() != null) {
+                vendor.setLastName(vendorDetails.getLastName());
+            }
+            if (vendorDetails.getProfilePicturePath() != null) {
+                vendor.setProfilePicturePath(vendorDetails.getProfilePicturePath());
+            }
+            if (vendorDetails.getPhoneNumber() != null) {
+                vendor.setPhoneNumber(vendorDetails.getPhoneNumber());
+            }
+            if (vendorDetails.getCompanyName() != null) {
+                vendor.setCompanyName(vendorDetails.getCompanyName());
+            }
+            if (vendorDetails.getTinNumber() != null) {
+                vendor.setTinNumber(vendorDetails.getTinNumber());
+            }
+            if (vendorDetails.getBusinessAddress() != null) {
+                vendor.setBusinessAddress(vendorDetails.getBusinessAddress());
+            }
+            if (vendorDetails.getBusinessType() != null) {
+                vendor.setBusinessType(vendorDetails.getBusinessType());
+            }
+            if (vendorDetails.getRegistrationDate() != null) {
+                vendor.setRegistrationDate(vendorDetails.getRegistrationDate());
+            }
+            if (vendorDetails.getLastLogin() != null) {
+                vendor.setLastLogin(vendorDetails.getLastLogin());
+            }
+            // boolean should be patched carefully (default is false, so check explicitly)
+            vendor.setActive(vendorDetails.isActive());
+
+            Vendors updatedVendor = vendorsRepository.save(vendor);
+            return Optional.of(updatedVendor);
+        }
+
+        return Optional.empty();
+    }
+
 }

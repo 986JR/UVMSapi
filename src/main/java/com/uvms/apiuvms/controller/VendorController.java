@@ -183,4 +183,21 @@ public class VendorController {
                     .body("Internal server error occurred");
         }
     }
+
+
+    //
+    // VendorController.java
+
+    @PatchMapping("/{vendor_id}")
+    public ResponseEntity<Vendors> patchVendor(
+            @PathVariable Integer vendor_id,
+            @RequestBody Vendors vendorDetails) {
+
+        Optional<Vendors> updatedVendor = vendorsService.patchVendor(vendor_id, vendorDetails);
+
+        return updatedVendor
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
