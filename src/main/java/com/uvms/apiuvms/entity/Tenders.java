@@ -1,8 +1,7 @@
 // Tenders.java in entity folder
 package com.uvms.apiuvms.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +14,10 @@ import java.util.List;
 @Entity
 @Table(name = "tenders")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "tender_id"
+)
 public class Tenders {
     public enum Status {
         ACTIVE, EXPIRED, PENDING, REJECTED
@@ -24,9 +27,9 @@ public class Tenders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tender_id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "college_id", nullable = false)
-    //@JsonBackReference("college-tenders")
+    @JsonIdentityReference(alwaysAsId = true)
     private Colleges college;
 
     @Column(nullable = false, length = 255)
