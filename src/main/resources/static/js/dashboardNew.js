@@ -4,19 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiBase = "https://uvmsapiv1.onrender.com/api";
     const token = localStorage.getItem("jwtToken");
 
-    //Logout
-    const logoutBtn = document.getElementById('logout-btn');
-    logoutBtn.addEventListener('click', () => {
-        //alert()
-        logout();
-        //window.location.href = '/index.html';
-    });
-    function logout() {
-        localStorage.removeItem('jwtToken');
-        console.log('🚪 User logged out');
-        window.location.href = 'index.html';
-    }
-
     if (!token) {
         setTimeout(() => {
             alert("You must login first!");
@@ -24,10 +11,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
     }
 
+    //Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    logoutBtn.addEventListener('click', () => {
+        //alert()
+        logout();
+        return;
+        alert("Actioned returned here");
+
+        //window.location.href = '/index.html';
+    });
+    function logout() {
+        localStorage.removeItem('jwtToken');
+        console.log('🚪 User logged out');
+      alert("This function is exceuted");
+        window.location.href = 'index.html';
+        throw new Error("Script stopped after logout");
+    }
+
+
+
+
     const authHeaders = {
         "Authorization": "Bearer " + token,
         "Content-Type": "application/json"
     };
+
 
     //Fetch Vendor Info
     fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
@@ -98,5 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Error fetching policies:", err));
 });
+
+
 
 
