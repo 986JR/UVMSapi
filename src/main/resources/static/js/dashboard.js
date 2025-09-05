@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("Forbidden: Token is invalid or expired.");
             localStorage.removeItem("jwtToken");
             setTimeout(() => {
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }, 1500);
             return;
         }

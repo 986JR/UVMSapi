@@ -4,6 +4,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiBase = "https://uvmsapiv1.onrender.com/api";
     const token = localStorage.getItem("jwtToken");
 
+    //Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    logoutBtn.addEventListener('click', () => {
+        //alert()
+        logout();
+        //window.location.href = '/index.html';
+    });
+    function logout() {
+        localStorage.removeItem('jwtToken');
+        console.log('🚪 User logged out');
+        window.location.href = 'index.html';
+    }
+
     if (!token) {
         setTimeout(() => {
             alert("You must login first!");
@@ -87,15 +100,3 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-//Logout
-const logoutBtn = document.getElementById('logout-btn');
-logoutBtn.addEventListener('click', () => {
-    //alert()
-    logout();
-    //window.location.href = '/index.html';
-});
-function logout() {
-    localStorage.removeItem('jwtToken');
-    console.log('🚪 User logged out');
-    window.location.href = 'index.html';
-}
