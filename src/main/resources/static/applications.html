@@ -34,7 +34,9 @@
         <h1>My Applications</h1>
         <div class="nav-actions">
             <button class="btn btn-sm btn-outline"><i class="fas fa-bell"></i></button>
-            <button class="btn btn-sm btn-outline"><i class="fas fa-user"></i></button>
+            <button class="btn btn-sm btn-outline" id="profileBtn">
+                <i class="fas fa-user"></i> <span id="vendorNameDisplay">Profile</span>
+            </button>
         </div>
     </header>
 
@@ -96,6 +98,9 @@
         "Content-Type": "application/json"
     };
 
+    let vendorId = null; // logged-in vendor ID
+    let vendorName = ""; // logged-in vendor full name
+
     // Sidebar toggle
     const sidebar = document.getElementById("sidebar");
     document.getElementById("openSidebar").addEventListener("click", () => {
@@ -105,23 +110,48 @@
         sidebar.classList.remove("active");
     });
 
+    // 1️⃣ Fetch vendor info
+    async function fetchVendorInfo() {
+        try {
+            const response = await fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders });
+            if (!response.ok) throw new Error("Unauthorized or session expired");
+
+            const vendorData = await response.json();
+            vendorId = vendorData.vendor_id || vendorData.id;
+            vendorName = `${vendorData.firstName || vendorData.first_name || ""} ${vendorData.lastName || vendorData.last_name || ""}`.trim();
+
+            // Set the vendor's name in the navbar
+            const vendorNameDisplay = document.getElementById("vendorNameDisplay");
+            if (vendorNameDisplay) vendorNameDisplay.textContent = vendorName || "Profile";
+
+            // Now fetch the vendor's applications
+            fetchApplications();
+        } catch (error) {
+            console.error("Error fetching vendor info:", error);
+            document.getElementById("applicationsContainer").innerHTML = `
+                <div style="text-align:center; padding:20px; color:red;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Unable to load vendor data. Please log in again.
+                </div>
+            `;
+            updateStats([]);
+        }
+    }
+
+    // 2️⃣ Fetch applications for the logged-in vendor
     async function fetchApplications() {
         const container = document.getElementById("applicationsContainer");
         container.innerHTML = `<p style="text-align:center; color: var(--uvms-text-secondary-light);">Loading applications...</p>`;
 
         try {
             const response = await fetch(`${apiBase}/applications`, { headers: authHeaders });
+            if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
 
-            if (!response.ok) {
-                throw new Error(`Server responded with status: ${response.status}`);
-            }
+            let data = await response.json();
 
-            const data = await response.json();
-
-            if (!Array.isArray(data) || data.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: gray;">No applications found.</p>`;
-                updateStats([]);
-                return;
+            // Filter only this vendor's applications
+            if (vendorId !== null) {
+                data = data.filter(app => app.vendor === vendorId);
             }
 
             updateStats(data);
@@ -139,27 +169,33 @@
         }
     }
 
+    // Render applications safely
     function renderApplications(data) {
         const container = document.getElementById("applicationsContainer");
         container.innerHTML = "";
 
-        data.forEach(app => {
-            const statusClass = app.status === "pending"
-                ? "badge-warning"
-                : app.status === "approved"
-                    ? "badge-success"
-                    : "badge-error";
+        if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color: gray;">No applications found.</p>`;
+            return;
+        }
 
-            const statusLabel = app.status.charAt(0).toUpperCase() + app.status.slice(1);
+        data.forEach(app => {
+            const status = app.status.toLowerCase();
+            const statusClass =
+                status === "pending" ? "badge-warning" :
+                    status === "approved" ? "badge-success" : "badge-error";
+
+            const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
 
             const card = `
-                <div class="card application-card" data-status="${app.status}">
+                <div class="card application-card" data-status="${status}">
                     <div class="card-body">
                         <div class="flex flex-between align-center mb-2 flex-mobile-stack">
                             <div>
-                                <h4 style="margin: 0; color: var(--uvms-blue-primary);">${app.tenderTitle}</h4>
+                                <h4 style="margin: 0; color: var(--uvms-blue-primary);">Application #${app.application_id}</h4>
                                 <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
-                                    <strong>Plot:</strong> ${app.plot} | <strong>College:</strong> ${app.college.college_name}
+                                    <strong>Vendor:</strong> ${vendorName || "-"}<br>
+                                    <strong>Plot:</strong> ${app.plot || "-"}
                                 </p>
                             </div>
                             <span class="badge ${statusClass}">${statusLabel}</span>
@@ -172,13 +208,13 @@
                             </div>
                             <div>
                                 <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
-                                <p style="margin: 0; font-weight: 500;">${app.applicationId || "-"}</p>
+                                <p style="margin: 0; font-weight: 500;">${app.application_id}</p>
                             </div>
                             <div>
                                 <small style="color: var(--uvms-text-secondary-light);">Submitted Contract:</small>
                                 <p style="margin: 0; font-weight: 500;">
-                                    <a href="${app.submittedContract || '#'}" style="color: var(--uvms-blue-primary);">
-                                        <i class="fas fa-file-pdf"></i> ${app.submittedContract ? "contract.pdf" : "N/A"}
+                                    <a href="${app.submittedContractPath || '#'}" style="color: var(--uvms-blue-primary);">
+                                        <i class="fas fa-file-pdf"></i> ${app.submittedContractPath ? "contract.pdf" : "N/A"}
                                     </a>
                                 </p>
                             </div>
@@ -190,18 +226,18 @@
 
                         <div class="flex flex-between align-center">
                             <small style="color: var(--uvms-text-secondary-light);">
-                                <i class="fas fa-clock"></i> Submitted ${app.submittedAgo || "N/A"}
+                                <i class="fas fa-clock"></i> Submitted ${app.reviewedAt || "N/A"}
                             </small>
                             <div class="flex gap-1">
-                                <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('${app.applicationId}', '${app.status}')">
+                                <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('${app.application_id}', '${status}')">
                                     <i class="fas fa-eye"></i> View Details
                                 </button>
-                                ${app.status === "pending" ? `
+                                ${status === "pending" ? `
                                     <button class="btn btn-sm btn-outline-danger">
                                         <i class="fas fa-times"></i> Withdraw
                                     </button>` : ""}
-                                ${app.status === "approved" ? `
-                                    <button class="btn btn-sm btn-success" onclick="downloadContract('${app.applicationId}')">
+                                ${status === "approved" ? `
+                                    <button class="btn btn-sm btn-success" onclick="downloadContract('${app.application_id}')">
                                         <i class="fas fa-download"></i> Download Contract
                                     </button>` : ""}
                             </div>
@@ -215,9 +251,9 @@
 
     function updateStats(data) {
         const total = data.length;
-        const pending = data.filter(app => app.status === "pending").length;
-        const approved = data.filter(app => app.status === "approved").length;
-        const denied = data.filter(app => app.status === "denied").length;
+        const pending = data.filter(app => app.status === "PENDING").length;
+        const approved = data.filter(app => app.status === "APPROVED").length;
+        const denied = data.filter(app => app.status === "DENIED").length;
 
         document.getElementById("totalCount").textContent = total;
         document.getElementById("pendingCount").textContent = pending;
@@ -228,15 +264,10 @@
     function filterApplications(status) {
         const cards = document.querySelectorAll(".application-card");
         cards.forEach(card => {
-            if (status === "all" || card.dataset.status === status) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
+            card.style.display = (status === "all" || card.dataset.status === status) ? "block" : "none";
         });
     }
 
-    // Placeholder functions
     function showApplicationDetails(id, status) {
         alert(`Show details for Application ID: ${id}, Status: ${status}`);
     }
@@ -244,10 +275,8 @@
         alert(`Downloading contract for Application ID: ${id}`);
     }
 
-    // Load on page start
-    fetchApplications();
+    fetchVendorInfo();
 </script>
-
 
 </body>
 </html>
