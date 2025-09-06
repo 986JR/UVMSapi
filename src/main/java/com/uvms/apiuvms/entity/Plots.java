@@ -33,7 +33,7 @@ public class Plots {
     @Column(name = "is_available")
     private Boolean isAvailable = true;
 
-    @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Applications> application;
 
