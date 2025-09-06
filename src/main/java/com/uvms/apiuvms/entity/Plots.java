@@ -21,7 +21,8 @@ public class Plots {
 
     @ManyToOne
     @JoinColumn(name = "tender_id", nullable = false)
-    @JsonBackReference("tender-plots")
+    //@JsonBackReference("tender-plots")
+    @JsonIdentityReference(alwaysAsId = true)
     private Tenders tender;
 
     @Column(name = "plot_number", length = 50, nullable = false)

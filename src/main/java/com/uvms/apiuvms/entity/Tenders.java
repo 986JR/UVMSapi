@@ -60,8 +60,9 @@ public class Tenders {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
-    @com.fasterxml.jackson.annotation.JsonIgnore
+    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    //@com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Plots> plots = new ArrayList<>();
 
     // Constructors
