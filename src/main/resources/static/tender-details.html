@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-<!-- Sidebar -->
 <div class="sidebar">
     <div class="sidebar-header"><h3>UVMS</h3></div>
     <nav class="sidebar-nav">
@@ -23,7 +22,6 @@
     </nav>
 </div>
 
-<!-- Top Navigation -->
 <nav class="navbar">
     <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
     <div class="navbar-brand">Tender Details</div>
@@ -33,7 +31,6 @@
     </div>
 </nav>
 
-<!-- Main Content -->
 <div class="main-content">
     <div class="flex flex-between align-center mb-3 flex-mobile-stack">
         <div class="mb-mobile-2">
@@ -46,9 +43,7 @@
     </div>
 
     <div class="grid grid-2 gap-3">
-        <!-- Left Column -->
         <div>
-            <!-- Basic Information -->
             <div class="card mb-3">
                 <div class="card-header"><h3>Basic Information</h3></div>
                 <div class="card-body">
@@ -63,7 +58,6 @@
                 </div>
             </div>
 
-            <!-- Description -->
             <div class="card mb-3">
                 <div class="card-header"><h3>Description</h3></div>
                 <div class="card-body">
@@ -71,34 +65,29 @@
                 </div>
             </div>
 
-            <!-- Available Plots -->
             <div class="card mb-3">
                 <div class="card-header"><h3>Available Plots</h3></div>
                 <div class="card-body" id="plotsContainer"></div>
             </div>
         </div>
 
-        <!-- Right Column -->
         <div>
-            <!-- Actions -->
             <div class="card mb-3">
                 <div class="card-header"><h3>Actions</h3></div>
                 <div class="card-body">
                     <div class="flex" style="flex-direction:column;gap:10px;">
                         <button class="btn btn-primary"><i class="fas fa-download"></i> Download Contract Template</button>
-                        <button class="btn btn-success"><i class="fas fa-paper-plane"></i> Submit Application</button>
+                        <button class="btn btn-success" onclick="openApplicationModal()"><i class="fas fa-paper-plane"></i> Submit Application</button>
                         <button class="btn btn-secondary"><i class="fas fa-question-circle"></i> Request Information</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Timeline -->
             <div class="card mb-3">
                 <div class="card-header"><h3>Timeline</h3></div>
                 <div class="card-body" id="timeline"></div>
             </div>
 
-            <!-- Requirements -->
             <div class="card">
                 <div class="card-header"><h3>Requirements</h3></div>
                 <div class="card-body">
@@ -113,7 +102,36 @@
         </div>
     </div>
 </div>
+<div id="applicationModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div class="modal-content" style="background: white; padding: 20px; width: 90%; max-width: 500px;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--uvms-surface-dark); padding-bottom: 15px; margin-bottom: 15px;">
+            <h3 style="margin: 0;">Submit Application</h3>
+            <span class="close" onclick="closeApplicationModal()" style="float: right; font-size: 24px; cursor: pointer;">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p style="color: var(--uvms-text-secondary-light); margin-bottom: 15px;">
+                You are applying for: <strong id="modalTenderTitle"></strong> (<span id="modalTenderId"></span>)
+            </p>
 
+            <div class="form-group">
+                <label for="plotSelection" class="form-label">Select Plot</label>
+                <select class="form-input" id="plotSelection" required>
+                    <option value="">Select a plot</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="signedContract" class="form-label">Upload Signed Contract (PDF or Word)</label>
+                <input type="file" class="form-input" id="signedContract" accept=".pdf,.doc,.docx" required>
+                <small style="color: var(--uvms-text-secondary-light);">Make sure to merge the required documents with the signed contract before attaching.</small>
+            </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--uvms-surface-dark); padding-top: 15px; margin-top: 15px;">
+            <button type="button" class="btn btn-secondary" onclick="closeApplicationModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="submitApplication()">Submit Application</button>
+        </div>
+    </div>
+</div>
 <script>
     const apiBase = "https://uvmsapiv1.onrender.com/api";
     const token = localStorage.getItem("jwtToken");
@@ -178,7 +196,7 @@
             document.getElementById("deadline").textContent = new Date(tender.deadlineDate).toLocaleString();
             document.getElementById("description").textContent = tender.description;
 
-            // Fill plots
+            // Fill plots on main page
             const plotsContainer = document.getElementById("plotsContainer");
             plotsContainer.innerHTML = "";
             if (!plots || plots.length === 0) {
@@ -209,21 +227,65 @@
           <small>${new Date(tender.deadlineDate).toLocaleDateString()}</small>
           <p style="margin:5px 0;font-weight:500;color:var(--uvms-danger-red);">Submission Deadline</p>
         </div>`;
+
+            // Populate modal with tender details and plots
+            const plotSelection = document.getElementById("plotSelection"); // Get the select element in the modal
+            plotSelection.innerHTML = '<option value="">Select a plot</option>'; // Reset the dropdown
+
+            plots.forEach(plot => {
+                const option = document.createElement("option");
+                option.value = plot.id; // Use plot ID as the value
+                option.textContent = `${plot.plotNumber} (${plot.locationDescription})`;
+                plotSelection.appendChild(option);
+            });
+
+            document.getElementById("modalTenderTitle").textContent = tender.title;
+            document.getElementById("modalTenderId").textContent = tender.tender_id;
+
         } catch (e) {
             console.error("Tender load error", e);
         }
     }
-//and here
 
+    // Modal functions
+    function openApplicationModal() {
+        document.getElementById("applicationModal").style.display = "flex";
+    }
 
+    function closeApplicationModal() {
+        document.getElementById("applicationModal").style.display = "none";
+    }
 
-    //here
+    function submitApplication() {
+        const plot = document.getElementById("plotSelection").value;
+        const contractFile = document.getElementById("signedContract").files[0];
+        const tenderId = new URLSearchParams(window.location.search).get("tenderId");
+
+        if (!plot || !contractFile) {
+            alert("Please select a plot and upload the signed contract");
+            return;
+        }
+
+        console.log(`Submitting application for tender ${tenderId}, plot ${plot} with file`, contractFile);
+
+        alert(`Application submitted for plot ${plot}. You will be notified once it's reviewed.`);
+        closeApplicationModal();
+
+        setTimeout(() => {
+            window.location.href = "applications.html";
+        }, 1500);
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("applicationModal");
+        if (event.target === modal) {
+            closeApplicationModal();
+        }
+    };
+
+    // Initial page load calls
     loadUser();
     loadTenderDetails();
 </script>
-
-
-
-
 </body>
 </html>
