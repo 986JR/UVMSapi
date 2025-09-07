@@ -232,6 +232,7 @@
             plots.forEach(plot => {
                 if (plot.isAvailable) {
                     const option = document.createElement("option");
+
                     option.value = plot.plot_id;
                     option.textContent = `${plot.plotNumber} (${plot.locationDescription})`;
                     plotSelection.appendChild(option);
@@ -256,15 +257,14 @@
 
     async function submitApplication() {
         const submitBtn = document.querySelector('#applicationModal .btn-primary');
-        const plot = document.getElementById("plotSelection").value;
+        const plotId = document.getElementById("plotSelection").value;
         const contractFile = document.getElementById("signedContract").files[0];
         const tenderId = new URLSearchParams(window.location.search).get("tenderId");
 
-        if (!plot || !contractFile) {
+        if (!plotId || !contractFile) {
             alert("Please select a plot and upload the signed contract");
             return;
         }
-
         if (!token) {
             alert("You must be logged in to submit an application.");
             window.location.href = "login.html";
@@ -276,14 +276,16 @@
         submitBtn.textContent = "Submitting...";
 
         const formData = new FormData();
-        formData.append("plot", plot);
-        formData.append("tenderId", tenderId);
+        formData.append("plot", plotId);
+        // CORRECTED: Add the filename to the append method for robustness
         formData.append("signedContract", contractFile, contractFile.name);
 
         try {
             const res = await fetch(`${apiBase}/applications`, {
                 method: "POST",
-                headers: { "Authorization": "Bearer " + token },
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
                 body: formData
             });
 

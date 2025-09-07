@@ -50,8 +50,17 @@ public class ApplicationController {
             @RequestHeader("Authorization") String authHeader
     ) {
         try {
-            // Extract token from "Bearer <token>"
+            // Debug logs
+            System.out.println("=== Incoming Application Request ===");
+            System.out.println("Auth Header: " + authHeader);
+            System.out.println("Plot ID: " + plotId);
+            System.out.println("File Name: " + (signedContract != null ? signedContract.getOriginalFilename() : "null"));
+            System.out.println("File Size: " + (signedContract != null ? signedContract.getSize() + " bytes" : "null"));
+
+            // Extract token
             String token = jwtUtil.extractTokenFromHeader(authHeader);
+            System.out.println("Extracted Token: " + token);
+
             if (token == null || !jwtUtil.isTokenValid(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Invalid or missing JWT token");
@@ -59,23 +68,32 @@ public class ApplicationController {
 
             // Extract vendor ID from token
             Integer vendorId = jwtUtil.extractVendor_id(token);
+            System.out.println("Vendor ID from token: " + vendorId);
+
             if (vendorId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Vendor ID not found in token");
             }
 
-            // Call service with vendorId instead of raw token
+            // Save application
             Applications app = applicationService.createApplication(vendorId, plotId, signedContract);
+            System.out.println("Application created with ID: " + app.getApplication_id());
+
             return ResponseEntity.ok(app);
 
         } catch (RuntimeException e) {
+            System.out.println("RuntimeException: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error: " + e.getMessage());
         } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Internal server error occurred");
         }
     }
+
 
 
     // ✅ Modified PUT to allow file update + status/feedback
