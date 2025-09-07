@@ -8,22 +8,33 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
-    private final String UPLOAD_DIR = "uploads/contracts/";
+
+    private final Path root = Paths.get("uploads/contracts");
 
     public String save(MultipartFile file) {
         try {
-            File dir = new File(UPLOAD_DIR);
-            if (!dir.exists()) dir.mkdirs();
+            // Ensure directory exists
+            if (!Files.exists(root)) {
+                Files.createDirectories(root);
+                System.out.println("Created directory: " + root.toAbsolutePath());
+            }
 
-            String filePath = UPLOAD_DIR + System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(filePath);
-            Files.write(path, file.getBytes());
-            return filePath;
-        } catch (IOException e) {
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = root.resolve(filename);
+
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("File saved at: " + filePath.toAbsolutePath());
+
+            return filePath.toString(); // store this in DB
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("File upload failed", e);
         }
     }
 }
+
