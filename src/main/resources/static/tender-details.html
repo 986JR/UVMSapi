@@ -102,6 +102,8 @@
         </div>
     </div>
 </div>
+
+<!-- Application Modal -->
 <div id="applicationModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
     <div class="modal-content" style="background: white; padding: 20px; width: 90%; max-width: 500px;">
         <div class="modal-header" style="border-bottom: 1px solid var(--uvms-surface-dark); padding-bottom: 15px; margin-bottom: 15px;">
@@ -132,6 +134,7 @@
         </div>
     </div>
 </div>
+
 <script>
     const apiBase = "https://uvmsapiv1.onrender.com/api";
     const token = localStorage.getItem("jwtToken");
@@ -158,10 +161,8 @@
     async function loadTenderDetails() {
         const { tenderId, collegeId } = getQueryParams();
         try {
-            // Fetch tender + college (public)
             const tenderRes = await fetch(`${apiBase}/tenders/${tenderId}`);
             const collegeRes = await fetch(`${apiBase}/colleges/${collegeId}`);
-            // Fetch all plots (protected)
             const plotsRes = await fetch(`${apiBase}/plots`, {
                 headers: { "Authorization": "Bearer " + token }
             });
@@ -174,10 +175,8 @@
             const college = await collegeRes.json();
             const allPlots = plotsRes.ok ? await plotsRes.json() : [];
 
-            // FIX: filter plots by "tender" field
             const plots = allPlots.filter(p => String(p.tender) === String(tenderId));
 
-            // Fill tender details
             document.getElementById("tenderTitle").textContent = tender.title;
             document.getElementById("tenderMeta").textContent = `Tender ID: ${tender.tender_id} | ${college.college_name}`;
             document.getElementById("tenderId").textContent = tender.tender_id;
@@ -185,7 +184,6 @@
             document.getElementById("createdBy").textContent = tender.createdBy?.name || "N/A";
             document.getElementById("createdAt").textContent = new Date(tender.createdAt).toLocaleString();
 
-            // Status badge with colors
             let statusClass = "badge-secondary";
             if (tender.status === "ACTIVE") statusClass = "badge-success";
             if (tender.status === "EXPIRED") statusClass = "badge-danger";
@@ -196,7 +194,7 @@
             document.getElementById("deadline").textContent = new Date(tender.deadlineDate).toLocaleString();
             document.getElementById("description").textContent = tender.description;
 
-            // Fill plots on main page
+            // Fill plots main section
             const plotsContainer = document.getElementById("plotsContainer");
             plotsContainer.innerHTML = "";
             if (!plots || plots.length === 0) {
@@ -207,36 +205,37 @@
                     div.className = "plot-item mb-2";
                     div.style = "padding:12px;border-left:4px solid var(--uvms-success-green);background:var(--uvms-surface-light);";
                     div.innerHTML = `
-            <h4 style="margin:0;font-size:1em;">${plot.plotNumber}</h4>
-            <p style="margin:5px 0;color:var(--uvms-text-secondary-light);">${plot.locationDescription}</p>
-            <small style="color:var(--uvms-text-secondary-light);">Available: ${plot.isAvailable}</small>`;
+                        <h4 style="margin:0;font-size:1em;">${plot.plotNumber}</h4>
+                        <p style="margin:5px 0;color:var(--uvms-text-secondary-light);">${plot.locationDescription}</p>
+                        <small style="color:var(--uvms-text-secondary-light);">Available: ${plot.isAvailable}</small>`;
                     plotsContainer.appendChild(div);
                 });
             }
 
-            // Timeline (published + deadline)
+            // Timeline
             const timeline = document.getElementById("timeline");
             timeline.innerHTML = `
-        <div class="timeline-item" style="padding:10px 0;border-left:2px solid var(--uvms-blue-primary);padding-left:15px;position:relative;">
-          <div style="position:absolute;left:-6px;top:12px;width:10px;height:10px;background:var(--uvms-blue-primary);border-radius:50%;"></div>
-          <small>${new Date(tender.createdAt).toLocaleDateString()}</small>
-          <p style="margin:5px 0;font-weight:500;">Tender Published</p>
-        </div>
-        <div class="timeline-item" style="padding:10px 0;padding-left:15px;position:relative;">
-          <div style="position:absolute;left:-6px;top:12px;width:10px;height:10px;background:var(--uvms-text-secondary-light);border-radius:50%;"></div>
-          <small>${new Date(tender.deadlineDate).toLocaleDateString()}</small>
-          <p style="margin:5px 0;font-weight:500;color:var(--uvms-danger-red);">Submission Deadline</p>
-        </div>`;
+                <div class="timeline-item" style="padding:10px 0;border-left:2px solid var(--uvms-blue-primary);padding-left:15px;position:relative;">
+                    <div style="position:absolute;left:-6px;top:12px;width:10px;height:10px;background:var(--uvms-blue-primary);border-radius:50%;"></div>
+                    <small>${new Date(tender.createdAt).toLocaleDateString()}</small>
+                    <p style="margin:5px 0;font-weight:500;">Tender Published</p>
+                </div>
+                <div class="timeline-item" style="padding:10px 0;padding-left:15px;position:relative;">
+                    <div style="position:absolute;left:-6px;top:12px;width:10px;height:10px;background:var(--uvms-text-secondary-light);border-radius:50%;"></div>
+                    <small>${new Date(tender.deadlineDate).toLocaleDateString()}</small>
+                    <p style="margin:5px 0;font-weight:500;color:var(--uvms-danger-red);">Submission Deadline</p>
+                </div>`;
 
-            // Populate modal with tender details and plots
-            const plotSelection = document.getElementById("plotSelection"); // Get the select element in the modal
-            plotSelection.innerHTML = '<option value="">Select a plot</option>'; // Reset the dropdown
-
+            // Modal plots
+            const plotSelection = document.getElementById("plotSelection");
+            plotSelection.innerHTML = '<option value="">Select a plot</option>';
             plots.forEach(plot => {
-                const option = document.createElement("option");
-                option.value = plot.id; // Use plot ID as the value
-                option.textContent = `${plot.plotNumber} (${plot.locationDescription})`;
-                plotSelection.appendChild(option);
+                if (plot.isAvailable) {
+                    const option = document.createElement("option");
+                    option.value = plot.plot_id;
+                    option.textContent = `${plot.plotNumber} (${plot.locationDescription})`;
+                    plotSelection.appendChild(option);
+                }
             });
 
             document.getElementById("modalTenderTitle").textContent = tender.title;
@@ -247,7 +246,6 @@
         }
     }
 
-    // Modal functions
     function openApplicationModal() {
         document.getElementById("applicationModal").style.display = "flex";
     }
@@ -256,7 +254,8 @@
         document.getElementById("applicationModal").style.display = "none";
     }
 
-    function submitApplication() {
+    async function submitApplication() {
+        const submitBtn = document.querySelector('#applicationModal .btn-primary');
         const plot = document.getElementById("plotSelection").value;
         const contractFile = document.getElementById("signedContract").files[0];
         const tenderId = new URLSearchParams(window.location.search).get("tenderId");
@@ -266,14 +265,55 @@
             return;
         }
 
-        console.log(`Submitting application for tender ${tenderId}, plot ${plot} with file`, contractFile);
+        if (!token) {
+            alert("You must be logged in to submit an application.");
+            window.location.href = "login.html";
+            return;
+        }
 
-        alert(`Application submitted for plot ${plot}. You will be notified once it's reviewed.`);
-        closeApplicationModal();
+        submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = "Submitting...";
 
-        setTimeout(() => {
-            window.location.href = "applications.html";
-        }, 1500);
+        const formData = new FormData();
+        formData.append("plot", plot);
+        formData.append("tenderId", tenderId);
+        formData.append("signedContract", contractFile, contractFile.name);
+
+        try {
+            const res = await fetch(`${apiBase}/applications`, {
+                method: "POST",
+                headers: { "Authorization": "Bearer " + token },
+                body: formData
+            });
+
+            if (res.status === 401) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (!res.ok) {
+                let errMsg = `Request failed (${res.status})`;
+                try {
+                    const errJson = await res.json();
+                    errMsg = errJson.message || JSON.stringify(errJson);
+                } catch (_) {}
+                throw new Error(errMsg);
+            }
+
+            const data = await res.json();
+            alert(data.message || "Application submitted successfully!");
+            closeApplicationModal();
+            setTimeout(() => window.location.href = "applications.html", 800);
+
+        } catch (err) {
+            console.error("Submit error:", err);
+            alert("Failed to submit application: " + (err.message || err));
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
     }
 
     window.onclick = function(event) {
@@ -283,7 +323,6 @@
         }
     };
 
-    // Initial page load calls
     loadUser();
     loadTenderDetails();
 </script>
