@@ -41,8 +41,8 @@ public class Admins {
 
 
 
-   // @Column(nullable = false)
-   // private String role;
+
+    // private String role;
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -158,5 +158,14 @@ public class Admins {
 
     public void setColleges(Colleges colleges) {
         this.colleges = colleges;
+    }
+    // @Column(nullable = false)
+
+    public int getAdmin_id() {
+        return admin_id;
+    }
+
+    public void setAdmin_id(int admin_id) {
+        this.admin_id = admin_id;
     }
 }

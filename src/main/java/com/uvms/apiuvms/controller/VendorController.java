@@ -165,7 +165,7 @@ public class VendorController {
             }
 
             // Extract vendor ID instead of email
-            Integer vendorId = jwtUtil.extractVendor_id(token);
+            Integer vendorId = jwtUtil.extractVendorId(token);
             if (vendorId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Invalid JWT token: missing vendor ID");

@@ -18,6 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+
+import com.uvms.apiuvms.dto.AdminLoginRequest;
+import com.uvms.apiuvms.dto.AdminJwtResponse;
+import com.uvms.apiuvms.entity.Admins;
+import com.uvms.apiuvms.service.AdminService;
 /**
  * Authentication Controller for vendor login, registration, and logout
  * Supports both Android and Web applications
@@ -36,6 +41,9 @@ public class AuthController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private AdminService adminsService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -121,7 +129,7 @@ public class AuthController {
             jwtResponse.setIs_active(vendor.isActive());
             jwtResponse.setSuccess(true);
             jwtResponse.setMessage("Login successful!!");
-            System.out.println("TESTING LOGIN HERE "+jwtResponse.getMessage());
+            System.out.println("TESTING LOGIN HERE " + jwtResponse.getMessage());
             return ResponseEntity.ok(jwtResponse);
 
         } catch (BadCredentialsException e) {
@@ -136,7 +144,7 @@ public class AuthController {
     /**
      * Vendor Logout Endpoint
      * POST /api/auth/logout
-     *
+     * <p>
      * Note: JWT is stateless, so logout is handled client-side by removing the token
      * This endpoint provides a standard response for client apps
      */
@@ -245,4 +253,59 @@ public class AuthController {
                     .body(JwtResponse.error("Token refresh failed: " + e.getMessage()));
         }
     }
+
+
+    /**
+     * Admin Login Endpoint
+     * POST /api/auth/admin/login
+     *
+     * @param loginRequest Admin login credentials (email & password)
+     * @return JWT response with admin information
+     */
+    @PostMapping("/admin/login")
+    public ResponseEntity<?> loginAdmin(@Valid @RequestBody AdminLoginRequest loginRequest) {
+        try {
+            // Authenticate admin credentials
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+
+            // Load admin details
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Admins admin = adminsService.getAdminByEmail(loginRequest.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+            // Update last login
+            adminsService.updateLastLogin(admin.getEmail());
+
+            // Generate JWT token with admin info
+            String jwt = jwtUtil.generateToken(userDetails, admin); // <-- Make sure JwtUtil supports Admins
+
+            // Build response
+            AdminJwtResponse jwtResponse = new AdminJwtResponse();
+            jwtResponse.setAccessToken(jwt);
+            jwtResponse.setTokenType("Bearer");
+            jwtResponse.setExpiresIn(jwtUtil.getExpirationInSeconds());
+            jwtResponse.setAdmin_id(admin.getAdmin_id()); // check your entity getter
+            jwtResponse.setEmail(admin.getEmail());
+            jwtResponse.setName(admin.getName());
+            jwtResponse.setRole(admin.getRole().name());
+            jwtResponse.setIs_active(admin.isIs_active()); // check your entity getter
+            jwtResponse.setSuccess(true);
+            jwtResponse.setMessage("Admin login successful");
+
+            return ResponseEntity.ok(jwtResponse);
+
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.badRequest()
+                    .body(AdminJwtResponse.error("Invalid email or password"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(AdminJwtResponse.error("Admin login failed: " + e.getMessage()));
+        }
+    }
+
 }

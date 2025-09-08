@@ -48,7 +48,7 @@ public class ApplicationController {
             }
 
             // Extract vendor ID from token
-            Integer vendorId = jwtUtil.extractVendor_id(token);
+            Integer vendorId = jwtUtil.extractVendorId(token);
             if (vendorId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Vendor ID not found in token");
