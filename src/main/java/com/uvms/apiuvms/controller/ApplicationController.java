@@ -61,7 +61,7 @@ public class ApplicationController {
             }
 
             // Save application
-            Applications app = applicationService.createApplication(vendorId, plotId, tenderId);
+            Applications app = applicationService.createApplication(vendorId, plotId);
             System.out.println("Application created with ID: " + app.getApplication_id());
 
             return ResponseEntity.ok(app);
@@ -85,7 +85,7 @@ public class ApplicationController {
             @RequestParam(value = "signedContract", required = false) org.springframework.web.multipart.MultipartFile signedContract,
             @RequestParam(value = "feedback", required = false) String feedback
     ) {
-        Applications updatedApp = applicationService.updateApplication(application_id, status, feedback, signedContract);
+        Applications updatedApp = applicationService.updateApplication(application_id, status, feedback);
         return ResponseEntity.ok(updatedApp);
     }
 

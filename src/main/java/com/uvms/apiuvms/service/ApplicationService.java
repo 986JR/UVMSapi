@@ -52,14 +52,13 @@ public class ApplicationService {
     }
 
     // ✅ Create a new application linked with Vendor, Plot and Tender
-    public Applications createApplication(Integer vendorId, Integer plotId, Integer tenderId) {
+    public Applications createApplication(Integer vendorId, Integer plotId) {
         Applications app = new Applications();
         app.setVendor(vendorsRepository.findById(vendorId)
                 .orElseThrow(() -> new RuntimeException("Vendor not found")));
         app.setPlot(plotRepository.findById(plotId)
                 .orElseThrow(() -> new RuntimeException("Plot not found")));
-        app.setTender(tendersRepository.findById(tenderId)
-                .orElseThrow(() -> new RuntimeException("Tender not found")));
+      //
         app.setStatus(Applications.Status.PENDING); // default status
 
         return applicationRepository.save(app);
@@ -68,18 +67,14 @@ public class ApplicationService {
     // ✅ Update an existing application (allows file + status + feedback)
     public Applications updateApplication(Integer applicationId,
                                           Applications.Status status,
-                                          String feedback,
-                                          MultipartFile file) {
+                                          String feedback) {
         Applications app = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
         if (status != null) app.setStatus(status);
         if (feedback != null) app.setFeedback(feedback);
 
-        if (file != null && !file.isEmpty()) {
-            String filePath = fileStorageService.save(file);
-            app.setSubmittedContractPath(filePath);
-        }
+
 
         return applicationRepository.save(app);
     }
