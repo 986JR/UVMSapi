@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "application_id"
 )
-//@JsonIdentityReference(alwaysAsId = true)
 @Entity
 @Table(name = "applications")
 @Data
@@ -28,10 +27,17 @@ public class Applications {
     @JoinColumn(name = "vendor_id", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Vendors vendor;
+
     @ManyToOne
     @JoinColumn(name = "plot_id", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Plots plot;
+
+    // 🔹 New relation: Many Applications belong to One Tender
+    @ManyToOne
+    @JoinColumn(name = "tender_id", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
+    private Tenders tender;
 
     @CreationTimestamp
     @Column(name = "application_date", updatable = false)
@@ -65,9 +71,10 @@ public class Applications {
     // Constructors
     public Applications() {}
 
-    public Applications(Vendors vendor, Plots plot, String submittedContractPath) {
+    public Applications(Vendors vendor, Plots plot, Tenders tender, String submittedContractPath) {
         this.vendor = vendor;
-       this.plot = plot;
+        this.plot = plot;
+        this.tender = tender;
         this.submittedContractPath = submittedContractPath;
     }
 }

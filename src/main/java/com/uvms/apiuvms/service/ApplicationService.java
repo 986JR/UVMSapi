@@ -1,8 +1,10 @@
 package com.uvms.apiuvms.service;
 
 import com.uvms.apiuvms.entity.Applications;
+import com.uvms.apiuvms.entity.Tenders;
 import com.uvms.apiuvms.repository.ApplicationRepository;
 import com.uvms.apiuvms.repository.PlotRepository;
+import com.uvms.apiuvms.repository.TendersRepository;
 import com.uvms.apiuvms.repository.VendorsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class ApplicationService {
     private PlotRepository plotRepository;
 
     @Autowired
+    private TendersRepository tendersRepository; // ✅ added
+
+    @Autowired
     private FileStorageService fileStorageService;
 
     // Get all applications
@@ -36,7 +41,7 @@ public class ApplicationService {
         return applicationRepository.findById(id);
     }
 
-    // Save a new application
+    // Save a new application (generic save)
     public Applications saveApplication(Applications application) {
         return applicationRepository.save(application);
     }
@@ -46,29 +51,25 @@ public class ApplicationService {
         applicationRepository.deleteById(id);
     }
 
-    // Get applications by status
-   //public List<Applications> getApplicationsByStatus(Applications.Status status) {
-       // return applicationRepository.findByStatus(status);
-    //}
-
-    // Create a new application
-    public Applications createApplication(Integer vendorId, Integer plotId, MultipartFile file) {
-        // Save the uploaded file and get the file path
-        String filePath = fileStorageService.save(file);
-
+    // ✅ Create a new application linked with Vendor, Plot and Tender
+    public Applications createApplication(Integer vendorId, Integer plotId, Integer tenderId) {
         Applications app = new Applications();
         app.setVendor(vendorsRepository.findById(vendorId)
                 .orElseThrow(() -> new RuntimeException("Vendor not found")));
         app.setPlot(plotRepository.findById(plotId)
                 .orElseThrow(() -> new RuntimeException("Plot not found")));
-        app.setSubmittedContractPath(filePath);
+        app.setTender(tendersRepository.findById(tenderId)
+                .orElseThrow(() -> new RuntimeException("Tender not found")));
         app.setStatus(Applications.Status.PENDING); // default status
 
         return applicationRepository.save(app);
     }
 
-    // Update an existing application
-    public Applications updateApplication(Integer applicationId, Applications.Status status, String feedback, MultipartFile file) {
+    // ✅ Update an existing application (allows file + status + feedback)
+    public Applications updateApplication(Integer applicationId,
+                                          Applications.Status status,
+                                          String feedback,
+                                          MultipartFile file) {
         Applications app = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 

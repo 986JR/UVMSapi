@@ -65,6 +65,10 @@ public class Tenders {
     @JsonIdentityReference(alwaysAsId = true)
     private List<Plots> plots = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<Applications> applications = new ArrayList<>();
+
     // Constructors
     public Tenders() {}
 

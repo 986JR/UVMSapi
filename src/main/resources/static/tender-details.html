@@ -76,9 +76,9 @@
                 <div class="card-header"><h3>Actions</h3></div>
                 <div class="card-body">
                     <div class="flex" style="flex-direction:column;gap:10px;">
-                        <button class="btn btn-primary" onclick="downloadContractTemplate()">
-                            <i class="fas fa-download"></i> Download Contract Template
-                        </button>
+                        <!-- <button class="btn btn-primary" onclick="downloadContractTemplate()">
+                             <i class="fas fa-download"></i> Download Contract Template
+                         </button>-->
 
                         <button class="btn btn-success" onclick="openApplicationModal()"><i class="fas fa-paper-plane"></i> Submit Application</button>
                         <button class="btn btn-secondary"><i class="fas fa-question-circle"></i> Request Information</button>
@@ -126,9 +126,10 @@
             </div>
 
             <div class="form-group">
-                <label for="signedContract" class="form-label">Upload Signed Contract (PDF or Word)</label>
-                <input type="file" class="form-input" id="signedContract" accept=".pdf,.doc,.docx" required>
-                <small style="color: var(--uvms-text-secondary-light);">Make sure to merge the required documents with the signed contract before attaching.</small>
+                <!-- <label for="signedContract" class="form-label">Upload Signed Contract (PDF or Word)</label>
+              -  <input type="file" class="form-input" id="signedContract" accept=".pdf,.doc,.docx" required>
+                 <small style="color: var(--uvms-text-secondary-light);">Make sure to merge the required documents with the signed contract before attaching.
+                 </small>-->
             </div>
         </div>
         <div class="modal-footer" style="border-top: 1px solid var(--uvms-surface-dark); padding-top: 15px; margin-top: 15px;">
@@ -263,11 +264,10 @@
     async function submitApplication() {
         const submitBtn = document.querySelector('#applicationModal .btn-primary');
         const plotId = document.getElementById("plotSelection").value;
-        const contractFile = document.getElementById("signedContract").files[0];
         const tenderId = new URLSearchParams(window.location.search).get("tenderId");
 
-        if (!plotId || !contractFile) {
-            alert("Please select a plot and upload the signed contract");
+        if (!plotId) {
+            alert("Please select a plot before submitting.");
             return;
         }
         if (!token) {
@@ -280,18 +280,17 @@
         const originalText = submitBtn.textContent;
         submitBtn.textContent = "Submitting...";
 
-        const formData = new FormData();
-        formData.append("plot", plotId);
-        // CORRECTED: Add the filename to the append method for robustness
-        formData.append("signedContract", contractFile, contractFile.name);
-
         try {
             const res = await fetch(`${apiBase}/applications`, {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
                 },
-                body: formData
+                body: JSON.stringify({
+                    plot: parseInt(plotId),
+                    tender: parseInt(tenderId)
+                })
             });
 
             if (res.status === 401) {
