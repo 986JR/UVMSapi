@@ -27,7 +27,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 console.log("It is here");
 
     try {
-        const res = await fetch("/api/auth/register", {
+        const res = await fetch("https://uvmsapiv1.onrender.com/api/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
@@ -46,7 +46,7 @@ console.log("It is here");
             window.location.href = "index.html";
         } else {
             alert("Registration successful. Please login.");
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         }
     } catch (err) {
         console.error("Network error:", err);
