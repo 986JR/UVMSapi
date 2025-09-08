@@ -51,12 +51,12 @@ public class SecurityConfig {
                         // Public auth endpoints
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         // Public API endpoints
-                        .requestMatchers("/api/colleges/**", "/api/tenders/**","/api/colleges").permitAll()
+                        .requestMatchers("/api/colleges/**", "/api/tenders/**","/api/colleges","/api/auth/admin/login").permitAll()
                         .requestMatchers("/api/policies/**").permitAll()
                         // Protected endpoints
                         .requestMatchers("/api/protected/**").authenticated()
                         .requestMatchers("/api/dashboard","/api/admins","/api/admins/**").authenticated()
-                        .requestMatchers("/api/auth/profile", "/api/auth/refresh", "/api/auth/logout","/api/auth/admin/login").authenticated()
+                        .requestMatchers("/api/auth/profile", "/api/auth/refresh", "/api/auth/logout").authenticated()
                         // Anything else requires authentication
                         .anyRequest().authenticated()
                 )
