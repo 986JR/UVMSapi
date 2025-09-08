@@ -22,38 +22,38 @@ public class ApplicationService {
     @Autowired
     private PlotRepository plotRepository;
 
-    // ✅ Get all applications
+    // Get all applications
     public List<Applications> getAllApplications() {
         return applicationRepository.findAll();
     }
 
-    // ✅ Get application by ID
+    // Get application by ID
     public Optional<Applications> getApplicationById(Integer id) {
         return applicationRepository.findById(id);
     }
 
-    // ✅ Save new application
+    // Save a new application
     public Applications saveApplication(Applications application) {
         return applicationRepository.save(application);
     }
 
-    // ✅ Delete application
+    // Delete application by ID
     public void deleteApplicationById(Integer id) {
         applicationRepository.deleteById(id);
     }
 
-    // ✅ Create application linked to Vendor + Plot
+    // Create application linked with vendor & plot
     public Applications createApplication(Integer vendorId, Integer plotId) {
         Applications app = new Applications();
         app.setVendor(vendorsRepository.findById(vendorId)
                 .orElseThrow(() -> new RuntimeException("Vendor not found")));
         app.setPlot(plotRepository.findById(plotId)
                 .orElseThrow(() -> new RuntimeException("Plot not found")));
-        app.setStatus(Applications.Status.PENDING); // default
+        app.setStatus(Applications.Status.PENDING);
         return applicationRepository.save(app);
     }
 
-    // ✅ Update application
+    // Update application (status + feedback)
     public Applications updateApplication(Integer applicationId,
                                           Applications.Status status,
                                           String feedback) {
