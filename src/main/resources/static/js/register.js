@@ -43,7 +43,7 @@ console.log("It is here");
         const data = await res.json().catch(() => ({}));
         if (data.token) {
             localStorage.setItem("jwt", data.token);
-            window.location.href = "dashboard2.html";
+            window.location.href = "index.html";
         } else {
             alert("Registration successful. Please login.");
             window.location.href = "login.html";
