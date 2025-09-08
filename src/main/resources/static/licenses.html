@@ -8,273 +8,188 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>UVMS</h3>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-            <a href="colleges.html">
-                <i class="fas fa-university"></i> Tenders
-            </a>
-            <a href="applications.html">
-                <i class="fas fa-clipboard-list"></i> Applications
-            </a>
-            <a href="licenses.html" class="active">
-                <i class="fas fa-certificate"></i> Licenses
-            </a>
-            <a href="contracts.html">
-                <i class="fas fa-file-signature"></i> Contracts
-            </a>
-            <a href="policies.html">
-                <i class="fas fa-book"></i> Policies
-            </a>
-            <a href="notifications.html">
-                <i class="fas fa-bell"></i> Notifications
-            </a>
-            <a href="" id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </nav>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h3>UVMS</h3>
     </div>
-
-    <!-- Top Navigation -->
-    <nav class="navbar">
-        <button class="mobile-menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="navbar-brand">My Licenses</div>
-        <div class="navbar-user">
-            <div class="user-avatar">JD</div>
-            <span>John Doe</span>
-        </div>
+    <nav class="sidebar-nav">
+        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="colleges.html"><i class="fas fa-university"></i> Tenders</a>
+        <a href="applications.html"><i class="fas fa-clipboard-list"></i> Applications</a>
+        <a href="licenses.html" class="active"><i class="fas fa-certificate"></i> Licenses</a>
+        <a href="contracts.html"><i class="fas fa-file-signature"></i> Contracts</a>
+        <a href="policies.html"><i class="fas fa-book"></i> Policies</a>
+        <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+        <a href="" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
+</div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-
-        <!-- Licenses Grid -->
-        <div class="grid grid-1" id="licensesContainer">
-            <!-- License Card 1 - Database Schema Compliant -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
-                        <div>
-                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Construction License</h4>
-                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
-                                <strong>License ID:</strong> LIC-2024-001 | <strong>License Number:</strong> VL-2024-0875
-                            </p>
-                        </div>
-                        <span class="badge badge-success">Active</span>
-                    </div>
-                    
-                    <div class="grid grid-2 gap-2 mb-3">
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
-                            <p style="margin: 0; font-weight: 500;">APP-2024-001</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Vendor ID:</small>
-                            <p style="margin: 0; font-weight: 500;">VND-2024-001</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Issue Date:</small>
-                            <p style="margin: 0; font-weight: 500;">2024-01-15</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Expiry Date:</small>
-                            <p style="margin: 0; font-weight: 500; color: var(--uvms-success-green);">2025-01-14</p>
-                        </div>
-                    </div>
-                    
-                    <div class="alert alert-success" style="margin-bottom: 15px;">
-                        <i class="fas fa-file-alt"></i> <strong>License File:</strong> /licenses/VL-2024-0875.pdf
-                    </div>
-                    
-                    <div class="flex flex-between align-center">
-                        <small style="color: var(--uvms-text-secondary-light);">
-                            <i class="fas fa-check-circle"></i> Active License - Valid for 25 days
-                        </small>
-                        <div class="flex gap-1">
-                            <button class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn btn-sm btn-primary">
-                                <i class="fas fa-download"></i> Download
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- License Card 2 - Active -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
-                        <div>
-                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Equipment Supply License</h4>
-                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
-                                <strong>License ID:</strong> LIC-2024-002 | <strong>License Number:</strong> VL-2024-0876
-                            </p>
-                        </div>
-                        <span class="badge badge-success">Active</span>
-                    </div>
-                    
-                    <div class="grid grid-2 gap-2 mb-3">
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
-                            <p style="margin: 0; font-weight: 500;">APP-2024-002</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Vendor ID:</small>
-                            <p style="margin: 0; font-weight: 500;">VND-2024-001</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Issue Date:</small>
-                            <p style="margin: 0; font-weight: 500;">2024-02-20</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Expiry Date:</small>
-                            <p style="margin: 0; font-weight: 500; color: var(--uvms-success-green);">2025-02-19</p>
-                        </div>
-                    </div>
-                    
-                    <div class="alert alert-success" style="margin-bottom: 15px;">
-                        <i class="fas fa-file-alt"></i> <strong>License File:</strong> /licenses/VL-2024-0876.pdf
-                    </div>
-                    
-                    <div class="flex flex-between align-center">
-                        <small style="color: var(--uvms-text-secondary-light);">
-                            <i class="fas fa-check-circle"></i> Active License - Valid for 60 days
-                        </small>
-                        <div class="flex gap-1">
-                            <button class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn btn-sm btn-primary">
-                                <i class="fas fa-download"></i> Download
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- License Card 3 - Active -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
-                        <div>
-                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">IT Infrastructure License</h4>
-                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
-                                <strong>License ID:</strong> LIC-2024-003 | <strong>License Number:</strong> VL-2024-0877
-                            </p>
-                        </div>
-                        <span class="badge badge-success">Active</span>
-                    </div>
-                    
-                    <div class="grid grid-2 gap-2 mb-3">
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
-                            <p style="margin: 0; font-weight: 500;">APP-2024-003</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Vendor ID:</small>
-                            <p style="margin: 0; font-weight: 500;">VND-2024-001</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Issue Date:</small>
-                            <p style="margin: 0; font-weight: 500;">2024-03-10</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Expiry Date:</small>
-                            <p style="margin: 0; font-weight: 500; color: var(--uvms-success-green);">2025-03-09</p>
-                        </div>
-                    </div>
-                    
-                    <div class="alert alert-success" style="margin-bottom: 15px;">
-                        <i class="fas fa-file-alt"></i> <strong>License File:</strong> /licenses/VL-2024-0877.pdf
-                    </div>
-                    
-                    <div class="flex flex-between align-center">
-                        <small style="color: var(--uvms-text-secondary-light);">
-                            <i class="fas fa-check-circle"></i> Active License - Valid for 77 days
-                        </small>
-                        <div class="flex gap-1">
-                            <button class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn btn-sm btn-primary">
-                                <i class="fas fa-download"></i> Download
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- License Card 4 - Expired -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex flex-between align-center mb-2 flex-mobile-stack">
-                        <div>
-                            <h4 style="margin: 0; color: var(--uvms-blue-primary);">Plumbing Works License</h4>
-                            <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
-                                <strong>License ID:</strong> LIC-2020-004 | <strong>License Number:</strong> PL-LIC-2020-9876
-                            </p>
-                        </div>
-                        <span class="badge badge-danger">Expired</span>
-                    </div>
-                    
-                    <div class="grid grid-2 gap-2 mb-3">
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
-                            <p style="margin: 0; font-weight: 500;">APP-2020-004</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Vendor ID:</small>
-                            <p style="margin: 0; font-weight: 500;">VND-2024-001</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Issue Date:</small>
-                            <p style="margin: 0; font-weight: 500;">2020-06-20</p>
-                        </div>
-                        <div>
-                            <small style="color: var(--uvms-text-secondary-light);">Expiry Date:</small>
-                            <p style="margin: 0; font-weight: 500; color: var(--uvms-error-red);">2022-06-19</p>
-                        </div>
-                    </div>
-                    
-                    <p style="margin-bottom: 15px; color: var(--uvms-text-secondary-light);">
-                        License for plumbing installation and maintenance in commercial and institutional buildings.
-                    </p>
-                    
-                    <div class="alert alert-danger" style="margin-bottom: 15px;">
-                        <i class="fas fa-exclamation-triangle"></i> This license has expired. You need to renew it to undertake plumbing projects.
-                    </div>
-                    
-                    <div class="flex flex-between align-center">
-                        <small style="color: var(--uvms-error-red);">
-                            <i class="fas fa-clock"></i> Expired 412 days ago
-                        </small>
-                        <div class="flex gap-1">
-                            <button class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn btn-sm btn-primary">
-                                <i class="fas fa-download"></i> Download
-                            </button>
-                            <button class="btn btn-sm btn-warning" onclick="location.href='renew-license.html'">
-                                <i class="fas fa-sync-alt"></i> Renew
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Top Navigation -->
+<nav class="navbar">
+    <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+    <div class="navbar-brand">My Licenses</div>
+    <div class="navbar-user">
+        <div class="user-avatar" id="userInitials">JD</div>
+        <span id="userName">John Doe</span>
     </div>
+</nav>
 
-    <script src="js/uvms-main.js"></script>
+<!-- Main Content -->
+<div class="main-content">
+    <div class="grid grid-1" id="licensesContainer"></div>
+</div>
+
+<!-- Add Tender Modal -->
+<div id="tenderModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New Tender</h3>
+            <span class="close-modal" onclick="document.getElementById('tenderModal').style.display='none'">&times;</span>
+        </div>
+        <form id="tenderForm">
+            <div class="form-group">
+                <label for="title">Tender Title</label>
+                <input type="text" id="title" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="deadline">Deadline Date</label>
+                <input type="date" id="deadline" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" required>
+                    <option value="ACTIVE">Active</option>
+                    <option value="UPCOMING">Upcoming</option>
+                    <option value="CLOSED">Closed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="contractPath">Contract Template Path</label>
+                <input type="text" id="contractPath" placeholder="/contracts/sample.pdf">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Tender</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const apiBase = "https://uvmsapiv1.onrender.com/api";
+    const token = localStorage.getItem("jwtToken");
+    const authHeaders = {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+    };
+
+    let vendorData = null;
+
+    // Load Vendor Dashboard Info
+    async function loadVendor() {
+        const res = await fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders });
+        vendorData = await res.json();
+
+        // Set user details
+        document.getElementById("userName").innerText = `${vendorData.firstName} ${vendorData.lastName}`;
+        document.getElementById("userInitials").innerText =
+            vendorData.firstName.charAt(0).toUpperCase() + vendorData.lastName.charAt(0).toUpperCase();
+
+        // After vendor loaded → load licenses filtered
+        loadLicenses();
+    }
+
+    // Load Licenses (filtered by vendor id)
+    async function loadLicenses() {
+        const res = await fetch(`${apiBase}/licenses`, { headers: authHeaders });
+        const licenses = await res.json();
+        const container = document.getElementById("licensesContainer");
+        container.innerHTML = "";
+
+        // Filter licenses by vendor id from dashboard
+        const vendorLicenses = licenses.filter(lic => lic.vendor.vendorId === vendorData.vendorId);
+
+        if (vendorLicenses.length === 0) {
+            // Show "No licenses found" message
+            container.innerHTML = `
+        <div style="
+          padding: 20px;
+          background-color: #f0f4f8;
+          border: 1px solid #d1d7e0;
+          border-radius: 8px;
+          text-align: center;
+          color: #555;
+          font-size: 1.1em;
+          margin-top: 15px;
+        ">
+          <i class="fas fa-exclamation-circle" style="color:#3498db; margin-right:8px;"></i>
+          No licenses found for your account.
+        </div>
+      `;
+            return;
+        }
+
+        for (let lic of vendorLicenses) {
+            let tenderTitle = "Unknown Tender";
+            try {
+                const plotRes = await fetch(`${apiBase}/plots/${lic.application.plot}`, { headers: authHeaders });
+                const plot = await plotRes.json();
+
+                if (plot.tender) {
+                    const tenderRes = await fetch(`${apiBase}/tenders/${plot.tender}`, { headers: authHeaders });
+                    const tender = await tenderRes.json();
+                    tenderTitle = tender.title;
+                }
+            } catch (err) {
+                console.error("Tender fetch failed", err);
+            }
+
+            const badgeClass = lic.application.status === "APPROVED" ? "badge-success" : "badge-danger";
+
+            const card = `
+        <div class="card">
+          <div class="card-body">
+            <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+              <div>
+                <h4 style="margin:0; color: var(--uvms-blue-primary);">${tenderTitle}</h4>
+                <p style="margin:5px 0; color: var(--uvms-text-secondary-light); font-size:0.9em;">
+                  <strong>License ID:</strong> ${lic.license_id} |
+                  <strong>Application ID:</strong> ${lic.application.application_id}
+                </p>
+              </div>
+              <span class="badge ${badgeClass}">${lic.application.status}</span>
+            </div>
+
+            <div class="grid grid-2 gap-2 mb-3">
+              <div><small>Vendor ID:</small><p>${lic.vendor.vendorId}</p></div>
+              <div><small>Issue Date:</small><p>${new Date(lic.application.applicationDate).toLocaleDateString()}</p></div>
+            </div>
+
+            <div class="alert ${badgeClass === 'badge-success' ? 'alert-success':'alert-danger'}" style="margin-bottom:15px;">
+              <i class="fas fa-file-alt"></i> <strong>Feedback:</strong> ${lic.application.feedback}
+            </div>
+
+            <div class="flex flex-between align-center">
+              <small style="color: var(--uvms-text-secondary-light);">
+                <i class="fas fa-clock"></i> ${lic.application.status === "APPROVED" ? "Active License" : "Expired/Denied"}
+              </small>
+              <div class="flex gap-1">
+                <button class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> View</button>
+                <button class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Download</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+            container.innerHTML += card;
+        }
+    }
+
+    loadVendor();
+</script>
+
+
 </body>
 </html>
