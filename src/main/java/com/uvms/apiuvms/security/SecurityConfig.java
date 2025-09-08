@@ -47,7 +47,7 @@ public class SecurityConfig {
                         // Static assets
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                         // Actuator health check (for Render)
-                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/info","/manage-tendersAdmin.html").permitAll()
                         // Public auth endpoints
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         // Public API endpoints

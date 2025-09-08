@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVMS - Manage Tenders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="header-left">
+        <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+        <div class="logo">UDOM Vendor Management System</div>
+    </div>
+    <div class="header-right">
+        <div class="logout-btn"><i class="fas fa-sign-out-alt"></i></div>
+    </div>
+</header>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">Admin Portal</div>
+    <div class="sidebar-scroll-container">
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="manage-tenders.html" class="active"><i class="fas fa-list"></i> Manage Tenders</a></li>
+            <li><a href="manage-plots.html"><i class="fas fa-map-marker-alt"></i> Manage Plots</a></li>
+            <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+            <li><a href="application-review.html"><i class="fas fa-clipboard-check"></i> Application Review</a></li>
+            <li><a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a></li>
+            <li><a href="renewals.html"><i class="fas fa-sync-alt"></i> License Renewals</a></li>
+            <li><a href="policies.html"><i class="fas fa-book"></i> Policies</a></li>
+            <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li><a href="change-password.html"><i class="fas fa-key"></i> Change Password</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="content-section">
+        <div class="content-header">
+            <h2>Manage Tenders</h2>
+            <p id="adminName">Loading...</p>
+            <button class="btn btn-primary" id="add-tender-btn">Add New Tender</button>
+        </div>
+
+        <div class="search-filter">
+            <input type="text" placeholder="Search tenders..." class="search-input" id="searchTender">
+            <select class="filter-select" id="filterTender">
+                <option value="all">All Tenders</option>
+                <option value="ACTIVE">Active</option>
+                <option value="UPCOMING">Upcoming</option>
+                <option value="CLOSED">Closed</option>
+            </select>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Tender ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Plots</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="tendersTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Tender Modal -->
+<div id="tender-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New Tender</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <form id="tender-form">
+            <div class="form-group">
+                <label for="tender-title">Tender Title</label>
+                <input type="text" id="tender-title" required>
+            </div>
+            <div class="form-group">
+                <label for="tender-description">Description</label>
+                <textarea id="tender-description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="deadline-date">Deadline Date</label>
+                <input type="date" id="deadline-date" required>
+            </div>
+            <div class="form-group">
+                <label for="tender-status">Status</label>
+                <select id="tender-status" required>
+                    <option value="ACTIVE">Active</option>
+                    <option value="UPCOMING">Upcoming</option>
+                    <option value="CLOSED">Closed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="contract-path">Contract Template Path</label>
+                <input type="text" id="contract-path" placeholder="/contracts/sample.pdf">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Tender</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const apiBase = "https://uvmsapiv1.onrender.com/api";
+    const token = localStorage.getItem("jwtToken");
+    const authHeaders = { "Authorization": "Bearer " + token, "Content-Type": "application/json" };
+
+    let adminData = {};
+    let tenders = [];
+
+    // Load Admin Name
+    fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
+        .then(res => res.json())
+        .then(data => {
+            adminData = data;
+            document.getElementById("adminName").innerText = `${data.firstName} ${data.lastName}`;
+        });
+
+    // Load Tenders
+    function loadTenders() {
+        fetch(`${apiBase}/tenders`, { headers: authHeaders })
+            .then(res => res.json())
+            .then(data => {
+                tenders = data;
+                renderTenders(data);
+            });
+    }
+
+    function renderTenders(list) {
+        const tbody = document.getElementById("tendersTable");
+        tbody.innerHTML = "";
+        list.forEach(t => {
+            tbody.innerHTML += `
+          <tr>
+            <td>${t.tender_id}</td>
+            <td>${t.title}</td>
+            <td>${t.description}</td>
+            <td>${t.plots.join(", ")}</td>
+            <td><span class="status-badge status-${t.status.toLowerCase()}">${t.status}</span></td>
+            <td>${new Date(t.createdAt).toLocaleDateString()}</td>
+            <td>${new Date(t.updatedAt).toLocaleDateString()}</td>
+            <td>
+              <button class="btn-icon delete-btn" onclick="deleteTender(${t.tender_id})">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+        });
+    }
+
+    // Delete Tender
+    function deleteTender(id) {
+        if (confirm("Are you sure you want to delete this tender?")) {
+            fetch(`${apiBase}/tenders/${id}`, {
+                method: "DELETE",
+                headers: authHeaders
+            }).then(() => {
+                alert("Tender deleted");
+                loadTenders();
+            });
+        }
+    }
+
+    // Modal Handlers
+    const modal = document.getElementById("tender-modal");
+    const addBtn = document.getElementById("add-tender-btn");
+    const closeBtn = document.querySelector(".close-modal");
+
+    addBtn.onclick = () => modal.style.display = "flex";
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+
+    // Create Tender (POST)
+    document.getElementById("tender-form").addEventListener("submit", e => {
+        e.preventDefault();
+
+        const payload = {
+            college: adminData.vendorId, // using vendor id as college ref
+            title: document.getElementById("tender-title").value,
+            description: document.getElementById("tender-description").value,
+            deadlineDate: new Date(document.getElementById("deadline-date").value).toISOString(),
+            status: document.getElementById("tender-status").value,
+            contractTemplatePath: document.getElementById("contract-path").value,
+            createdBy: {
+                admin_id: 1 // static for now, replace with actual logged admin id
+            }
+        };
+
+        fetch(`${apiBase}/tenders`, {
+            method: "POST",
+            headers: authHeaders,
+            body: JSON.stringify(payload)
+        }).then(res => {
+            if (res.ok) {
+                alert("Tender created successfully");
+                modal.style.display = "none";
+                loadTenders();
+            } else {
+                alert("Error creating tender");
+            }
+        });
+    });
+
+    // Initial Load
+    loadTenders();
+</script>
+</body>
+</html>
