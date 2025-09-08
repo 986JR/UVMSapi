@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVMS - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">UDOM Vendor Management System</div>
+        </div>
+        <div class="header-right">
+            <div class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+        </div>
+    </header>
+
+   <!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">Admin Portal</div>
+    <div class="sidebar-scroll-container">
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="manage-tenders.html"><i class="fas fa-list"></i> Manage Tenders</a></li>
+            <li><a href="manage-plots.html"><i class="fas fa-map-marker-alt"></i> Manage Plots</a></li>
+            <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+            <li><a href="application-review.html"><i class="fas fa-clipboard-check"></i> Application Review</a></li>
+            <li><a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a></li>
+            <li><a href="renewals.html"><i class="fas fa-sync-alt"></i> License Renewals</a></li>
+            <li><a href="policies.html"><i class="fas fa-book"></i> Policies</a></li>
+            <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li><a href="change-password.html"><i class="fas fa-key"></i> Change Password</a></li>
+        </ul>
+    </div>
+</div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Content -->
+        <div class="content-section">
+            <div class="content-header">
+                <h2>Dashboard Overview</h2>
+                <p>College of Informatics and Virtual Education (CIVE)</p>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-title">Total Tenders</div>
+                    <div class="card-value">24</div>
+                    <div class="card-change positive"><i class="fas fa-arrow-up"></i> 12% from last month</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Pending Applications</div>
+                    <div class="card-value">18</div>
+                    <div class="card-change negative"><i class="fas fa-arrow-up"></i> 5% from last week</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Active Licenses</div>
+                    <div class="card-value">42</div>
+                    <div class="card-change positive"><i class="fas fa-arrow-up"></i> 8% from last month</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Renewal Requests</div>
+                    <div class="card-value">7</div>
+                    <div class="card-change positive"><i class="fas fa-arrow-down"></i> 3% from last week</div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3 class="section-title">Recent Applications</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Application ID</th>
+                            <th>Vendor</th>
+                            <th>Tender</th>
+                            <th>Date Submitted</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>APP-2023-0089</td>
+                            <td>Juma Enterprises</td>
+                            <td>Food Supply Tender</td>
+                            <td>Aug 22, 2023</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>APP-2023-0088</td>
+                            <td>Tech Solutions Ltd</td>
+                            <td>IT Equipment</td>
+                            <td>Aug 21, 2023</td>
+                            <td><span class="status-badge status-active">Approved</span></td>
+                        </tr>
+                        <tr>
+                            <td>APP-2023-0087</td>
+                            <td>Clean Water Co.</td>
+                            <td>Water Supply</td>
+                            <td>Aug 20, 2023</td>
+                            <td><span class="status-badge status-rejected">Rejected</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
