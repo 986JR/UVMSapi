@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVMS - Admin Applications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .status-badge { padding: 3px 6px; border-radius: 6px; font-size: 12px; }
+        .status-pending { background: orange; color: white; }
+        .status-approved { background: green; color: white; }
+        .status-denied { background: red; color: white; }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content:center; align-items:center; }
+        .modal-content { background:#fff; padding:20px; border-radius:8px; width:80%; max-width:600px; }
+        .close-btn { float:right; cursor:pointer; font-size:18px; }
+        .app-card { border:1px solid #ddd; border-radius:10px; padding:15px; margin:10px 0; }
+        .app-actions button { margin-right:10px; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+        <div class="logo">UDOM Vendor Management System</div>
+    </div>
+    <div class="header-right">
+        <div class="logout-btn"><i class="fas fa-sign-out-alt"></i></div>
+    </div>
+</header>
+
+<div class="sidebar">
+    <div class="sidebar-header">Admin Portal</div>
+    <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+        <li><a href="application-review.html"><i class="fas fa-clipboard-check"></i> Application Review</a></li>
+        <li><a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="content-section">
+        <div class="content-header">
+            <h2>Applications</h2>
+            <p id="vendorName">Loading...</p>
+        </div>
+
+        <!-- Category Tabs -->
+        <div id="categories">
+            <button onclick="filterApps('ALL')">All</button>
+            <button onclick="filterApps('PENDING')">Pending</button>
+            <button onclick="filterApps('APPROVED')">Approved</button>
+            <button onclick="filterApps('DENIED')">Denied</button>
+        </div>
+
+        <!-- Application Cards -->
+        <div id="applicationsContainer"></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="appModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div id="modalDetails">Loading...</div>
+        <div class="app-actions">
+            <button onclick="approveApp()">Approve</button>
+            <button onclick="denyApp()">Deny</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const apiBase = "https://uvmsapiv1.onrender.com/api";
+    const token = localStorage.getItem("jwtToken");
+    const authHeaders = { "Authorization": "Bearer " + token, "Content-Type": "application/json" };
+
+    let applications = [];
+    let vendors = [];
+    let currentApp = null;
+    let adminLastName = "";
+
+    // Load Vendor (Admin) Name
+    fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders })
+        .then(res => res.json())
+        .then(data => {
+            adminLastName = data.lastName;
+            document.getElementById("vendorName").innerText = `${data.firstName} ${data.lastName}, Admin`;
+        });
+
+    // Load Vendors
+    fetch(`${apiBase}/vendors`, { headers: authHeaders })
+        .then(res => res.json()).then(data => vendors = data);
+
+    // Load Applications
+    fetch(`${apiBase}/applications`, { headers: authHeaders })
+        .then(res => res.json()).then(async data => {
+        applications = data;
+        renderApplications(applications);
+    });
+
+    async function renderApplications(apps) {
+        const container = document.getElementById("applicationsContainer");
+        container.innerHTML = "";
+
+        for (let app of apps) {
+            const vendor = vendors.find(v => v.vendorId === app.vendor);
+            const vendorName = vendor ? vendor.companyName : "Unknown Vendor";
+            const fullName = vendor ? `${vendor.firstName} ${vendor.lastName}` : "";
+
+            // Get Tender Description
+            let tenderDescription = "";
+            const plotRes = await fetch(`${apiBase}/plots/${app.plot}`, { headers: authHeaders });
+            const plot = await plotRes.json();
+            const tenderRes = await fetch(`${apiBase}/tenders/${plot.tender}`, { headers: authHeaders });
+            const tender = await tenderRes.json();
+            tenderDescription = tender.description;
+
+            // Card HTML
+            const card = `
+        <div class="app-card">
+          <div style="display:flex; justify-content:space-between;">
+            <b>Vendor Registration - ${vendorName}</b>
+            <span class="status-badge status-${app.status.toLowerCase()}">${app.status}</span>
+          </div>
+          <p>${tenderDescription}</p>
+          <p><b>Date Submitted:</b> ${new Date(app.applicationDate).toLocaleDateString()}</p>
+          <p><b>Vendor:</b> ${fullName}</p>
+          <div class="app-actions">
+            <button onclick="openModal(${app.application_id})">View</button>
+            <button onclick="approveApp(${app.application_id})">Approve</button>
+            <button onclick="denyApp(${app.application_id})">Deny</button>
+          </div>
+        </div>`;
+            container.innerHTML += card;
+        }
+    }
+
+    // Filter by Status
+    function filterApps(status) {
+        if (status === "ALL") {
+            renderApplications(applications);
+        } else {
+            renderApplications(applications.filter(app => app.status === status));
+        }
+    }
+
+    // Modal
+    function openModal(appId) {
+        currentApp = applications.find(a => a.application_id === appId);
+        document.getElementById("modalDetails").innerHTML = JSON.stringify(currentApp, null, 2);
+        document.getElementById("appModal").style.display = "flex";
+    }
+    function closeModal() { document.getElementById("appModal").style.display = "none"; }
+
+    // Approve / Deny
+    function approveApp(appId) {
+        const app = applications.find(a => a.application_id === appId);
+        const payload = {
+            ...app,
+            status: "APPROVED",
+            reviewedBy: adminLastName,
+            reviewedAt: new Date().toISOString(),
+            feedback: "Congrats Welcome To UDOM investments",
+            license: "LIC-2025-001"
+        };
+        fetch(`${apiBase}/applications/${appId}`, {
+            method: "PUT", headers: authHeaders, body: JSON.stringify(payload)
+        }).then(() => { alert("Application Approved"); location.reload(); });
+    }
+    function denyApp(appId) {
+        const app = applications.find(a => a.application_id === appId);
+        const payload = {
+            ...app,
+            status: "DENIED",
+            reviewedBy: adminLastName,
+            reviewedAt: new Date().toISOString(),
+            feedback: "Sorry, try another one!",
+            license: null
+        };
+        fetch(`${apiBase}/applications/${appId}`, {
+            method: "PUT", headers: authHeaders, body: JSON.stringify(payload)
+        }).then(() => { alert("Application Denied"); location.reload(); });
+    }
+</script>
+</body>
+</html>
