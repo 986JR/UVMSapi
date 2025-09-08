@@ -56,7 +56,7 @@ public class SecurityConfig {
                         // Protected endpoints
                         .requestMatchers("/api/protected/**").authenticated()
                         .requestMatchers("/api/dashboard","/api/admins","/api/admins/**").authenticated()
-                        .requestMatchers("/api/auth/profile", "/api/auth/refresh", "/api/auth/logout").authenticated()
+                        .requestMatchers("/api/auth/profile", "/api/auth/refresh", "/api/auth/logout","/api/auth/admin/login").authenticated()
                         // Anything else requires authentication
                         .anyRequest().authenticated()
                 )
