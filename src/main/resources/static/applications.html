@@ -6,276 +6,249 @@
     <title>My Applications | UDOM Vendor Management System</title>
     <link rel="stylesheet" href="css/vendor-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Keep your existing CSS from Applications Query file */
+    </style>
 </head>
 <body>
+<!-- Mobile Menu Toggle -->
+<button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
 <!-- Sidebar -->
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h2>UVMS</h2>
-        <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
-    </div>
+<div class="sidebar">
+    <div class="sidebar-header"><h3>UVMS</h3></div>
     <nav class="sidebar-nav">
-        <ul>
-            <li><a href="vendor-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="tenders.html"><i class="fas fa-file-contract"></i> Tenders</a></li>
-            <li><a href="applications.html" class="active"><i class="fas fa-tasks"></i> My Applications</a></li>
-            <li><a href="contracts.html"><i class="fas fa-scroll"></i> Contracts</a></li>
-            <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
-            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-        </ul>
+        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="colleges.html"><i class="fas fa-university"></i> Tenders</a>
+        <a href="applications.html" class="active"><i class="fas fa-clipboard-list"></i> Applications</a>
+        <a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a>
+        <a href="contracts.html"><i class="fas fa-file-signature"></i> Contracts</a>
+        <a href="policies.html"><i class="fas fa-book"></i> Policies</a>
+        <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+        <a href="../../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
-</aside>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-brand">My Applications</div>
+    <div class="navbar-user">
+        <div class="user-avatar" id="userInitials">JD</div>
+        <span id="userFullName">John Doe</span>
+    </div>
+</nav>
 
 <!-- Main Content -->
-<main class="main-content">
-    <!-- Navbar -->
-    <header class="navbar">
-        <button class="menu-btn" id="openSidebar"><i class="fas fa-bars"></i></button>
-        <h1>My Applications</h1>
-        <div class="nav-actions">
-            <button class="btn btn-sm btn-outline"><i class="fas fa-bell"></i></button>
-            <button class="btn btn-sm btn-outline" id="profileBtn">
-                <i class="fas fa-user"></i> <span id="vendorNameDisplay">Profile</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Page Content -->
-    <div class="page-content">
-        <!-- Stats Summary -->
-        <div class="grid grid-4 gap-2 mb-3">
-            <div class="card card-stats">
-                <div class="card-body">
-                    <h3 id="totalCount">0</h3>
-                    <p>Total Applications</p>
+<div class="main-content">
+    <!-- Search & Filter -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="flex flex-between align-center gap-2 flex-mobile-stack">
+                <a href="college-tenders.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> <span class="hide-mobile">Browse Tenders</span>
+                </a>
+                <div class="flex gap-1 gap-mobile-1">
+                    <button class="btn sort btn-secondary" onclick="filterApplications('all')"><i class="fas fa-list"></i> All</button>
+                    <button class="btn sort btn-secondary" onclick="filterApplications('PENDING')"><i class="fas fa-clock"></i> Pending</button>
+                    <button class="btn sort btn-secondary" onclick="filterApplications('APPROVED')"><i class="fas fa-check"></i> Approved</button>
+                    <button class="btn sort btn-secondary" onclick="filterApplications('DENIED')"><i class="fas fa-times"></i> Denied</button>
                 </div>
             </div>
-            <div class="card card-stats">
-                <div class="card-body">
-                    <h3 id="pendingCount">0</h3>
-                    <p>Pending</p>
-                </div>
-            </div>
-            <div class="card card-stats">
-                <div class="card-body">
-                    <h3 id="approvedCount">0</h3>
-                    <p>Approved</p>
-                </div>
-            </div>
-            <div class="card card-stats">
-                <div class="card-body">
-                    <h3 id="deniedCount">0</h3>
-                    <p>Denied</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Applications Header -->
-        <div class="flex flex-between align-center mb-2">
-            <h2>Applications List</h2>
-            <div class="flex gap-1">
-                <button class="btn btn-sm btn-outline" onclick="filterApplications('all')">All</button>
-                <button class="btn btn-sm btn-outline" onclick="filterApplications('pending')">Pending</button>
-                <button class="btn btn-sm btn-outline" onclick="filterApplications('approved')">Approved</button>
-                <button class="btn btn-sm btn-outline" onclick="filterApplications('denied')">Denied</button>
-            </div>
-        </div>
-
-        <!-- Applications List -->
-        <div class="grid grid-1" id="applicationsContainer">
-            <p style="text-align:center; color: var(--uvms-text-secondary-light);">Loading applications...</p>
         </div>
     </div>
-</main>
 
-<!-- Scripts -->
+    <!-- Stats Summary -->
+    <div class="stats-grid mb-3" id="statsContainer" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <!-- Stats will be injected dynamically -->
+    </div>
+
+    <!-- Applications Container -->
+    <div class="grid grid-1" id="applicationsContainer"></div>
+</div>
+
+<!-- Application Details Modal -->
+<div id="applicationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Application Details</h2>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Application info will be populated dynamically -->
+            <div class="modal-section">
+                <h3>Application Information</h3>
+                <div class="info-grid">
+                    <div class="info-item"><span class="info-label">Application ID</span><span class="info-value" id="modal-app-id">-</span></div>
+                    <div class="info-item"><span class="info-label">Status</span><span class="info-value" id="modal-status">-</span></div>
+                    <div class="info-item"><span class="info-label">Application Date</span><span class="info-value" id="modal-app-date">-</span></div>
+                    <div class="info-item"><span class="info-label">Submitted Contract</span><a href="#" class="file-download" id="modal-submitted-contract"><i class="fas fa-file-pdf"></i> Download</a></div>
+                    <div class="info-item" id="approved-contract-section" style="display:none;">
+                        <span class="info-label">Approved Contract</span>
+                        <a href="#" class="file-download" id="modal-approved-contract"><i class="fas fa-file-contract"></i> Download</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            <button class="btn btn-primary" id="modal-download-btn" style="display:none;" onclick="downloadCurrentContract()">
+                <i class="fas fa-download"></i> Download Contract
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     const apiBase = "https://uvmsapiv1.onrender.com/api";
     const token = localStorage.getItem("jwtToken");
+
+    if (!token) {
+        alert("Session expired. Please log in again.");
+        window.location.href = "login.html";
+    }
 
     const authHeaders = {
         "Authorization": "Bearer " + token,
         "Content-Type": "application/json"
     };
 
-    let vendorId = null; // logged-in vendor ID
-    let vendorName = ""; // logged-in vendor full name
+    let vendorId = null;
 
-    // Sidebar toggle
-    const sidebar = document.getElementById("sidebar");
-    document.getElementById("openSidebar").addEventListener("click", () => {
-        sidebar.classList.add("active");
-    });
-    document.getElementById("closeSidebar").addEventListener("click", () => {
-        sidebar.classList.remove("active");
-    });
-
-    // 1️⃣ Fetch vendor info
-    async function fetchVendorInfo() {
+    // Load vendor details (for navbar)
+    async function loadVendor() {
         try {
-            const response = await fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders });
-            if (!response.ok) throw new Error("Unauthorized or session expired");
+            const res = await fetch(`${apiBase}/vendors/dashboard`, { headers: authHeaders });
 
-            const vendorData = await response.json();
-            vendorId = vendorData.vendor_id || vendorData.id;
-            vendorName = `${vendorData.firstName || vendorData.first_name || ""} ${vendorData.lastName || vendorData.last_name || ""}`.trim();
-
-            // Set the vendor's name in the navbar
-            const vendorNameDisplay = document.getElementById("vendorNameDisplay");
-            if (vendorNameDisplay) vendorNameDisplay.textContent = vendorName || "Profile";
-
-            // Now fetch the vendor's applications
-            fetchApplications();
-        } catch (error) {
-            console.error("Error fetching vendor info:", error);
-            document.getElementById("applicationsContainer").innerHTML = `
-                <div style="text-align:center; padding:20px; color:red;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    Unable to load vendor data. Please log in again.
-                </div>
-            `;
-            updateStats([]);
-        }
-    }
-
-    // 2️⃣ Fetch applications for the logged-in vendor
-    async function fetchApplications() {
-        const container = document.getElementById("applicationsContainer");
-        container.innerHTML = `<p style="text-align:center; color: var(--uvms-text-secondary-light);">Loading applications...</p>`;
-
-        try {
-            const response = await fetch(`${apiBase}/applications`, { headers: authHeaders });
-            if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
-
-            let data = await response.json();
-
-            // Filter only this vendor's applications
-            if (vendorId !== null) {
-                data = data.filter(app => app.vendor === vendorId);
+            if (res.status === 401 || res.status === 403) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "login.html";
+                return;
             }
 
-            updateStats(data);
-            renderApplications(data);
+            if (!res.ok) throw new Error("Failed to load vendor");
 
-        } catch (error) {
-            console.error("Error fetching applications:", error);
-            container.innerHTML = `
-                <div style="text-align:center; padding:20px; color:red;">
-                    <i class="fas fa-exclamation-circle"></i>
-                    Failed to load applications. Please try again later.
-                </div>
-            `;
-            updateStats([]);
+            const vendor = await res.json();
+            vendorId = vendor.vendorId;
+
+            document.querySelector(".navbar-user span").textContent = vendor.fullName;
+            const initials = (vendor.firstName[0] + vendor.lastName[0]).toUpperCase();
+            document.querySelector(".user-avatar").textContent = initials;
+
+        } catch (err) {
+            console.error("Vendor load error:", err);
         }
     }
 
-    // Render applications safely
-    function renderApplications(data) {
+    // Load applications and filter by vendor
+    async function loadApplications() {
+        try {
+            const res = await fetch(`${apiBase}/applications`, { headers: authHeaders });
+
+            if (!res.ok) throw new Error("Failed to fetch applications");
+
+            const allApps = await res.json();
+            const apps = allApps.filter(app => app.vendor === vendorId);
+
+            renderStats(apps);
+            renderApplications(apps);
+
+        } catch (err) {
+            console.error("Applications load error:", err);
+        }
+    }
+
+    // Render stats summary
+    function renderStats(apps) {
+        const total = apps.length;
+        const pending = apps.filter(a => a.status === "PENDING").length;
+        const approved = apps.filter(a => a.status === "APPROVED").length;
+        const denied = apps.filter(a => a.status === "DENIED").length;
+
+        const statsGrid = document.querySelector(".stats-grid");
+        statsGrid.innerHTML = `
+        <div class="card"><div class="card-body"><h2>${total}</h2><p>Total Applications</p></div></div>
+        <div class="card"><div class="card-body"><h2>${pending}</h2><p>Pending</p></div></div>
+        <div class="card"><div class="card-body"><h2>${approved}</h2><p>Approved</p></div></div>
+        <div class="card"><div class="card-body"><h2>${denied}</h2><p>Denied</p></div></div>
+    `;
+    }
+
+    // Render applications list
+    function renderApplications(apps) {
         const container = document.getElementById("applicationsContainer");
         container.innerHTML = "";
 
-        if (!Array.isArray(data) || data.length === 0) {
-            container.innerHTML = `<p style="text-align:center; color: gray;">No applications found.</p>`;
+        if (apps.length === 0) {
+            container.innerHTML = `<p style="color:var(--uvms-text-secondary-light);">No applications found</p>`;
             return;
         }
 
-        data.forEach(app => {
-            const status = app.status.toLowerCase();
-            const statusClass =
-                status === "pending" ? "badge-warning" :
-                    status === "approved" ? "badge-success" : "badge-error";
+        apps.forEach(app => {
+            const badgeClasses = {
+                PENDING: "badge-warning",
+                APPROVED: "badge-success",
+                DENIED: "badge-error"
+            };
 
-            const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+            const card = document.createElement("div");
+            card.className = "card application-card";
+            card.dataset.status = app.status.toLowerCase();
 
-            const card = `
-                <div class="card application-card" data-status="${status}">
-                    <div class="card-body">
-                        <div class="flex flex-between align-center mb-2 flex-mobile-stack">
-                            <div>
-                                <h4 style="margin: 0; color: var(--uvms-blue-primary);">Application #${app.application_id}</h4>
-                                <p style="margin: 5px 0; color: var(--uvms-text-secondary-light); font-size: 0.9em;">
-                                    <strong>Vendor:</strong> ${vendorName || "-"}<br>
-                                    <strong>Plot:</strong> ${app.plot || "-"}
-                                </p>
-                            </div>
-                            <span class="badge ${statusClass}">${statusLabel}</span>
-                        </div>
+            card.innerHTML = `
+            <div class="card-body">
+                <div class="flex flex-between align-center mb-2 flex-mobile-stack">
+                    <div>
+                        <h4 style="margin:0;color:var(--uvms-blue-primary);">Application #${app.application_id}</h4>
+                        <p style="margin:5px 0;color:var(--uvms-text-secondary-light);font-size:0.9em;">
+                            <strong>Plot:</strong> ${app.plot} | <strong>License:</strong> ${app.license || "N/A"}
+                        </p>
+                    </div>
+                    <span class="badge ${badgeClasses[app.status]}">${app.status}</span>
+                </div>
 
-                        <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
-                            <div>
-                                <small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
-                                <p style="margin: 0; font-weight: 500;">${app.applicationDate || "-"}</p>
-                            </div>
-                            <div>
-                                <small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
-                                <p style="margin: 0; font-weight: 500;">${app.application_id}</p>
-                            </div>
-                            <div>
-                                <small style="color: var(--uvms-text-secondary-light);">Submitted Contract:</small>
-                                <p style="margin: 0; font-weight: 500;">
-                                    <a href="${app.submittedContractPath || '#'}" style="color: var(--uvms-blue-primary);">
-                                        <i class="fas fa-file-pdf"></i> ${app.submittedContractPath ? "contract.pdf" : "N/A"}
-                                    </a>
-                                </p>
-                            </div>
-                            <div>
-                                <small style="color: var(--uvms-text-secondary-light);">Status:</small>
-                                <p style="margin: 0; font-weight: 500;">${statusLabel}</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-between align-center">
-                            <small style="color: var(--uvms-text-secondary-light);">
-                                <i class="fas fa-clock"></i> Submitted ${app.reviewedAt || "N/A"}
-                            </small>
-                            <div class="flex gap-1">
-                                <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails('${app.application_id}', '${status}')">
-                                    <i class="fas fa-eye"></i> View Details
-                                </button>
-                                ${status === "pending" ? `
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="fas fa-times"></i> Withdraw
-                                    </button>` : ""}
-                                ${status === "approved" ? `
-                                    <button class="btn btn-sm btn-success" onclick="downloadContract('${app.application_id}')">
-                                        <i class="fas fa-download"></i> Download Contract
-                                    </button>` : ""}
-                            </div>
-                        </div>
+                <div class="grid grid-4 gap-2 mb-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                    <div><small style="color: var(--uvms-text-secondary-light);">Application Date:</small>
+                        <p style="margin:0;font-weight:500;">${new Date(app.applicationDate).toLocaleDateString()}</p>
+                    </div>
+                    <div><small style="color: var(--uvms-text-secondary-light);">Application ID:</small>
+                        <p style="margin:0;font-weight:500;">${app.application_id}</p>
+                    </div>
+                    <div><small style="color: var(--uvms-text-secondary-light);">Contract:</small>
+                        <p style="margin:0;font-weight:500;">
+                            ${app.submittedContractPath ? `<a href="${app.submittedContractPath}" target="_blank" style="color: var(--uvms-blue-primary);"><i class="fas fa-file-pdf"></i> ${app.submittedContractPath.split('/').pop()}</a>` : "N/A"}
+                        </p>
+                    </div>
+                    <div><small style="color: var(--uvms-text-secondary-light);">Status:</small>
+                        <p style="margin:0;font-weight:500;">${app.status}</p>
                     </div>
                 </div>
-            `;
-            container.innerHTML += card;
+
+                <div class="flex flex-between align-center">
+                    <small style="color: var(--uvms-text-secondary-light);"><i class="fas fa-clock"></i> Submitted</small>
+                    <div class="flex gap-1">
+                        <button class="btn btn-sm btn-secondary" onclick="showApplicationDetails(${app.application_id})"><i class="fas fa-eye"></i> View Details</button>
+                        ${app.status === "PENDING" ? '<button class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i> Withdraw</button>' : ""}
+                        ${app.status === "APPROVED" ? `<button class="btn btn-sm btn-success"><i class="fas fa-download"></i> Download Contract</button>` : ""}
+                    </div>
+                </div>
+            </div>
+        `;
+
+            container.appendChild(card);
         });
     }
 
-    function updateStats(data) {
-        const total = data.length;
-        const pending = data.filter(app => app.status === "PENDING").length;
-        const approved = data.filter(app => app.status === "APPROVED").length;
-        const denied = data.filter(app => app.status === "DENIED").length;
-
-        document.getElementById("totalCount").textContent = total;
-        document.getElementById("pendingCount").textContent = pending;
-        document.getElementById("approvedCount").textContent = approved;
-        document.getElementById("deniedCount").textContent = denied;
+    // Init function
+    async function init() {
+        await loadVendor();
+        if (vendorId) {
+            await loadApplications();
+        }
     }
 
-    function filterApplications(status) {
-        const cards = document.querySelectorAll(".application-card");
-        cards.forEach(card => {
-            card.style.display = (status === "all" || card.dataset.status === status) ? "block" : "none";
-        });
-    }
-
-    function showApplicationDetails(id, status) {
-        alert(`Show details for Application ID: ${id}, Status: ${status}`);
-    }
-    function downloadContract(id) {
-        alert(`Downloading contract for Application ID: ${id}`);
-    }
-
-    fetchVendorInfo();
+    init();
 </script>
 
 </body>
