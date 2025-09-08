@@ -55,7 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/policies/**").permitAll()
                         // Protected endpoints
                         .requestMatchers("/api/protected/**").authenticated()
-                        .requestMatchers("/api/dashboard").authenticated()
+                        .requestMatchers("/api/dashboard","/api/admins","/api/admins/**").authenticated()
                         .requestMatchers("/api/auth/profile", "/api/auth/refresh", "/api/auth/logout").authenticated()
                         // Anything else requires authentication
                         .anyRequest().authenticated()
