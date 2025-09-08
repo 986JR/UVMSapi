@@ -6,17 +6,6 @@
     <title>UVMS - Admin Applications</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin.css">
-    <style>
-        .status-badge { padding: 3px 6px; border-radius: 6px; font-size: 12px; }
-        .status-pending { background: orange; color: white; }
-        .status-approved { background: green; color: white; }
-        .status-denied { background: red; color: white; }
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content:center; align-items:center; }
-        .modal-content { background:#fff; padding:20px; border-radius:8px; width:80%; max-width:600px; }
-        .close-btn { float:right; cursor:pointer; font-size:18px; }
-        .app-card { border:1px solid #ddd; border-radius:10px; padding:15px; margin:10px 0; }
-        .app-actions button { margin-right:10px; }
-    </style>
 </head>
 <body>
 <header>
@@ -33,9 +22,15 @@
     <div class="sidebar-header">Admin Portal</div>
     <ul class="sidebar-menu">
         <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="applications.html"><i class="fas fa-file-alt"></i> Applications</a></li>
+        <li><a href="manage-tenders.html"><i class="fas fa-list"></i> Manage Tenders</a></li>
+        <li><a href="manage-plots.html"><i class="fas fa-map-marker-alt"></i> Manage Plots</a></li>
+        <li><a href="applicationsAdmin.html" class="active"><i class="fas fa-file-alt"></i> Applications</a></li>
         <li><a href="application-review.html"><i class="fas fa-clipboard-check"></i> Application Review</a></li>
         <li><a href="licenses.html"><i class="fas fa-certificate"></i> Licenses</a></li>
+        <li><a href="renewals.html"><i class="fas fa-sync-alt"></i> License Renewals</a></li>
+        <li><a href="policies.html"><i class="fas fa-book"></i> Policies</a></li>
+        <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="change-password.html"><i class="fas fa-key"></i> Change Password</a></li>
     </ul>
 </div>
 
@@ -47,26 +42,33 @@
         </div>
 
         <!-- Category Tabs -->
-        <div id="categories">
-            <button onclick="filterApps('ALL')">All</button>
-            <button onclick="filterApps('PENDING')">Pending</button>
-            <button onclick="filterApps('APPROVED')">Approved</button>
-            <button onclick="filterApps('DENIED')">Denied</button>
+        <div class="notification-filters">
+            <button class="filter-btn active" onclick="filterApps('ALL')">All</button>
+            <button class="filter-btn" onclick="filterApps('PENDING')">Pending</button>
+            <button class="filter-btn" onclick="filterApps('APPROVED')">Approved</button>
+            <button class="filter-btn" onclick="filterApps('DENIED')">Denied</button>
         </div>
 
         <!-- Application Cards -->
-        <div id="applicationsContainer"></div>
+        <div id="applicationsContainer" class="policy-cards"></div>
     </div>
 </div>
 
 <!-- Modal -->
 <div class="modal" id="appModal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <div id="modalDetails">Loading...</div>
-        <div class="app-actions">
-            <button onclick="approveApp()">Approve</button>
-            <button onclick="denyApp()">Deny</button>
+        <div class="modal-header">
+            <h3>Application Details</h3>
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+        </div>
+        <div id="modalDetails" class="modal-details">Loading...</div>
+        <div class="app-actions" style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+            <button class="btn approve-btn" onclick="approveApp(currentApp?.application_id)">
+                <i class="fas fa-check"></i> Approve
+            </button>
+            <button class="btn deny-btn" onclick="denyApp(currentApp?.application_id)">
+                <i class="fas fa-times"></i> Deny
+            </button>
         </div>
     </div>
 </div>
@@ -91,14 +93,16 @@
 
     // Load Vendors
     fetch(`${apiBase}/vendors`, { headers: authHeaders })
-        .then(res => res.json()).then(data => vendors = data);
+        .then(res => res.json())
+        .then(data => vendors = data);
 
     // Load Applications
     fetch(`${apiBase}/applications`, { headers: authHeaders })
-        .then(res => res.json()).then(async data => {
-        applications = data;
-        renderApplications(applications);
-    });
+        .then(res => res.json())
+        .then(async data => {
+            applications = data;
+            renderApplications(applications);
+        });
 
     async function renderApplications(apps) {
         const container = document.getElementById("applicationsContainer");
@@ -117,20 +121,30 @@
             const tender = await tenderRes.json();
             tenderDescription = tender.description;
 
-            // Card HTML
+            // Card HTML styled with your CSS
             const card = `
-        <div class="app-card">
-          <div style="display:flex; justify-content:space-between;">
-            <b>Vendor Registration - ${vendorName}</b>
+        <div class="policy-card">
+          <div class="policy-header">
+            <h4>Vendor Registration - ${vendorName}</h4>
             <span class="status-badge status-${app.status.toLowerCase()}">${app.status}</span>
           </div>
-          <p>${tenderDescription}</p>
-          <p><b>Date Submitted:</b> ${new Date(app.applicationDate).toLocaleDateString()}</p>
-          <p><b>Vendor:</b> ${fullName}</p>
-          <div class="app-actions">
-            <button onclick="openModal(${app.application_id})">View</button>
-            <button onclick="approveApp(${app.application_id})">Approve</button>
-            <button onclick="denyApp(${app.application_id})">Deny</button>
+          <div class="policy-description">${tenderDescription}</div>
+          <div class="policy-meta">
+            <span><i class="fas fa-calendar"></i> ${new Date(app.applicationDate).toLocaleDateString()}</span>
+            <span><i class="fas fa-user"></i> ${fullName}</span>
+          </div>
+          <div class="policy-actions">
+            <button class="btn btn-sm btn-primary" onclick="openModal(${app.application_id})">
+              <i class="fas fa-eye"></i> View
+            </button>
+            ${app.status === "PENDING" ? `
+              <button class="btn btn-sm approve-btn" onclick="approveApp(${app.application_id})">
+                <i class="fas fa-check"></i> Approve
+              </button>
+              <button class="btn btn-sm deny-btn" onclick="denyApp(${app.application_id})">
+                <i class="fas fa-times"></i> Deny
+              </button>
+            ` : ""}
           </div>
         </div>`;
             container.innerHTML += card;
@@ -139,6 +153,10 @@
 
     // Filter by Status
     function filterApps(status) {
+        const btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
         if (status === "ALL") {
             renderApplications(applications);
         } else {
@@ -149,26 +167,67 @@
     // Modal
     function openModal(appId) {
         currentApp = applications.find(a => a.application_id === appId);
-        document.getElementById("modalDetails").innerHTML = JSON.stringify(currentApp, null, 2);
+        const vendor = vendors.find(v => v.vendorId === currentApp.vendor);
+        const vendorName = vendor ? `${vendor.firstName} ${vendor.lastName}` : "Unknown Vendor";
+
+        document.getElementById("modalDetails").innerHTML = `
+      <p><b>Application ID:</b> ${currentApp.application_id}</p>
+      <p><b>Status:</b> ${currentApp.status}</p>
+      <p><b>Vendor:</b> ${vendorName}</p>
+      <p><b>Plot ID:</b> ${currentApp.plot}</p>
+      <p><b>Date Submitted:</b> ${new Date(currentApp.applicationDate).toLocaleDateString()}</p>
+    `;
+
+        // Show or hide modal buttons depending on status
+        const actionsDiv = document.querySelector("#appModal .app-actions");
+        if (currentApp.status === "PENDING") {
+            actionsDiv.style.display = "flex";
+        } else {
+            actionsDiv.style.display = "none";
+        }
+
         document.getElementById("appModal").style.display = "flex";
     }
     function closeModal() { document.getElementById("appModal").style.display = "none"; }
 
-    // Approve / Deny
-    function approveApp(appId) {
+    // Approve
+    async function approveApp(appId) {
         const app = applications.find(a => a.application_id === appId);
-        const payload = {
+
+        const updatedApp = {
             ...app,
             status: "APPROVED",
             reviewedBy: adminLastName,
             reviewedAt: new Date().toISOString(),
-            feedback: "Congrats Welcome To UDOM investments",
-            license: "LIC-2025-001"
+            feedback: "Congrats Welcome To UDOM investments"
         };
-        fetch(`${apiBase}/applications/${appId}`, {
-            method: "PUT", headers: authHeaders, body: JSON.stringify(payload)
-        }).then(() => { alert("Application Approved"); location.reload(); });
+
+        await fetch(`${apiBase}/applications/${appId}`, {
+            method: "PUT", headers: authHeaders, body: JSON.stringify(updatedApp)
+        });
+
+        const licensePayload = {
+            application: { application_id: app.application_id },
+            vendor: { vendorId: app.vendor },
+            licenseNumber: `LIC-${new Date().getFullYear()}-${appId}`,
+            issueDate: new Date().toISOString(),
+            expiryDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
+            licenseFilePath: "/licenses/generated_license.pdf",
+            isActive: true,
+            renewalRequests: []
+        };
+
+        await fetch(`${apiBase}/licenses`, {
+            method: "POST",
+            headers: authHeaders,
+            body: JSON.stringify(licensePayload)
+        });
+
+        alert("Application Approved & License Created");
+        location.reload();
     }
+
+    // Deny
     function denyApp(appId) {
         const app = applications.find(a => a.application_id === appId);
         const payload = {
@@ -184,5 +243,7 @@
         }).then(() => { alert("Application Denied"); location.reload(); });
     }
 </script>
+
+
 </body>
 </html>
