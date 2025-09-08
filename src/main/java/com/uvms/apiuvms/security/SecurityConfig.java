@@ -41,7 +41,7 @@ public class SecurityConfig {
                         // Public pages (served by Spring Boot)
                         .requestMatchers("/", "/index.html", "/login.html", "/register.html",
                                 "/dashboard.html", "/forgotPassword.html","/applications.html").permitAll()
-                        .requestMatchers("/apply-tender.html","/college-tenders.html","/Admindashboard.html"
+                        .requestMatchers("/apply-tender.html","/college-tenders.html","/Admindashboard.html","/applicationsAdmin.html"
                         ,"/colleges.html","/contracts.html","/licenses.html","/notifications.html").permitAll()
                         .requestMatchers("/policies.html","/renew-license.html","/tenders.html","/tender-details.html").permitAll()
                         // Static assets
