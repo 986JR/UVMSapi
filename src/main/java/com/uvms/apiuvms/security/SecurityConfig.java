@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         // Public API endpoints
                         .requestMatchers("/api/colleges/**", "/api/tenders/**","/api/colleges","/api/auth/admin/login").permitAll()
-                        .requestMatchers("/api/policies/**").permitAll()
+                        .requestMatchers("/api/policies/**","/licensesAdimin.html").permitAll()
                         // Protected endpoints
                         .requestMatchers("/api/protected/**").authenticated()
                         .requestMatchers("/api/dashboard","/api/admins","/api/admins/**").authenticated()
