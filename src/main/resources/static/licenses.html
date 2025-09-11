@@ -108,11 +108,13 @@
         const container = document.getElementById("licensesContainer");
         container.innerHTML = "";
 
-        // Filter licenses by vendor id from dashboard
-        const vendorLicenses = licenses.filter(lic => lic.vendor.vendorId === vendorData.vendorId);
+        // Fix: handle both object and number vendor fields
+        const vendorLicenses = licenses.filter(lic => {
+            const vendorId = typeof lic.vendor === "object" ? lic.vendor.vendorId : lic.vendor;
+            return vendorId === vendorData.vendorId;
+        });
 
         if (vendorLicenses.length === 0) {
-            // Show "No licenses found" message
             container.innerHTML = `
         <div style="
           padding: 20px;
@@ -163,8 +165,8 @@
             </div>
 
             <div class="grid grid-2 gap-2 mb-3">
-              <div><small>Vendor ID:</small><p>${lic.vendor.vendorId}</p></div>
-              <div><small>Issue Date:</small><p>${new Date(lic.application.applicationDate).toLocaleDateString()}</p></div>
+              <div><small>Vendor ID:</small><p>${typeof lic.vendor === "object" ? lic.vendor.vendorId : lic.vendor}</p></div>
+              <div><small>Issue Date:</small><p>${new Date(lic.issueDate).toLocaleDateString()}</p></div>
             </div>
 
             <div class="alert ${badgeClass === 'badge-success' ? 'alert-success':'alert-danger'}" style="margin-bottom:15px;">
@@ -173,7 +175,7 @@
 
             <div class="flex flex-between align-center">
               <small style="color: var(--uvms-text-secondary-light);">
-                <i class="fas fa-clock"></i> ${lic.application.status === "APPROVED" ? "Active License" : "Expired/Denied"}
+                <i class="fas fa-clock"></i> ${lic.isActive ? "Active License" : "Expired/Denied"}
               </small>
               <div class="flex gap-1">
                 <button class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i> View</button>
@@ -186,6 +188,8 @@
             container.innerHTML += card;
         }
     }
+
+
 
     loadVendor();
 </script>

@@ -127,12 +127,10 @@
             const statusFilter = document.getElementById('status-filter');
             const categoryItems = document.querySelectorAll('.category-item');
 
-            // Modal (created dynamically)
-            let modal = null;
-
             // In-memory store
             let vendorData = null;
             let licenses = [];
+            let vendorCache = {}; // cache vendor lookups
 
             // ---------------------------
             // Helper: format date
@@ -145,7 +143,7 @@
             }
 
             // ---------------------------
-            // Fetch vendor dashboard (to get first + last)
+            // Fetch vendor dashboard
             // ---------------------------
             async function loadVendor() {
                 try {
@@ -162,6 +160,24 @@
             }
 
             // ---------------------------
+            // Fetch vendor details by ID (with cache)
+            // ---------------------------
+            async function getVendorById(id) {
+                if (!id) return null;
+                if (vendorCache[id]) return vendorCache[id];
+                try {
+                    const res = await fetch(`${apiBase}/vendors/${id}`, { headers: authHeaders });
+                    if (!res.ok) throw new Error('Failed to fetch vendor ' + id);
+                    const data = await res.json();
+                    vendorCache[id] = data;
+                    return data;
+                } catch (err) {
+                    console.error('vendor fetch error', err);
+                    return null;
+                }
+            }
+
+            // ---------------------------
             // Fetch and render licenses
             // ---------------------------
             async function loadLicenses() {
@@ -169,7 +185,7 @@
                     const res = await fetch(`${apiBase}/licenses`, { headers: authHeaders });
                     if (!res.ok) throw new Error('Failed to fetch licenses');
                     licenses = await res.json();
-                    renderLicenses(licenses);
+                    await renderLicenses(licenses);
                 } catch (err) {
                     console.error('licenses load error', err);
                     licenseCardsContainer.innerHTML = `<p style="color:var(--uvms-text-secondary);padding:12px">Failed to load licenses.</p>`;
@@ -177,9 +193,9 @@
             }
 
             // ---------------------------
-            // Render license cards (applies current filters)
+            // Render license cards
             // ---------------------------
-            function renderLicenses(list) {
+            async function renderLicenses(list) {
                 const filterText = (searchInput && searchInput.value || '').toLowerCase();
                 const status = statusFilter ? statusFilter.value : 'all';
                 const activeCategory = Array.from(categoryItems || []).find(i => i.classList.contains('active'))?.dataset?.category || 'all';
@@ -187,24 +203,19 @@
                 licenseCardsContainer.innerHTML = '';
 
                 const filtered = list.filter(l => {
-                    // Filter by vendor/company name/licenseNumber/application id/license id text search
-                    const company = (l.vendor && l.vendor.companyName) ? l.vendor.companyName.toLowerCase() : '';
                     const licenseNum = (l.licenseNumber || '').toLowerCase();
-                    const appId = l.application && l.application.application_id ? String(l.application.application_id) : '';
+                    const appId = l.application?.application_id ? String(l.application.application_id) : '';
                     const licId = l.license_id ? String(l.license_id) : '';
 
-                    const matchesSearch = !filterText || company.includes(filterText) || licenseNum.includes(filterText) || appId.includes(filterText) || licId.includes(filterText);
+                    const matchesSearch = !filterText || licenseNum.includes(filterText) || appId.includes(filterText) || licId.includes(filterText);
 
-                    // status filter: all / active / non-active
                     const isActive = Boolean(l.isActive);
                     const matchesStatus = status === 'all' ||
                         (status === 'active' && isActive) ||
                         (status === 'non-active' && !isActive);
 
-                    // category filter (if your template uses vendor/tender categories)
                     let matchesCategory = true;
                     if (activeCategory && activeCategory !== 'all') {
-                        // vendor category: show licenses where vendor exists (all do), tender category: show those with application.plot (we keep simple)
                         if (activeCategory === 'vendor') matchesCategory = true;
                         if (activeCategory === 'tender') matchesCategory = true;
                     }
@@ -218,66 +229,74 @@
                 }
 
                 for (const l of filtered) {
-                    const companyName = l.vendor && l.vendor.companyName ? l.vendor.companyName : 'Unknown Company';
+                    // get vendor id (either from application.vendor or license.vendor)
+                    const vendorId = (typeof l.vendor === "number") ? l.vendor :
+                        (typeof l.application?.vendor === "number") ? l.application.vendor :
+                            (l.vendor?.vendor_id) || (l.application?.vendor?.vendor_id);
+
+                    let companyName = "Unknown Company";
+                    if (vendorId) {
+                        const vendorObj = await getVendorById(vendorId);
+                        if (vendorObj?.companyName) companyName = vendorObj.companyName;
+                    }
+
                     const licenseId = l.license_id ?? '-';
-                    const applicationId = l.application && l.application.application_id ? l.application.application_id : '-';
+                    const applicationId = l.application?.application_id || '-';
                     const licenseNumber = l.licenseNumber || '-';
                     const issueDate = fmtDate(l.issueDate);
                     const expiryDate = fmtDate(l.expiryDate);
                     const activeBadgeClass = l.isActive ? 'policy-status active' : 'policy-status expired';
                     const activeText = l.isActive ? 'Active' : 'Non-active';
 
-                    // create DOM element (policy-card)
                     const card = document.createElement('div');
                     card.className = `policy-card`;
                     card.setAttribute('data-status', l.isActive ? 'active' : 'non-active');
                     card.setAttribute('data-license-id', licenseId);
 
                     card.innerHTML = `
-        <div class="policy-header">
-          <h4>License - ${companyName}</h4>
-          <span class="policy-badge vendor">Vendor</span>
-          <span class="${activeBadgeClass}">${activeText}</span>
-        </div>
-        <p class="policy-description">${l.application?.feedback ? escapeHtml(l.application.feedback).slice(0,120) : ''}</p>
-        <div class="policy-meta">
-          <span><i class="fas fa-hashtag"></i> License ID: <strong>${licenseId}</strong></span>
-          <span><i class="fas fa-file-alt"></i> Application ID: <strong>${applicationId}</strong></span>
-          <span><i class="fas fa-id-badge"></i> License No: <strong>${licenseNumber}</strong></span>
-        </div>
-        <div class="policy-meta" style="margin-top:8px;">
-          <span><i class="fas fa-calendar-alt"></i> Issued: ${issueDate}</span>
-          <span><i class="fas fa-calendar-check"></i> Expires: ${expiryDate}</span>
-        </div>
-        <div class="policy-actions" style="margin-top:12px;">
-          <button class="btn btn-sm view-btn" data-id="${licenseId}"><i class="fas fa-eye"></i> View</button>
-          <button class="btn btn-sm btn-primary download-btn" data-path="${l.licenseFilePath || ''}"><i class="fas fa-download"></i> Download</button>
-        </div>
-      `;
+                <div class="policy-header">
+                  <h4>License - ${companyName}</h4>
+                  <span class="policy-badge vendor">Vendor</span>
+                  <span class="${activeBadgeClass}">${activeText}</span>
+                </div>
+                <p class="policy-description">${l.application?.feedback ? escapeHtml(l.application.feedback).slice(0,120) : ''}</p>
+                <div class="policy-meta">
+                  <span><i class="fas fa-hashtag"></i> License ID: <strong>${licenseId}</strong></span>
+                  <span><i class="fas fa-file-alt"></i> Application ID: <strong>${applicationId}</strong></span>
+                  <span><i class="fas fa-id-badge"></i> License No: <strong>${licenseNumber}</strong></span>
+                </div>
+                <div class="policy-meta" style="margin-top:8px;">
+                  <span><i class="fas fa-calendar-alt"></i> Issued: ${issueDate}</span>
+                  <span><i class="fas fa-calendar-check"></i> Expires: ${expiryDate}</span>
+                </div>
+                <div class="policy-actions" style="margin-top:12px;">
+                  <button class="btn btn-sm view-btn" data-id="${licenseId}"><i class="fas fa-eye"></i> View</button>
+                  <button class="btn btn-sm btn-primary download-btn" data-path="${l.licenseFilePath || ''}"><i class="fas fa-download"></i> Download</button>
+                </div>
+            `;
 
                     licenseCardsContainer.appendChild(card);
                 }
 
-                // attach listeners for view and download buttons
+                // Attach listeners
                 licenseCardsContainer.querySelectorAll('.view-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
+                    btn.addEventListener('click', () => {
                         const licId = Number(btn.getAttribute('data-id'));
                         openLicenseModal(licId);
                     });
                 });
 
                 licenseCardsContainer.querySelectorAll('.download-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
+                    btn.addEventListener('click', () => {
                         const path = btn.getAttribute('data-path');
                         if (!path) { alert('No license file available'); return; }
-                        // simple download (open)
                         window.open(path, '_blank');
                     });
                 });
             }
 
             // ---------------------------
-            // Escape HTML helper for small outputs
+            // Escape HTML
             // ---------------------------
             function escapeHtml(s){
                 if (!s) return '';
@@ -285,98 +304,88 @@
             }
 
             // ---------------------------
-            // Modal: build and open
+            // Modal
             // ---------------------------
-            function buildModalHtml(lic) {
-                const company = lic.vendor || {};
+            function buildModalHtml(lic, vendorObj) {
+                const company = vendorObj || lic.vendor || lic.application?.vendor || {};
                 const app = lic.application || {};
 
                 return `
-      <div class="modal" id="licenseDetailModal" style="display:flex;">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>License Details</h3>
-            <span class="close-modal" id="closeLicenseModal">&times;</span>
-          </div>
-
-          <div class="modal-body" style="max-height:60vh; overflow:auto; text-align:left;">
-            <p><strong>License ID:</strong> ${lic.license_id}</p>
-            <p><strong>License Number:</strong> ${lic.licenseNumber || '-'}</p>
-            <p><strong>Application ID:</strong> ${app.application_id || '-'}</p>
-            <p><strong>Company:</strong> ${company.companyName || '-'}</p>
-            <p><strong>Vendor Owner:</strong> ${company.firstName || '-'} ${company.lastName || '-'}</p>
-            <p><strong>TIN:</strong> ${company.tinNumber || '-'}</p>
-            <p><strong>Business Address:</strong><br>${(company.businessAddress || '-').replace(/\n/g,'<br>')}</p>
-            <p><strong>Issue Date:</strong> ${fmtDate(lic.issueDate)}</p>
-            <p><strong>Expiry Date:</strong> ${fmtDate(lic.expiryDate)}</p>
-            <p><strong>Feedback:</strong> ${escapeHtml(app.feedback || '')}</p>
-            <p><strong>License File Path:</strong> ${lic.licenseFilePath || 'N/A'}</p>
-            <p><strong>Is Active:</strong> ${lic.isActive ? 'Yes' : 'No'}</p>
-            <hr>
-            <small style="color:var(--text-secondary)">* Use the buttons below to expire this license or cancel.</small>
-          </div>
-
-          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
-            ${lic.isActive ? `<button class="btn btn-sm btn-warning" id="expireLicenseBtn">Expire</button>` : ''}
-            <button class="btn btn-sm" id="closeCancelBtn">Cancel</button>
-          </div>
-        </div>
-      </div>
-    `;
+            <div class="modal" id="licenseDetailModal" style="display:flex;">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3>License Details</h3>
+                  <span class="close-modal" id="closeLicenseModal">&times;</span>
+                </div>
+                <div class="modal-body" style="max-height:60vh; overflow:auto; text-align:left;">
+                  <p><strong>License ID:</strong> ${lic.license_id}</p>
+                  <p><strong>License Number:</strong> ${lic.licenseNumber || '-'}</p>
+                  <p><strong>Application ID:</strong> ${app.application_id || '-'}</p>
+                  <p><strong>Company:</strong> ${company.companyName || '-'}</p>
+                  <p><strong>Vendor Owner:</strong> ${company.firstName || '-'} ${company.lastName || '-'}</p>
+                  <p><strong>TIN:</strong> ${company.tinNumber || '-'}</p>
+                  <p><strong>Business Address:</strong><br>${(company.businessAddress || '-').replace(/\n/g,'<br>')}</p>
+                  <p><strong>Issue Date:</strong> ${fmtDate(lic.issueDate)}</p>
+                  <p><strong>Expiry Date:</strong> ${fmtDate(lic.expiryDate)}</p>
+                  <p><strong>Feedback:</strong> ${escapeHtml(app.feedback || '')}</p>
+                  <p><strong>License File Path:</strong> ${lic.licenseFilePath || 'N/A'}</p>
+                  <p><strong>Is Active:</strong> ${lic.isActive ? 'Yes' : 'No'}</p>
+                  <hr>
+                  <small style="color:var(--text-secondary)">* Use the buttons below to expire this license or cancel.</small>
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
+                  ${lic.isActive ? `<button class="btn btn-sm btn-warning" id="expireLicenseBtn">Expire</button>` : ''}
+                  <button class="btn btn-sm" id="closeCancelBtn">Cancel</button>
+                </div>
+              </div>
+            </div>
+        `;
             }
 
-            // ---------------------------
-            // Open modal for specific license id
-            // ---------------------------
-            function openLicenseModal(licenseId) {
+            async function openLicenseModal(licenseId) {
                 const lic = licenses.find(x => Number(x.license_id) === Number(licenseId));
                 if (!lic) { alert('License not found'); return; }
 
-                // remove existing modal if any
+                const vendorId = (typeof lic.vendor === "number") ? lic.vendor :
+                    (typeof lic.application?.vendor === "number") ? lic.application.vendor :
+                        (lic.vendor?.vendor_id) || (lic.application?.vendor?.vendor_id);
+
+                const vendorObj = vendorId ? await getVendorById(vendorId) : null;
+
                 const existing = document.getElementById('licenseDetailModal');
-                if (existing) existing.parentElement.removeChild(existing);
+                if (existing) existing.remove();
 
-                // append modal to body
                 const wrapper = document.createElement('div');
-                wrapper.innerHTML = buildModalHtml(lic);
-                document.body.appendChild(wrapper.firstElementChild); // modal element
+                wrapper.innerHTML = buildModalHtml(lic, vendorObj);
+                document.body.appendChild(wrapper.firstElementChild);
 
-                // attach listeners
-                const closeModalEl = document.getElementById('closeLicenseModal') || document.getElementById('closeCancelBtn');
-                if (closeModalEl) closeModalEl.addEventListener('click', () => { closeLicenseModal(); });
+                document.getElementById('closeLicenseModal')?.addEventListener('click', closeLicenseModal);
+                document.getElementById('closeCancelBtn')?.addEventListener('click', closeLicenseModal);
 
-                const cancelBtn = document.getElementById('closeCancelBtn');
-                if (cancelBtn) cancelBtn.addEventListener('click', () => closeLicenseModal());
-
-                const expireBtn = document.getElementById('expireLicenseBtn');
-                if (expireBtn) expireBtn.addEventListener('click', async () => {
+                document.getElementById('expireLicenseBtn')?.addEventListener('click', async () => {
                     if (!confirm('Mark this license as expired (set isActive=false)?')) return;
                     await expireLicense(lic.license_id);
                 });
 
-                // close modal by clicking overlay
                 document.getElementById('licenseDetailModal').addEventListener('click', (e) => {
                     if (e.target.id === 'licenseDetailModal') closeLicenseModal();
                 });
             }
 
             function closeLicenseModal() {
-                const el = document.getElementById('licenseDetailModal');
-                if (el) el.remove();
+                document.getElementById('licenseDetailModal')?.remove();
             }
 
             // ---------------------------
-            // Expire license (PUT update)
+            // Expire license
             // ---------------------------
             async function expireLicense(licenseId) {
                 try {
                     const lic = licenses.find(x => Number(x.license_id) === Number(licenseId));
                     if (!lic) { alert('License not found'); return; }
 
-                    // create updated payload — backend may expect the full object; we mirror structure and set isActive false
-                    const updated = Object.assign({}, lic, { isActive: false });
+                    const updated = { ...lic, isActive: false };
 
-                    // Some backends require nested objects in specific shape; we send as-is (matches GET shape)
                     const res = await fetch(`${apiBase}/licenses/${licenseId}`, {
                         method: 'PUT',
                         headers: authHeaders,
@@ -398,22 +407,15 @@
             }
 
             // ---------------------------
-            // Filters & search listeners
+            // Filters & search
             // ---------------------------
-            if (searchInput) {
-                searchInput.addEventListener('input', () => renderLicenses(licenses));
-            }
-            if (statusFilter) {
-                statusFilter.addEventListener('change', () => renderLicenses(licenses));
-            }
-
-            if (categoryItems && categoryItems.length) {
-                categoryItems.forEach(item => item.addEventListener('click', function() {
-                    categoryItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    renderLicenses(licenses);
-                }));
-            }
+            searchInput?.addEventListener('input', () => renderLicenses(licenses));
+            statusFilter?.addEventListener('change', () => renderLicenses(licenses));
+            categoryItems.forEach(item => item.addEventListener('click', function() {
+                categoryItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                renderLicenses(licenses);
+            }));
 
             // ---------------------------
             // Initial load
@@ -422,9 +424,10 @@
                 await loadVendor();
                 await loadLicenses();
             })();
-
         });
     </script>
+
+
 
 </body>
 </html>
